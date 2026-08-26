@@ -1,0 +1,1866 @@
+<!DOCTYPE html>
+<html lang="en" data-screen="home">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>PalengkeHub - Lipa City Public Market</title>
+<meta name="description" content="Bili online, sundo sa Lipa. Compare stall prices at the Lipa City Public Market, then pick up your order at the stall.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   PalengkeHub - Variant 5: app baseline + motion layer
+   Single file. Inline CSS/JS. CDN: Google Fonts, GSAP, Lenis.
+   ============================================================ */
+
+/* ---------- tokens ---------- */
+:root{
+  /* brand: deep leafy produce green (deliberately not Grab #00B14F) */
+  --green:#1F7A3A;
+  --green-deep:#155A29;
+  --green-ink:#0E3D1C;
+  --green-tint:#E9F2E9;
+  --green-tint-2:#D5E7D6;
+
+  /* warm neutrals - page is never pure white */
+  --page:#F6F4EF;
+  --card:#FFFFFF;
+  --line:#E7E2D8;
+  --line-soft:#F0ECE4;
+  --ink:#1B1A17;
+  --ink-2:#4B4740;
+  --ink-3:#7A736A;
+
+  /* semantic + market vocabulary */
+  --mura:#1F7A3A;
+  --mura-bg:#E4F0E4;
+  --mahal:#C0392B;
+  --mahal-bg:#FAE8E5;
+  --deal:#D8721F;          /* discount flags, drawn from the logo orange family */
+  --deal-bg:#FBEEDE;
+  --gold:#D99B12;          /* star glyphs */
+  --gcash:#007DFE;
+
+  --r-card:16px;
+  --r-sm:10px;
+  --r-pill:999px;
+
+  --shadow-bar:0 -1px 0 rgba(27,26,23,.06), 0 -8px 24px -18px rgba(27,26,23,.5);
+  --shadow-top:0 1px 0 rgba(27,26,23,.06), 0 10px 24px -20px rgba(27,26,23,.6);
+  --shadow-sheet:0 -10px 40px -12px rgba(27,26,23,.28);
+
+  --ease:cubic-bezier(.2,0,0,1);
+  --t-micro:150ms;
+  --t-std:240ms;
+  --t-large:420ms;
+
+  --appbar-h:70px;
+  --tabbar-h:66px;
+}
+
+*,*::before,*::after{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+html{-webkit-text-size-adjust:100%;background:var(--page);}
+body{
+  font-family:'Figtree','Segoe UI',system-ui,-apple-system,'Helvetica Neue',Arial,sans-serif;
+  background:var(--page);
+  color:var(--ink);
+  font-size:16px;
+  line-height:1.45;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+img{max-width:100%;display:block;}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;}
+ul{margin:0;padding:0;list-style:none;}
+a{color:inherit;}
+:focus-visible{outline:3px solid var(--green);outline-offset:2px;border-radius:6px;}
+.num{font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1;}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;}
+
+/* Lenis (inlined, no second stylesheet request) */
+html.lenis,html.lenis body{height:auto;}
+.lenis.lenis-smooth{scroll-behavior:auto !important;}
+.lenis.lenis-stopped{overflow:hidden;}
+
+/* ---------- icons ---------- */
+.ic{width:24px;height:24px;flex:0 0 auto;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;}
+.ic-sm{width:18px;height:18px;}
+.ic-xs{width:15px;height:15px;}
+.ic-fill{fill:currentColor;stroke:none;}
+
+/* ============================================================
+   APP BAR
+   ============================================================ */
+.appbar{
+  position:sticky;top:0;z-index:60;
+  background:var(--green);
+  color:#fff;
+  padding:8px 16px 10px;
+  transition:padding var(--t-std) var(--ease), background var(--t-std) var(--ease);
+  box-shadow:var(--shadow-top);
+}
+.appbar-row{display:flex;flex-wrap:wrap;align-items:center;column-gap:10px;row-gap:4px;}
+.brand{display:flex;align-items:center;gap:10px;min-width:0;flex:1;min-height:44px;}
+.brand-mark{
+  width:40px;height:40px;border-radius:var(--r-pill);
+  background:#FBFAF6;overflow:hidden;flex:0 0 auto;
+  display:flex;align-items:center;justify-content:center;
+}
+.brand-mark img{width:100%;height:100%;object-fit:cover;transform:scale(1.42);}
+.brand-mark .fallback{width:24px;height:24px;color:var(--green);}
+.brand-txt{min-width:0;}
+.brand-name{display:block;font-size:19px;font-weight:800;letter-spacing:-.02em;line-height:1.15;}
+.brand-sub{display:block;font-size:12px;font-weight:500;opacity:.85;line-height:1.2;white-space:nowrap;}
+.appbar-btn{
+  width:44px;height:44px;border-radius:var(--r-pill);
+  display:flex;align-items:center;justify-content:center;
+  position:relative;color:#fff;
+  transition:background var(--t-micro) var(--ease);
+}
+.appbar-btn:hover{background:rgba(255,255,255,.14);}
+.appbar-btn:active{transform:scale(.94);}
+.dot-badge{
+  position:absolute;top:6px;right:6px;min-width:18px;height:18px;padding:0 4px;
+  border-radius:var(--r-pill);background:var(--deal);color:#fff;
+  font-size:11px;font-weight:800;line-height:18px;text-align:center;
+  border:2px solid var(--green);
+}
+.loc-row{
+  flex:0 0 100%;
+  display:flex;align-items:center;gap:6px;
+  margin-top:0;padding:1px 0;color:#fff;font-size:13px;font-weight:600;
+  max-height:26px;opacity:1;overflow:hidden;
+  transition:max-height var(--t-std) var(--ease), opacity var(--t-micro) var(--ease), margin var(--t-std) var(--ease);
+}
+.loc-row .pill-open{
+  margin-left:6px;font-size:12px;font-weight:700;padding:2px 8px;
+  border-radius:var(--r-pill);background:rgba(255,255,255,.18);
+}
+.searchdock{flex:0 0 100%;margin-top:2px;transition:margin var(--t-std) var(--ease);}
+.searchfield{
+  display:flex;align-items:center;gap:10px;
+  background:#fff;border-radius:var(--r-pill);
+  padding:0 16px;height:44px;width:100%;
+  color:var(--ink-3);font-size:16px;text-align:left;
+  transition:height var(--t-std) var(--ease);
+}
+.searchfield .ic{color:var(--green);}
+.searchfield span{flex:1;color:var(--ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.appbar-back{display:none;}
+
+/* collapsed state */
+html.scrolled .appbar{padding-top:8px;padding-bottom:10px;}
+html.scrolled .loc-row{max-height:0;opacity:0;margin-top:0;}
+html.scrolled .searchdock{margin-top:2px;}
+html.scrolled .searchfield{height:42px;}
+html.scrolled .brand-sub{display:none;}
+html.scrolled .brand{min-height:38px;}
+
+/* sub-screen app bar */
+html[data-screen="home"] .appbar-back{display:none;}
+html:not([data-screen="home"]) .appbar .brand{display:none;}
+html:not([data-screen="home"]) .appbar .loc-row{display:none;}
+html:not([data-screen="home"]) .appbar-back{display:flex;}
+html:not([data-screen="home"]) .appbar{padding-top:10px;padding-bottom:10px;}
+html:not([data-screen="home"]) .appbar-row{column-gap:8px;}
+html:not([data-screen="home"]) #bellBtn{display:none;}
+html:not([data-screen="home"]) .appbar .searchdock{flex:1 1 0;min-width:0;margin-top:0;}
+
+/* ============================================================
+   PARALLAX MARKET HEADER (Ben's parallax guide, applied subtly)
+   ============================================================ */
+/* Mobile keeps the parallax but stays short: the first peso figure has to
+   land inside the first screenful on a 375x812 phone. */
+.hero{
+  position:relative;height:132px;overflow:hidden;background:var(--green-deep);
+}
+.hero-layer{position:absolute;inset:-14% -2%;will-change:transform;}
+.hero-sky{background:linear-gradient(180deg,#9FBFA6 0%,#6E9B78 55%,#4C7C58 100%);}
+.hero-photo{
+  background-image:var(--hero-img);
+  background-size:cover;background-position:60% 82%;
+  filter:saturate(.92) contrast(1.02);
+}
+.hero-scrim{
+  position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(14,61,28,.30) 0%,rgba(14,61,28,.52) 55%,rgba(14,61,28,.80) 100%);
+}
+.hero-fg{
+  position:absolute;left:0;right:0;bottom:0;padding:0 16px 14px;color:#fff;will-change:transform,opacity;
+}
+.hero-greet{font-size:21px;font-weight:800;letter-spacing:-.02em;margin:0;text-shadow:0 1px 8px rgba(0,0,0,.35);}
+.hero-line{font-size:14px;font-weight:500;opacity:.93;margin:2px 0 0;text-shadow:0 1px 8px rgba(0,0,0,.4);}
+.hero-chipline{display:flex;gap:6px;align-items:center;margin-top:7px;flex-wrap:wrap;}
+.hero-chip{
+  display:inline-flex;align-items:center;gap:5px;
+  background:rgba(255,255,255,.94);color:var(--green-ink);
+  font-size:12px;font-weight:700;padding:4px 10px;border-radius:var(--r-pill);
+}
+.hero-chip.gcash{color:var(--gcash);}
+
+/* ============================================================
+   SHELL / SCREENS
+   ============================================================ */
+.shell{max-width:1360px;margin:0 auto;}
+.sidenav{display:none;}
+main{padding-bottom:calc(var(--tabbar-h) + env(safe-area-inset-bottom) + 12px);}
+.screen{display:none;}
+.screen.is-active{display:block;}
+.sheetpull{
+  background:var(--page);border-radius:20px 20px 0 0;margin-top:-18px;position:relative;z-index:2;padding-top:6px;
+}
+.pad{padding-left:16px;padding-right:16px;}
+.sec{margin-top:18px;}
+.sec-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;padding:0 16px 8px;}
+.sec-title{font-size:19px;font-weight:800;letter-spacing:-.02em;margin:0;line-height:1.2;}
+.sec-sub{font-size:14px;color:var(--ink-3);margin:2px 0 0;font-weight:500;}
+.sec-link{
+  font-size:14px;font-weight:700;color:var(--green);white-space:nowrap;
+  display:inline-flex;align-items:center;gap:2px;padding:0 2px;
+  min-height:44px;margin-bottom:-6px;
+}
+
+/* horizontal rails - always let the next card peek */
+.rail{
+  display:flex;gap:12px;overflow-x:auto;padding:2px 16px 4px;
+  scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+}
+.rail::-webkit-scrollbar{display:none;}
+.rail>*{scroll-snap-align:start;flex:0 0 auto;}
+
+/* ---------- category chips ---------- */
+.cats{padding-top:8px;}
+.cat{
+  width:72px;display:flex;flex-direction:column;align-items:center;gap:6px;
+  transition:transform var(--t-micro) var(--ease);
+}
+.cat:active{transform:scale(.95);}
+.cat-ic{
+  width:54px;height:54px;border-radius:var(--r-pill);
+  background:var(--green-tint);color:var(--green-deep);
+  display:flex;align-items:center;justify-content:center;
+}
+.cat-ic .ic{width:26px;height:26px;}
+.cat b{font-size:14px;font-weight:700;line-height:1.1;}
+.cat i{font-size:12px;font-style:normal;color:var(--ink-3);line-height:1.1;}
+
+/* ---------- promo carousel ---------- */
+.promo-rail{padding-bottom:0;}
+.promo{
+  width:calc(100vw - 44px);max-width:520px;aspect-ratio:2.45/1;
+  border-radius:var(--r-card);overflow:hidden;position:relative;
+  background:var(--green-deep);color:#fff;text-align:left;
+  transition:transform var(--t-micro) var(--ease);
+}
+.promo:active{transform:scale(.985);}
+.promo .bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+.promo .veil{position:absolute;inset:0;background:linear-gradient(100deg,rgba(14,61,28,.86) 0%,rgba(14,61,28,.55) 52%,rgba(14,61,28,.18) 100%);}
+.promo .body{position:absolute;inset:0;padding:12px 16px;display:flex;flex-direction:column;justify-content:center;gap:3px;}
+.promo .kick{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;opacity:.9;}
+.promo .h{font-size:19px;font-weight:800;letter-spacing:-.02em;line-height:1.12;max-width:14ch;}
+.promo .p{font-size:14px;font-weight:500;opacity:.93;max-width:24ch;}
+.promo.alt .veil{background:linear-gradient(100deg,rgba(120,55,10,.88) 0%,rgba(120,55,10,.5) 55%,rgba(120,55,10,.14) 100%);}
+.promo.alt2 .veil{background:linear-gradient(100deg,rgba(20,54,80,.88) 0%,rgba(20,54,80,.5) 55%,rgba(20,54,80,.16) 100%);}
+/* no banner artwork present: fall back to a flat brand panel, not a wash */
+.promo.noimg .veil{background:var(--green-deep);}
+.promo.alt.noimg .veil{background:#7A3B0C;}
+.promo.alt2.noimg .veil{background:#173F5C;}
+.promo.noimg .ph{background:transparent;}
+.promo-foot{display:flex;align-items:center;gap:10px;padding:8px 16px 0;}
+.dots{display:flex;gap:6px;}
+.dots i{width:7px;height:7px;border-radius:var(--r-pill);background:var(--line);display:block;transition:width var(--t-std) var(--ease),background var(--t-std) var(--ease);}
+.dots i.on{width:20px;background:var(--green);}
+/* short track, so it reads as a carousel progress control and never as a stray scrollbar */
+.progressrail{flex:1;max-width:120px;height:3px;border-radius:var(--r-pill);background:var(--line);overflow:hidden;}
+.progressrail b{display:block;height:100%;width:40%;background:var(--green);border-radius:var(--r-pill);}
+
+/* ---------- product card (rail + grid) ---------- */
+.pcard{
+  width:164px;background:var(--card);border-radius:var(--r-card);overflow:hidden;
+  display:flex;flex-direction:column;text-align:left;
+  transition:transform var(--t-micro) var(--ease);
+}
+.pcard:active{transform:scale(.97);}
+.pmedia{position:relative;aspect-ratio:1/1;background:var(--green-tint);overflow:hidden;}
+.pmedia img{width:100%;height:100%;object-fit:cover;}
+.ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;}
+.ph .ic{width:44px;height:44px;opacity:.5;stroke-width:1.4;}
+.ph.veg{background:var(--green-tint-2);color:var(--green-deep);}
+.ph.meat{background:#F4E1DD;color:#8E3428;}
+.ph.staple{background:#F0E6D5;color:#7A5A2A;}
+.ph.fruit{background:#F6E7CE;color:#8A5A15;}
+.ph.fish{background:#DFEAF1;color:#2C5C76;}
+.promo .ph.bg{position:absolute;inset:0;}
+.thumb .ph .ic,.th .ph .ic,.av .ph .ic{width:22px;height:22px;}
+.cmphead .thumb .ph .ic{width:22px;height:22px;}
+.flag{
+  position:absolute;top:8px;left:8px;
+  background:var(--deal);color:#fff;font-size:12px;font-weight:800;
+  padding:3px 8px;border-radius:var(--r-sm);letter-spacing:.01em;
+}
+.fav{
+  position:absolute;top:6px;right:6px;width:34px;height:34px;border-radius:var(--r-pill);
+  background:rgba(255,255,255,.92);color:var(--ink-3);
+  display:flex;align-items:center;justify-content:center;
+}
+/* glyph stays 34px for card density, the tap area is padded out to 44px */
+.fav::after{content:"";position:absolute;top:-5px;right:-5px;bottom:-5px;left:-5px;border-radius:var(--r-pill);}
+.fav.on{color:var(--mahal);}
+.fav.on .ic{fill:currentColor;}
+.pbody{padding:10px 12px 12px;display:flex;flex-direction:column;gap:3px;flex:1;}
+.ptitle{font-size:16px;font-weight:600;line-height:1.25;letter-spacing:-.01em;}
+.ptitle i{font-style:normal;color:var(--ink-3);font-weight:500;font-size:14px;}
+.priceline{display:flex;align-items:baseline;gap:6px;flex-wrap:wrap;margin-top:1px;}
+.price{font-size:19px;font-weight:800;letter-spacing:-.02em;line-height:1.15;}
+.per{font-size:14px;font-weight:600;color:var(--ink-3);}
+.was{font-size:14px;font-weight:500;color:var(--ink-3);text-decoration:line-through;}
+.meta{
+  font-size:13px;color:var(--ink-3);font-weight:500;display:flex;align-items:center;gap:4px;
+  line-height:1.3;white-space:nowrap;overflow:hidden;
+}
+.meta .ic{color:var(--gold);}
+.meta .sep{opacity:.5;}
+.stallname{font-size:13px;color:var(--ink-2);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.verdict{
+  display:inline-flex;align-items:center;gap:4px;align-self:flex-start;
+  font-size:12px;font-weight:800;letter-spacing:.04em;
+  padding:3px 8px;border-radius:var(--r-pill);margin-top:2px;
+}
+.verdict.mura{background:var(--mura-bg);color:var(--mura);}
+.verdict.mahal{background:var(--mahal-bg);color:var(--mahal);}
+.verdict.mid{background:#EFEBE2;color:var(--ink-2);}
+.cmpbtn{
+  margin-top:8px;display:flex;align-items:center;justify-content:center;gap:6px;width:100%;
+  height:44px;border-radius:var(--r-sm);white-space:nowrap;
+  background:var(--green-tint);color:var(--green-deep);
+  font-size:14px;font-weight:700;
+  transition:background var(--t-micro) var(--ease);
+}
+.cmpbtn:hover{background:var(--green-tint-2);}
+
+/* grid */
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;padding:0 16px;}
+.grid2 .pcard{width:auto;}
+
+/* ---------- stall card ---------- */
+.scard{
+  width:264px;background:var(--card);border-radius:var(--r-card);overflow:hidden;text-align:left;
+  display:flex;flex-direction:column;
+  transition:transform var(--t-micro) var(--ease);
+}
+.scard:active{transform:scale(.98);}
+.smedia{position:relative;aspect-ratio:16/9;background:var(--green-tint-2);overflow:hidden;}
+.smedia img{width:100%;height:100%;object-fit:cover;}
+.sbadge{
+  position:absolute;top:8px;left:8px;font-size:12px;font-weight:800;letter-spacing:.03em;
+  padding:3px 8px;border-radius:var(--r-sm);background:#fff;color:var(--green);
+}
+.sbadge.shut{background:#3C3833;color:#fff;}
+.sbody{padding:11px 13px 13px;display:flex;flex-direction:column;gap:3px;}
+.sname{font-size:16px;font-weight:700;letter-spacing:-.01em;}
+.srange{font-size:17px;font-weight:800;letter-spacing:-.02em;margin-top:3px;}
+.srange span{font-size:14px;font-weight:600;color:var(--ink-3);}
+
+/* ---------- compare widget on home ---------- */
+.cmpcard{
+  margin:0 16px;background:var(--card);border-radius:var(--r-card);overflow:hidden;
+}
+.cmphead{padding:10px 16px 9px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--line-soft);}
+.cmphead .thumb{width:44px;height:44px;border-radius:var(--r-sm);overflow:hidden;background:var(--green-tint-2);flex:0 0 auto;}
+.cmphead .thumb img{width:100%;height:100%;object-fit:cover;}
+.cmphead .t{flex:1;min-width:0;}
+.cmphead .t b{display:block;font-size:16px;font-weight:700;}
+.cmphead .t span{display:block;font-size:13px;color:var(--ink-3);font-weight:500;}
+/* the answer before the ranking: cheapest per kilo, in the card head */
+.cmphead .best{flex:0 0 auto;text-align:right;}
+.cmphead .best span{display:block;font-size:12px;font-weight:700;color:var(--mura);letter-spacing:.03em;}
+.cmphead .best b{display:block;font-size:19px;font-weight:800;letter-spacing:-.02em;line-height:1.15;}
+.cmphead .best b i{font-style:normal;font-size:13px;font-weight:600;color:var(--ink-3);}
+.cmprow{display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:1px solid var(--line-soft);}
+.cmprow .rank{
+  width:24px;height:24px;border-radius:var(--r-pill);background:#EFEBE2;color:var(--ink-2);
+  font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center;flex:0 0 auto;
+}
+.cmprow.best{background:var(--mura-bg);}
+.cmprow.best .rank{background:var(--green);color:#fff;}
+.cmprow .who{flex:1;min-width:0;}
+.cmprow .who b{display:block;font-size:15px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.cmprow .who span{display:block;font-size:13px;color:var(--ink-3);font-weight:500;}
+.cmprow .pr{text-align:right;flex:0 0 auto;}
+.cmprow .pr b{display:block;font-size:17px;font-weight:800;letter-spacing:-.02em;}
+.cmprow .pr span{display:block;font-size:12px;color:var(--ink-3);font-weight:600;}
+.cmpfoot{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  padding:12px 16px;font-size:14px;font-weight:600;color:var(--ink-2);
+}
+.cmpfoot b{font-weight:800;color:var(--ink);}
+.linkbtn{
+  display:flex;align-items:center;justify-content:center;gap:6px;width:100%;
+  height:46px;border-top:1px solid var(--line-soft);
+  color:var(--green);font-size:15px;font-weight:800;
+  transition:background var(--t-micro) var(--ease);
+}
+.linkbtn:hover{background:var(--green-tint);}
+
+/* ---------- filter chip bar ---------- */
+.filterbar{
+  position:sticky;top:var(--appbar-h);z-index:40;background:var(--page);
+  padding:10px 0 8px;border-bottom:1px solid var(--line);
+}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:0 16px;scrollbar-width:none;}
+.chips::-webkit-scrollbar{display:none;}
+.chip{
+  flex:0 0 auto;height:44px;padding:0 16px;border-radius:var(--r-pill);
+  background:var(--card);color:var(--ink-2);font-size:14px;font-weight:700;
+  display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);
+  transition:background var(--t-micro) var(--ease),color var(--t-micro) var(--ease),border-color var(--t-micro) var(--ease);
+}
+.chip.on{background:var(--green);color:#fff;border-color:var(--green);}
+.chip .cnt{
+  min-width:20px;height:20px;border-radius:var(--r-pill);background:var(--green);color:#fff;
+  font-size:12px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;padding:0 5px;
+}
+.chip.on .cnt{background:#fff;color:var(--green);}
+
+.resultbar{display:flex;align-items:baseline;justify-content:space-between;gap:10px;padding:12px 16px 8px;}
+.resultbar b{font-size:16px;font-weight:700;white-space:nowrap;}
+.resultbar span{font-size:14px;color:var(--ink-3);font-weight:500;white-space:nowrap;}
+
+/* ---------- product detail ---------- */
+.gallery{position:relative;background:var(--green-tint);aspect-ratio:4/3;max-height:360px;}
+.gallery img{width:100%;height:100%;object-fit:cover;}
+.gallery .dots{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);}
+.gallery .dots i{background:rgba(255,255,255,.6);}
+.gallery .dots i.on{background:#fff;}
+.detail{background:var(--page);}
+.dblock{background:var(--card);padding:16px;margin-bottom:10px;}
+.dtitle{font-size:23px;font-weight:800;letter-spacing:-.025em;margin:0;line-height:1.18;}
+.dtitle i{font-style:normal;font-weight:500;color:var(--ink-3);font-size:17px;}
+.dprice{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin-top:8px;}
+.dprice b{font-size:30px;font-weight:800;letter-spacing:-.03em;line-height:1;}
+.dprice .per{font-size:17px;}
+.dnorm{font-size:15px;color:var(--ink-2);font-weight:600;margin-top:6px;}
+.trust{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--ink-3);font-weight:500;margin-top:10px;flex-wrap:wrap;}
+.unitrow{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;}
+.unit{
+  min-height:46px;padding:6px 14px;border-radius:var(--r-sm);border:1.5px solid var(--line);
+  background:var(--card);text-align:center;line-height:1.15;
+  transition:border-color var(--t-micro) var(--ease),background var(--t-micro) var(--ease);
+}
+.unit b{display:block;font-size:15px;font-weight:700;}
+.unit span{display:block;font-size:13px;color:var(--ink-3);font-weight:600;}
+.unit.on{border-color:var(--green);background:var(--green-tint);}
+.unit.on span{color:var(--green-deep);}
+.dlabel{font-size:13px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);margin:0 0 10px;}
+.spark{display:flex;align-items:center;gap:12px;}
+.spark svg{flex:0 0 auto;}
+.spark p{margin:0;font-size:15px;font-weight:600;color:var(--ink-2);}
+.spark .down{color:var(--mura);font-weight:800;}
+.stallstrip{display:flex;align-items:center;gap:12px;}
+.stallstrip .av{width:48px;height:48px;border-radius:var(--r-pill);overflow:hidden;background:var(--green-tint-2);flex:0 0 auto;}
+.stallstrip .av img{width:100%;height:100%;object-fit:cover;}
+.stallstrip .t{flex:1;min-width:0;}
+.stallstrip .t b{display:block;font-size:16px;font-weight:700;}
+.stallstrip .t span{display:block;font-size:13px;color:var(--ink-3);font-weight:500;}
+.ghost{
+  height:40px;padding:0 14px;border-radius:var(--r-pill);border:1.5px solid var(--green);
+  color:var(--green);font-size:14px;font-weight:800;display:inline-flex;align-items:center;gap:5px;
+  transition:background var(--t-micro) var(--ease);
+}
+.ghost:hover{background:var(--green-tint);}
+.infostrip{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;}
+.fact{
+  display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;
+  padding:6px 10px;border-radius:var(--r-pill);background:var(--page);color:var(--ink-2);
+}
+.fact.gcash{color:var(--gcash);background:#E8F4FF;}
+
+/* sticky bottom action bar */
+.actionbar{
+  position:fixed;left:0;right:0;bottom:calc(var(--tabbar-h) + env(safe-area-inset-bottom));
+  z-index:55;background:var(--card);box-shadow:var(--shadow-bar);
+  display:none;align-items:center;gap:12px;padding:10px 16px;
+}
+html[data-screen="product"] .actionbar,html[data-screen="cart"] .actionbar{display:flex;}
+.actionbar .amt{flex:0 0 auto;}
+.actionbar .amt span{display:block;font-size:13px;color:var(--ink-3);font-weight:600;line-height:1.1;}
+.actionbar .amt b{display:block;font-size:22px;font-weight:800;letter-spacing:-.02em;line-height:1.2;}
+.cta{
+  flex:1;height:50px;border-radius:var(--r-pill);background:var(--green);color:#fff;
+  font-size:16px;font-weight:800;display:flex;align-items:center;justify-content:center;gap:8px;
+  transition:background var(--t-micro) var(--ease),transform var(--t-micro) var(--ease);
+}
+.cta:hover{background:var(--green-deep);}
+.cta:active{transform:scale(.98);}
+
+/* ---------- cart ---------- */
+.cartgroup{background:var(--card);border-radius:var(--r-card);margin:0 16px 12px;overflow:hidden;}
+.cartgroup header{display:flex;align-items:center;gap:10px;padding:13px 14px;border-bottom:1px solid var(--line-soft);}
+.cartgroup header .t{flex:1;min-width:0;}
+.cartgroup header .t b{display:block;font-size:16px;font-weight:700;}
+.cartgroup header .t span{display:block;font-size:13px;color:var(--ink-3);font-weight:500;}
+.citem{display:flex;align-items:center;gap:12px;padding:12px 14px;}
+.citem .th{width:60px;height:60px;border-radius:var(--r-sm);overflow:hidden;background:var(--green-tint-2);flex:0 0 auto;}
+.citem .th img{width:100%;height:100%;object-fit:cover;}
+.citem .t{flex:1;min-width:0;}
+.citem .t b{display:block;font-size:16px;font-weight:600;}
+.citem .t span{display:block;font-size:15px;font-weight:800;letter-spacing:-.02em;margin-top:2px;}
+.citem .t span i{font-style:normal;font-size:13px;font-weight:600;color:var(--ink-3);}
+.stepper{display:flex;align-items:center;gap:2px;border:1.5px solid var(--line);border-radius:var(--r-pill);padding:2px;}
+.stepper button{width:38px;height:38px;border-radius:var(--r-pill);display:flex;align-items:center;justify-content:center;color:var(--green);}
+.stepper button:hover{background:var(--green-tint);}
+.stepper b{min-width:26px;text-align:center;font-size:16px;font-weight:700;}
+.cartfoot{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:var(--page);}
+.cartfoot span{font-size:14px;font-weight:600;color:var(--ink-2);}
+.cartfoot b{font-size:17px;font-weight:800;letter-spacing:-.02em;}
+.savebar{
+  margin:0 16px 14px;padding:12px 14px;border-radius:var(--r-card);
+  background:var(--mura-bg);color:var(--green-ink);
+  display:flex;align-items:center;gap:10px;font-size:15px;font-weight:700;
+}
+.notebar{
+  margin:0 16px 14px;padding:12px 14px;border-radius:var(--r-card);background:#FDF3E2;color:#7A5218;
+  display:flex;align-items:flex-start;gap:10px;font-size:14px;font-weight:600;
+}
+
+/* ============================================================
+   COMPARE SHEET
+   ============================================================ */
+.scrim{
+  position:fixed;inset:0;z-index:80;background:rgba(20,18,15,.5);
+  opacity:0;visibility:hidden;pointer-events:none;
+  transition:opacity var(--t-std) var(--ease), visibility 0s linear var(--t-std);
+}
+.scrim.on{opacity:1;visibility:visible;pointer-events:auto;transition-delay:0s;}
+.sheet{
+  position:fixed;left:0;right:0;bottom:0;z-index:90;
+  background:var(--page);border-radius:22px 22px 0 0;box-shadow:var(--shadow-sheet);
+  max-height:88vh;display:flex;flex-direction:column;pointer-events:none;visibility:hidden;
+  transform:translateY(100%);
+  transition:transform var(--t-large) var(--ease), visibility 0s linear var(--t-large);
+}
+.sheet.on{transform:translateY(0);pointer-events:auto;visibility:visible;transition-delay:0s;}
+html.sheet-open,html.sheet-open body{overflow:hidden;}
+.sheet-grip{width:44px;height:5px;border-radius:var(--r-pill);background:var(--line);margin:10px auto 4px;flex:0 0 auto;}
+.sheet-head{padding:6px 16px 12px;border-bottom:1px solid var(--line);flex:0 0 auto;}
+.sheet-head .top{display:flex;align-items:center;gap:12px;}
+.sheet-head .top .thumb{width:52px;height:52px;border-radius:var(--r-sm);overflow:hidden;background:var(--green-tint-2);flex:0 0 auto;}
+.sheet-head .top .thumb img{width:100%;height:100%;object-fit:cover;}
+.sheet-head h2{margin:0;font-size:21px;font-weight:800;letter-spacing:-.02em;line-height:1.15;}
+.sheet-head p{margin:2px 0 0;font-size:14px;color:var(--ink-3);font-weight:500;}
+.sheet-close{width:44px;height:44px;border-radius:var(--r-pill);background:#EFEBE2;display:flex;align-items:center;justify-content:center;color:var(--ink-2);flex:0 0 auto;}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px;}
+.kpi{background:var(--card);border-radius:var(--r-sm);padding:9px 10px;}
+.kpi span{display:block;font-size:12px;font-weight:700;color:var(--ink-3);letter-spacing:.02em;}
+.kpi b{display:block;font-size:17px;font-weight:800;letter-spacing:-.02em;margin-top:1px;}
+.kpi.low b{color:var(--mura);}
+.kpi.high b{color:var(--mahal);}
+.sortline{display:flex;align-items:center;justify-content:space-between;padding:10px 16px 6px;}
+.sortline span{font-size:13px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-3);}
+.sortline button{display:inline-flex;align-items:center;gap:5px;min-height:44px;padding:0 4px;font-size:14px;font-weight:700;color:var(--green);}
+.sheet-body{overflow-y:auto;-webkit-overflow-scrolling:touch;padding:0 16px 20px;flex:1;}
+.crow{
+  display:grid;grid-template-columns:26px minmax(0,1fr) auto;gap:8px;align-items:center;
+  background:var(--card);border-radius:var(--r-card);padding:11px 13px;margin-bottom:8px;
+  text-align:left;width:100%;
+  transition:transform var(--t-micro) var(--ease);
+}
+.crow:active{transform:scale(.99);}
+.crow.best{background:var(--mura-bg);}
+.crow .rk{
+  width:26px;height:26px;border-radius:var(--r-pill);background:#EFEBE2;color:var(--ink-2);
+  font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center;
+}
+.crow.best .rk{background:var(--green);color:#fff;}
+.crow .nm{min-width:0;}
+.crow .nm b{display:block;font-size:16px;font-weight:700;line-height:1.2;}
+.crow .nm span{display:block;font-size:13px;color:var(--ink-3);font-weight:500;margin-top:1px;}
+.crow .pz{text-align:right;}
+.crow .pz b{display:block;font-size:19px;font-weight:800;letter-spacing:-.02em;line-height:1.1;}
+.crow .pz .verdict{margin-top:5px;}
+.crow .quoted{display:block;font-size:13px;font-weight:600;color:var(--ink-2);margin-top:3px;}
+.crow .bar{grid-column:1 / -1;margin-top:9px;position:relative;height:8px;border-radius:var(--r-pill);background:#EDE8DF;overflow:visible;}
+.crow.best .bar{background:#CFE3CF;}
+.crow .bar u{position:absolute;left:0;top:0;bottom:0;border-radius:var(--r-pill);background:var(--ink-3);}
+.crow.best .bar u{background:var(--green);}
+.crow.over .bar u{background:var(--mahal);}
+.crow .bar em{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--ink);opacity:.55;}
+.avgline{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  padding:12px 13px;border-radius:var(--r-card);background:#EFEBE2;margin-top:4px;
+  font-size:14px;font-weight:700;color:var(--ink-2);
+}
+.avgline b{font-size:17px;font-weight:800;color:var(--ink);letter-spacing:-.02em;}
+.sheet-note{font-size:13px;color:var(--ink-3);font-weight:500;margin:12px 2px 0;line-height:1.45;}
+
+/* ============================================================
+   BOTTOM TAB BAR
+   ============================================================ */
+.tabbar{
+  position:fixed;left:0;right:0;bottom:0;z-index:70;
+  background:var(--card);box-shadow:var(--shadow-bar);
+  display:flex;padding-bottom:env(safe-area-inset-bottom);
+}
+.tab{
+  flex:1;min-height:var(--tabbar-h);padding:8px 2px 9px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+  color:var(--ink-3);position:relative;
+  transition:color var(--t-micro) var(--ease);
+}
+.tab .pillbg{
+  position:absolute;top:6px;width:52px;height:30px;border-radius:var(--r-pill);
+  background:transparent;transition:background var(--t-micro) var(--ease);
+}
+.tab .ic{position:relative;z-index:1;}
+.tab b{font-size:12px;font-weight:600;letter-spacing:-.01em;position:relative;z-index:1;}
+.tab.on{color:var(--green);}
+.tab.on .pillbg{background:var(--green-tint);}
+.tab.on b{font-weight:800;}
+.tab .cbadge{
+  position:absolute;top:2px;left:calc(50% + 8px);min-width:19px;height:19px;padding:0 5px;
+  border-radius:var(--r-pill);background:var(--deal);color:#fff;
+  font-size:11px;font-weight:800;line-height:19px;text-align:center;border:2px solid var(--card);z-index:2;
+}
+
+/* toast */
+.toast{
+  position:fixed;left:50%;bottom:calc(var(--tabbar-h) + 22px);transform:translate(-50%,12px);
+  z-index:100;background:var(--ink);color:#fff;font-size:14px;font-weight:600;
+  padding:11px 16px;border-radius:var(--r-pill);opacity:0;pointer-events:none;
+  transition:opacity var(--t-std) var(--ease),transform var(--t-std) var(--ease);
+  max-width:calc(100vw - 32px);text-align:center;
+}
+.toast.on{opacity:1;transform:translate(-50%,0);}
+
+/* scroll to top */
+.totop{
+  position:fixed;right:14px;bottom:calc(var(--tabbar-h) + 18px);z-index:50;
+  width:44px;height:44px;border-radius:var(--r-pill);background:var(--card);color:var(--green);
+  display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px -6px rgba(27,26,23,.4);
+  opacity:0;pointer-events:none;transition:opacity var(--t-std) var(--ease);
+}
+html.scrolled .totop{opacity:1;pointer-events:auto;}
+html[data-screen="product"] .totop,html[data-screen="cart"] .totop{display:none;}
+
+/* reveal (only armed by JS when motion is allowed) */
+html.motion .rv{opacity:0;transform:translateY(14px);}
+
+/* ============================================================
+   TABLET
+   ============================================================ */
+@media (min-width:600px){
+  .grid2{grid-template-columns:repeat(3,minmax(0,1fr));}
+  .hero{height:190px;}
+  .promo{width:420px;}
+}
+
+/* ============================================================
+   DESKTOP - the app widens, it does not become a landing page
+   ============================================================ */
+@media (min-width:1024px){
+  :root{--appbar-h:72px;}
+  .appbar{padding:12px 24px;}
+  .appbar-row{column-gap:20px;max-width:1360px;margin:0 auto;width:100%;flex-wrap:nowrap;}
+  .brand{flex:0 0 auto;order:0;min-height:0;}
+  .loc-row,.searchdock{flex-basis:auto;}
+  html:not([data-screen="home"]) .appbar .brand{display:flex;}
+  .appbar-back{display:none !important;}
+  .searchdock{margin-top:0 !important;flex:1;max-width:560px;order:1;}
+  html.scrolled .searchfield{height:46px;}
+  .loc-row{
+    max-height:none !important;opacity:1 !important;margin:0 !important;
+    order:2;flex:0 0 auto;font-size:14px;
+  }
+  .appbar-btn{order:3;}
+  html:not([data-screen="home"]) .appbar .loc-row{display:flex;max-height:none;opacity:1;}
+  html.scrolled .brand-sub{display:block;}
+
+  .hero{height:230px;border-radius:var(--r-card);}
+  .shell{display:grid;grid-template-columns:236px minmax(0,1fr);gap:26px;padding:0 24px;align-items:start;}
+  .sidenav{
+    display:block;position:sticky;top:calc(var(--appbar-h) + 20px);
+    padding:18px 0 0;
+  }
+  .sidenav ul{display:flex;flex-direction:column;gap:4px;}
+  .sidenav .tab{
+    flex-direction:row;justify-content:flex-start;gap:12px;min-height:50px;
+    padding:0 14px;border-radius:var(--r-pill);
+  }
+  .sidenav .tab .pillbg{display:none;}
+  .sidenav .tab b{font-size:16px;font-weight:600;}
+  .sidenav .tab.on{background:var(--green-tint);color:var(--green-deep);}
+  .sidenav .tab.on b{font-weight:800;}
+  .sidenav .tab .cbadge{position:static;border:0;margin-left:auto;}
+  .sidenav .sidefoot{
+    margin-top:18px;padding:14px;border-radius:var(--r-card);background:var(--card);
+    font-size:14px;font-weight:600;color:var(--ink-2);line-height:1.5;
+  }
+  .sidenav .sidefoot b{display:block;font-size:15px;color:var(--ink);margin-bottom:4px;}
+  .tabbar{display:none;}
+  main{padding-bottom:40px;}
+  .sheetpull{margin-top:0;border-radius:0;background:transparent;padding-top:20px;}
+  .pad,.sec-head,.rail,.chips,.grid2,.cmpcard,.cartgroup,.savebar,.notebar{padding-left:0;padding-right:0;}
+  .cmpcard,.cartgroup,.savebar,.notebar{margin-left:0;margin-right:0;}
+  .rail{overflow:visible;flex-wrap:wrap;}
+  .rail.promo-rail{flex-wrap:nowrap;overflow-x:auto;}
+  .promo{width:520px;max-width:none;}
+  .promo .body{padding:18px 20px;gap:4px;}
+  .promo .h{font-size:23px;}
+  .grid2{grid-template-columns:repeat(6,minmax(0,1fr));gap:14px;}
+  .grid2 .pcard{width:auto;}
+  .rail .pcard{width:calc(25% - 9px);}
+  .cats .cat{width:92px;}
+  .scard{width:calc(33.333% - 8px);}
+  .sec{margin-top:32px;}
+  .sec-title{font-size:22px;}
+  .filterbar{padding:14px 0 12px;}
+  .actionbar{
+    left:auto;right:auto;bottom:0;width:100%;max-width:1360px;
+    margin:0 auto;padding:12px 24px;
+    position:fixed;left:50%;transform:translateX(-50%);
+  }
+  .cta{flex:0 0 auto;min-width:280px;margin-left:auto;}
+  .detailwrap{display:grid;grid-template-columns:minmax(0,460px) minmax(0,1fr);gap:24px;align-items:start;}
+  .gallery{border-radius:var(--r-card);overflow:hidden;max-height:none;position:sticky;top:calc(var(--appbar-h) + 20px);}
+  .dblock{border-radius:var(--r-card);}
+  .sheet{
+    left:50%;right:auto;bottom:auto;top:50%;
+    width:min(720px,92vw);max-height:86vh;border-radius:20px;
+    transform:translate(-50%,-46%) scale(.98);opacity:0;
+    transition:transform var(--t-large) var(--ease),opacity var(--t-std) var(--ease),
+               visibility 0s linear var(--t-large);
+  }
+  .sheet.on{transform:translate(-50%,-50%) scale(1);opacity:1;transition-delay:0s;}
+  .sheet-grip{display:none;}
+  .kpis{grid-template-columns:repeat(3,1fr);max-width:520px;}
+  .totop{bottom:24px;right:24px;}
+  .toast{bottom:28px;}
+}
+
+/* ============================================================
+   REDUCED MOTION
+   ============================================================ */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation-duration:.01ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:.01ms !important;
+    scroll-behavior:auto !important;
+  }
+  .hero-layer,.hero-fg{transform:none !important;}
+  html.motion .rv{opacity:1;transform:none;}
+}
+</style>
+</head>
+<body>
+
+<!-- ============ icon sprite (Lucide, single set, currentColor) ============ -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
+<symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></symbol>
+<symbol id="i-pin" viewBox="0 0 24 24"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></symbol>
+<symbol id="i-chev-d" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+<symbol id="i-chev-r" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></symbol>
+<symbol id="i-bell" viewBox="0 0 24 24"><path d="M10.268 21a2 2 0 0 0 3.464 0"/><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"/></symbol>
+<symbol id="i-home" viewBox="0 0 24 24"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></symbol>
+<symbol id="i-basket" viewBox="0 0 24 24"><path d="m15 11-1 9"/><path d="m19 11-4-7"/><path d="M2 11h20"/><path d="m3.5 11 1.6 7.4a2 2 0 0 0 2 1.6h9.8a2 2 0 0 0 2-1.6l1.7-7.4"/><path d="M4.5 15.5h15"/><path d="m5 11 4-7"/><path d="m9 11 1 9"/></symbol>
+<symbol id="i-receipt" viewBox="0 0 24 24"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"/><path d="M14 8H8"/><path d="M16 12H8"/><path d="M13 16H8"/></symbol>
+<symbol id="i-chat" viewBox="0 0 24 24"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></symbol>
+<symbol id="i-user" viewBox="0 0 24 24"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
+<symbol id="i-star" viewBox="0 0 24 24"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 20.99a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.774a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></symbol>
+<symbol id="i-heart" viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></symbol>
+<symbol id="i-plus" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="M12 5v14"/></symbol>
+<symbol id="i-minus" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol>
+<symbol id="i-back" viewBox="0 0 24 24"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></symbol>
+<symbol id="i-filter" viewBox="0 0 24 24"><path d="M10 5H3"/><path d="M12 19H3"/><path d="M14 3v4"/><path d="M16 17v4"/><path d="M21 12h-9"/><path d="M21 19h-5"/><path d="M21 5h-7"/><path d="M8 10v4"/><path d="M8 12H3"/></symbol>
+<symbol id="i-sort" viewBox="0 0 24 24"><path d="m3 16 4 4 4-4"/><path d="M7 20V4"/><path d="m21 8-4-4-4 4"/><path d="M17 4v16"/></symbol>
+<symbol id="i-trend-d" viewBox="0 0 24 24"><path d="M16 17h6v-6"/><path d="m22 17-8.5-8.5-5 5L2 7"/></symbol>
+<symbol id="i-scale" viewBox="0 0 24 24"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></symbol>
+<symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+<symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></symbol>
+<symbol id="i-store" viewBox="0 0 24 24"><path d="m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7"/><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><path d="M15 22v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4"/><path d="M2 7h20"/></symbol>
+<symbol id="i-up" viewBox="0 0 24 24"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></symbol>
+<symbol id="i-wallet" viewBox="0 0 24 24"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/></symbol>
+<symbol id="i-leaf" viewBox="0 0 24 24"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></symbol>
+<symbol id="i-beef" viewBox="0 0 24 24"><circle cx="12.5" cy="8.5" r="2.5"/><path d="M12.5 2a6.5 6.5 0 0 0-6.22 4.6c-1.1 3.13-.78 3.9-3.18 6.08A3 3 0 0 0 5 18c4 0 8.4-1.8 11.4-4.3a6.5 6.5 0 0 0-3.9-11.7"/><path d="m18.5 6 2.19 4.5a6.48 6.48 0 0 1-2.29 7.2C15.4 20.2 11 22 7 22a3 3 0 0 1-2.68-1.66L2.4 16.5"/></symbol>
+<symbol id="i-fish" viewBox="0 0 24 24"><path d="M6.5 12c.94-3.46 4.94-6 8.5-6 3.56 0 6.06 2.54 7 6-.94 3.47-3.44 6-7 6s-7.56-2.53-8.5-6Z"/><path d="M18 12v.5"/><path d="M16 17.93a9.77 9.77 0 0 1 0-11.86"/><path d="M7 10.67C7 8 5.58 5.97 2.73 5.5c-1 1.5-1 5 .23 6.5-1.24 1.5-1.24 5-.23 6.5C5.58 18.03 7 16 7 13.33"/></symbol>
+<symbol id="i-apple" viewBox="0 0 24 24"><path d="M12 20.94c1.5 0 2.75 1.06 4 1.06 3 0 6-8 6-12.22A4.91 4.91 0 0 0 17 5c-2.22 0-4 1.44-5 2-1-.56-2.78-2-5-2a4.9 4.9 0 0 0-5 4.78C2 14 5 22 8 22c1.25 0 2.5-1.06 4-1.06Z"/><path d="M10 2c1 .5 2 2 2 5"/></symbol>
+<symbol id="i-egg" viewBox="0 0 24 24"><path d="M12 2C8 2 4 8.5 4 14a8 8 0 0 0 16 0c0-5.5-4-12-8-12"/></symbol>
+<symbol id="i-sack" viewBox="0 0 24 24"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></symbol>
+<symbol id="i-grid" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M3 15h18"/><path d="M9 3v18"/><path d="M15 3v18"/></symbol>
+<symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></symbol>
+</defs></svg>
+
+<!-- ============================ APP BAR ============================ -->
+<header class="appbar" id="appbar">
+  <div class="appbar-row">
+    <button class="appbar-btn appbar-back" id="backBtn" aria-label="Bumalik">
+      <svg class="ic"><use href="#i-back"></use></svg>
+    </button>
+
+    <div class="brand">
+      <!-- SINGLE logo reference in the whole file. Swap this one src to change the mark everywhere. -->
+      <span class="brand-mark">
+        <img id="brandLogo" src="../02-audit/logo/app-icon.png" alt="PalengkeHub">
+      </span>
+      <span class="brand-txt">
+        <span class="brand-name">PalengkeHub</span>
+        <span class="brand-sub">Lipa City Public Market</span>
+      </span>
+    </div>
+
+    <button class="appbar-btn" id="bellBtn" aria-label="Mga abiso">
+      <svg class="ic"><use href="#i-bell"></use></svg>
+      <span class="dot-badge num">2</span>
+    </button>
+
+    <div class="loc-row">
+      <svg class="ic ic-sm"><use href="#i-pin"></use></svg>
+      <span>Lipa City Public Market</span>
+      <svg class="ic ic-sm"><use href="#i-chev-d"></use></svg>
+      <span class="pill-open">Bukas ang Palengke</span>
+    </div>
+
+    <div class="searchdock">
+      <button class="searchfield" id="searchBtn">
+        <svg class="ic ic-sm"><use href="#i-search"></use></svg>
+        <span>Maghanap ng produkto, puwesto...</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="shell">
+
+  <!-- ============================ SIDE NAV (desktop) ============================ -->
+  <nav class="sidenav" aria-label="Main">
+    <ul id="sideTabs"></ul>
+    <div class="sidefoot">
+      <b>Pickup lang, walang delivery fee</b>
+      Umorder na, i-pickup sa Pamilihang Bayan ng Lipa. Bukas 5:00 AM - 7:00 PM, Lunes hanggang Linggo.
+    </div>
+  </nav>
+
+  <main>
+
+  <!-- ============================ HOME ============================ -->
+  <section class="screen is-active" id="screen-home">
+
+    <!-- layered market header, gentle depth on scroll -->
+    <div class="hero" id="hero">
+      <div class="hero-layer hero-sky" data-depth="1"></div>
+      <div class="hero-layer hero-photo" id="heroPhoto" data-depth="2"></div>
+      <div class="hero-scrim"></div>
+      <div class="hero-fg" id="heroFg">
+        <p class="hero-greet" id="greet">Magandang umaga</p>
+        <p class="hero-line">Umorder na, i-pickup sa Pamilihang Bayan ng Lipa.</p>
+        <div class="hero-chipline">
+          <span class="hero-chip"><svg class="ic ic-xs"><use href="#i-clock"></use></svg>5:00 AM - 7:00 PM</span>
+          <span class="hero-chip gcash"><svg class="ic ic-xs"><use href="#i-wallet"></use></svg>GCash lang ang bayad</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="sheetpull">
+
+      <!-- categories -->
+      <div class="sec cats" style="margin-top:8px">
+        <div class="rail" id="catRail"></div>
+      </div>
+
+      <!-- promo carousel -->
+      <div class="sec" style="margin-top:14px">
+        <div class="rail promo-rail" id="promoRail"></div>
+        <div class="promo-foot">
+          <div class="dots" id="promoDots"><i class="on"></i><i></i><i></i></div>
+          <div class="progressrail"><b id="promoProgress"></b></div>
+        </div>
+      </div>
+
+      <!-- price comparison: the signature, high on the page -->
+      <div class="sec">
+        <div class="sec-head">
+          <div>
+            <h2 class="sec-title">Presyo ngayon sa palengke</h2>
+            <p class="sec-sub">Ikumpara ang presyo kada kilo bago ka pumunta</p>
+          </div>
+        </div>
+        <div class="cmpcard rv">
+          <div class="cmphead">
+            <span class="thumb"><img data-img="kamatis" data-ph="veg" alt=""></span>
+            <span class="t">
+              <b>Kamatis <span style="font-weight:500;color:var(--ink-3)">(Tomato)</span></b>
+              <span id="homeCmpSub">6 na puwesto ngayon</span>
+            </span>
+            <span class="best">
+              <span>PINAKAMURA</span>
+              <b class="num" id="homeBest">&#8369;60 <i>/ kg</i></b>
+            </span>
+          </div>
+          <div id="homeCompareRows"></div>
+          <div class="cmpfoot">
+            <span>Average sa palengke</span>
+            <b class="num" id="homeAvg">&#8369;69 / kg</b>
+          </div>
+          <button class="linkbtn" data-compare="kamatis">
+            <svg class="ic ic-sm"><use href="#i-scale"></use></svg>
+            <span id="homeCmpAll">Ikumpara lahat ng 6 na puwesto</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- today's deals -->
+      <div class="sec">
+        <div class="sec-head">
+          <div>
+            <h2 class="sec-title">Today's Deals</h2>
+            <p class="sec-sub">Huwag palampasin ang mga diskwento na ito</p>
+          </div>
+          <button class="sec-link" data-go="browse">Tingnan Lahat <svg class="ic ic-xs"><use href="#i-chev-r"></use></svg></button>
+        </div>
+        <div class="rail" id="dealRail"></div>
+      </div>
+
+      <!-- top rated stalls -->
+      <div class="sec">
+        <div class="sec-head">
+          <div>
+            <h2 class="sec-title">Mga Pinagkakatiwalaang Tindahan</h2>
+            <p class="sec-sub">Trusted by our shoppers</p>
+          </div>
+          <button class="sec-link" data-go="browse">Tingnan Lahat <svg class="ic ic-xs"><use href="#i-chev-r"></use></svg></button>
+        </div>
+        <div class="rail" id="stallRail"></div>
+      </div>
+
+      <!-- best value grid -->
+      <div class="sec">
+        <div class="sec-head">
+          <div>
+            <h2 class="sec-title">Mura ngayon</h2>
+            <p class="sec-sub"><span class="num" id="muraCount">6 na produkto</span> sa ilalim ng average na presyo sa palengke</p>
+          </div>
+        </div>
+        <div class="grid2" id="homeGrid"></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================ BROWSE / LISTING ============================ -->
+  <section class="screen" id="screen-browse">
+    <div class="filterbar">
+      <div class="chips">
+        <button class="chip on"><svg class="ic ic-xs"><use href="#i-filter"></use></svg> Filters <span class="cnt num">1</span></button>
+        <button class="chip"><svg class="ic ic-xs"><use href="#i-sort"></use></svg> Pinakamura</button>
+        <button class="chip">Malapit</button>
+        <button class="chip">Bukas ngayon</button>
+        <button class="chip">4.5 pataas</button>
+        <button class="chip">May promo</button>
+      </div>
+    </div>
+    <div class="resultbar">
+      <b class="num">12 produkto</b>
+      <span>Ayon sa presyo kada kilo</span>
+    </div>
+    <div class="grid2" id="browseGrid" style="padding-bottom:8px"></div>
+    <div class="sec" style="margin-top:18px">
+      <div class="sec-head"><div><h2 class="sec-title">Mga puwestong may ganitong tinda</h2><p class="sec-sub">Vegetable Section, Fruit Section, Meat Section</p></div></div>
+      <div class="rail" id="browseStalls"></div>
+    </div>
+  </section>
+
+  <!-- ============================ PRODUCT DETAIL ============================ -->
+  <section class="screen" id="screen-product">
+    <div class="detailwrap">
+      <div class="gallery">
+        <img data-img="kamatis" data-ph="veg" alt="Kamatis">
+        <div class="dots"><i class="on"></i><i></i><i></i></div>
+      </div>
+      <div class="detail">
+
+        <div class="dblock">
+          <h1 class="dtitle">Kamatis <i>(Tomato)</i></h1>
+          <div class="dprice">
+            <b class="num" id="dPrice">&#8369;60</b><span class="per">/ kg</span>
+            <span class="was num" id="dWas">&#8369;72</span>
+            <span class="verdict mura" id="dVerdict" style="margin-top:0"><svg class="ic ic-xs"><use href="#i-trend-d"></use></svg> MURA</span>
+          </div>
+          <p class="dnorm num" id="dNorm">&#8369;60 kada kilo &middot; 13% below the market average of &#8369;69 / kg</p>
+          <div class="trust">
+            <svg class="ic ic-sm ic-fill" style="color:var(--gold)"><use href="#i-star"></use></svg>
+            <b class="num" style="color:var(--ink)">4.8</b>
+            <span class="num">(312 reviews)</span>
+            <span class="sep">&middot;</span>
+            <span class="num">1,240 benta</span>
+            <span class="sep">&middot;</span>
+            <span>In Stock</span>
+          </div>
+          <div class="infostrip">
+            <span class="fact"><svg class="ic ic-xs"><use href="#i-store"></use></svg> Vegetable Section &middot; #12</span>
+            <span class="fact"><svg class="ic ic-xs"><use href="#i-clock"></use></svg> Ready for pickup, 5:00 AM - 7:00 PM</span>
+            <span class="fact gcash"><svg class="ic ic-xs"><use href="#i-wallet"></use></svg> GCash</span>
+          </div>
+        </div>
+
+        <div class="dblock">
+          <p class="dlabel">Select Unit</p>
+          <div class="unitrow">
+            <button class="unit on"><b>1 kilo</b><span class="num">&#8369;60</span></button>
+            <button class="unit"><b>1/2 kilo</b><span class="num">&#8369;30</span></button>
+            <button class="unit"><b>1/4 kilo</b><span class="num">&#8369;15</span></button>
+            <button class="unit"><b>Tali</b><span class="num">&#8369;22</span></button>
+          </div>
+        </div>
+
+        <!-- the differentiator, promoted from a buried footer -->
+        <div class="dblock">
+          <p class="dlabel">Ibang presyo sa ibang puwesto</p>
+          <div id="detailCompareRows"></div>
+          <div class="cmpfoot" style="padding-left:0;padding-right:0">
+            <span>Average sa palengke</span><b class="num" id="dAvg">&#8369;69 / kg</b>
+          </div>
+          <button class="cmpbtn" data-compare="kamatis" style="height:48px;font-size:15px;width:100%">
+            <svg class="ic ic-sm"><use href="#i-scale"></use></svg> <span id="dCmpAll">Tingnan lahat ng 6 na presyo</span>
+          </button>
+        </div>
+
+        <div class="dblock">
+          <p class="dlabel">Price trend, huling 30 araw</p>
+          <div class="spark">
+            <svg width="120" height="44" viewBox="0 0 120 44" fill="none" aria-hidden="true">
+              <polyline points="2,10 14,12 26,9 38,16 50,14 62,20 74,18 86,26 98,30 110,33 118,34"
+                        stroke="#1F7A3A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="118" cy="34" r="3.5" fill="#1F7A3A"/>
+            </svg>
+            <p><span class="down num">Bumaba ang presyo &#8369;12</span><br>mula noong nakaraang linggo.</p>
+          </div>
+        </div>
+
+        <div class="dblock">
+          <p class="dlabel">Sold by</p>
+          <div class="stallstrip">
+            <span class="av"><img data-img="__market__" data-crop="92% 94%" data-zoom="3.4" alt=""></span>
+            <span class="t">
+              <b>Aling Nena Gulayan</b>
+              <span class="num">Vegetable Section &middot; #12 &middot; 4.8 (312)</span>
+            </span>
+            <button class="ghost" data-go="browse">Bisitahin</button>
+          </div>
+        </div>
+
+        <div class="dblock" style="margin-bottom:180px">
+          <p class="dlabel">More from this stall</p>
+          <div class="rail" id="moreRail" style="padding-left:0;padding-right:0"></div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ PALENGKART ============================ -->
+  <section class="screen" id="screen-cart">
+    <div class="resultbar"><b>My PalengKart</b><span class="num">4 items &middot; 2 stalls</span></div>
+
+    <div class="savebar">
+      <svg class="ic ic-sm"><use href="#i-check"></use></svg>
+      <span class="num">Nakatipid ka ng &#8369;96 kumpara sa average na presyo.</span>
+    </div>
+
+    <div class="cartgroup">
+      <header>
+        <svg class="ic ic-sm" style="color:var(--green)"><use href="#i-store"></use></svg>
+        <span class="t"><b>Aling Nena Gulayan</b><span class="num">Stall #12 &middot; Vegetable Section</span></span>
+      </header>
+      <div class="citem">
+        <span class="th"><img data-img="kamatis" data-ph="veg" alt=""></span>
+        <span class="t"><b>Kamatis</b><span class="num">&#8369;60 <i>/ kg</i></span></span>
+        <span class="stepper"><button aria-label="Bawasan"><svg class="ic ic-sm"><use href="#i-minus"></use></svg></button><b class="num">2</b><button aria-label="Dagdagan"><svg class="ic ic-sm"><use href="#i-plus"></use></svg></button></span>
+      </div>
+      <div class="citem">
+        <span class="th"><img data-img="sitaw" data-ph="veg" alt=""></span>
+        <span class="t"><b>Sitaw</b><span class="num">&#8369;18 <i>/ tali</i></span></span>
+        <span class="stepper"><button aria-label="Bawasan"><svg class="ic ic-sm"><use href="#i-minus"></use></svg></button><b class="num">3</b><button aria-label="Dagdagan"><svg class="ic ic-sm"><use href="#i-plus"></use></svg></button></span>
+      </div>
+      <div class="cartfoot"><span>Stall Total</span><b class="num">&#8369;174</b></div>
+    </div>
+
+    <div class="cartgroup">
+      <header>
+        <svg class="ic ic-sm" style="color:var(--green)"><use href="#i-store"></use></svg>
+        <span class="t"><b>Mang Juan's Meat Shop</b><span class="num">Stall #4 &middot; Meat Section</span></span>
+      </header>
+      <div class="citem">
+        <span class="th"><img data-img="liempo" data-ph="meat" alt=""></span>
+        <span class="t"><b>Liempo</b><span class="num">&#8369;340 <i>/ kg</i></span></span>
+        <span class="stepper"><button aria-label="Bawasan"><svg class="ic ic-sm"><use href="#i-minus"></use></svg></button><b class="num">1</b><button aria-label="Dagdagan"><svg class="ic ic-sm"><use href="#i-plus"></use></svg></button></span>
+      </div>
+      <div class="citem">
+        <span class="th"><img data-img="itlog" data-ph="staple" alt=""></span>
+        <span class="t"><b>Itlog</b><span class="num">&#8369;96 <i>/ dozen</i></span></span>
+        <span class="stepper"><button aria-label="Bawasan"><svg class="ic ic-sm"><use href="#i-minus"></use></svg></button><b class="num">1</b><button aria-label="Dagdagan"><svg class="ic ic-sm"><use href="#i-plus"></use></svg></button></span>
+      </div>
+      <div class="cartfoot"><span>Stall Total</span><b class="num">&#8369;436</b></div>
+    </div>
+
+    <div class="notebar">
+      <svg class="ic ic-sm" style="flex:0 0 auto"><use href="#i-info"></use></svg>
+      <span>You are ordering from 2 vendors. You will need to pay each vendor separately via GCash. Pickup lang, walang delivery fee.</span>
+    </div>
+    <div style="height:110px"></div>
+  </section>
+
+  </main>
+</div>
+
+<!-- ============================ STICKY ACTION BAR ============================ -->
+<div class="actionbar" id="actionBar">
+  <span class="amt"><span id="actionLabel">Total Amount</span><b class="num" id="actionAmount">&#8369;60</b></span>
+  <button class="cta" id="actionCta"><svg class="ic ic-sm"><use href="#i-basket"></use></svg> <span id="actionCtaText">Add to Cart</span></button>
+</div>
+
+<!-- ============================ SCROLL TO TOP ============================ -->
+<button class="totop" id="toTop" aria-label="Balik sa itaas"><svg class="ic"><use href="#i-up"></use></svg></button>
+
+<!-- ============================ BOTTOM TABS ============================ -->
+<nav class="tabbar" id="tabbar" aria-label="Main"></nav>
+
+<!-- ============================ COMPARE SHEET ============================ -->
+<div class="scrim" id="scrim"></div>
+<section class="sheet" id="compareSheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+  <div class="sheet-grip"></div>
+  <div class="sheet-head">
+    <div class="top">
+      <span class="thumb"><img id="sheetThumb" data-img="kamatis" data-ph="veg" alt=""></span>
+      <div style="flex:1;min-width:0">
+        <h2 id="sheetTitle">Kamatis</h2>
+        <p id="sheetSub">Presyo ngayon sa 6 na puwesto &middot; per kilo</p>
+      </div>
+      <button class="sheet-close" id="sheetClose" aria-label="Isara"><svg class="ic"><use href="#i-x"></use></svg></button>
+    </div>
+    <div class="kpis">
+      <div class="kpi low"><span>Lowest</span><b class="num" id="kpiLow">&#8369;60</b></div>
+      <div class="kpi"><span>Average</span><b class="num" id="kpiAvg">&#8369;69</b></div>
+      <div class="kpi high"><span>Highest</span><b class="num" id="kpiHigh">&#8369;78</b></div>
+    </div>
+  </div>
+  <div class="sortline">
+    <span>Ranked by presyo kada kilo</span>
+    <button><svg class="ic ic-xs"><use href="#i-sort"></use></svg> Pinakamura</button>
+  </div>
+  <div class="sheet-body">
+    <div id="sheetRows"></div>
+    <div class="avgline">
+      <span>Average sa palengke</span>
+      <b class="num" id="sheetAvg">&#8369;69 / kg</b>
+    </div>
+    <p class="sheet-note">
+      Ang lahat ng presyo ay ginawang per-kilo para pantay ang paghahambing, kahit iba-iba ang unit ng bawat puwesto.
+      <span id="sheetSave">Sa pinakamurang puwesto, tipid ka ng &#8369;9 kada kilo kumpara sa average sa palengke.</span>
+    </p>
+  </div>
+</section>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<!-- ============================================================
+     Motion libraries. Pinned versions with SRI, per the Stage 0
+     security review. The page is fully usable without them.
+     ============================================================ -->
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"
+        integrity="sha384-XmJ9SoHtVOHoQUcKvFAzVXwdkKo1Ie3bhmSoIAkcdsHGaIrVJIkmozyq0FJeb/Ly"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/ScrollTrigger.min.js"
+        integrity="sha384-wl5TeDVvOWt30Pbf8aSo2ZrzsOjddu3avOBvHe+p+OhJt9gP6w9YXmDkN5DK2/dF"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.3.26/dist/lenis.min.js"
+        integrity="sha384-jqpi9VmOdhyLoLURgjCn7EpnG9BbnHW57ibIZoeaIU+erWDH3k8fQQg0xH2ySjnw"
+        crossorigin="anonymous"></script>
+
+<script>
+(function(){
+  'use strict';
+
+  var root = document.documentElement;
+  var PESO = '₱';
+
+  /* ---------------- asset paths ---------------- */
+  var MARKET_PHOTO = '../02-audit/logo/Lipapublicmarket.jpg';
+  var HEADER_WIDE  = '../assets/generated/header/header-market-wide.png';
+  var PRODUCT_DIR  = '../assets/generated/products/product-';
+  var BANNER_DIR   = '../assets/generated/banners/banner-';
+
+  /* ---------------- helpers ---------------- */
+  /* Whole pesos in the interface, the way a feed reads out loud. Centavos
+     only survive where they carry meaning: a unit-normalized equivalent or a
+     price the vendor actually quoted with centavos. */
+  function peso(n){
+    var v = Math.round(n * 100) / 100;
+    var whole = Math.floor(Math.abs(v));
+    var txt = String(whole).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    var cents = Math.round((Math.abs(v) - whole) * 100);
+    if (cents) txt += '.' + (cents < 10 ? '0' + cents : cents);
+    return PESO + (v < 0 ? '-' : '') + txt;
+  }
+  function el(html){
+    var d = document.createElement('div');
+    d.innerHTML = html.trim();
+    return d.firstElementChild;
+  }
+  function verdictOf(price, avg){
+    var d = (price - avg) / avg;
+    if (d <= -0.05) return 'mura';
+    if (d >= 0.05)  return 'mahal';
+    return 'mid';
+  }
+  function verdictChip(v){
+    if (v === 'mura')  return '<span class="verdict mura">MURA</span>';
+    if (v === 'mahal') return '<span class="verdict mahal">MAHAL</span>';
+    return '<span class="verdict mid">KATAMTAMAN</span>';
+  }
+
+  /* Every image degrades to a palette-matched inline placeholder. */
+  var PH_ICON = { veg:'#i-leaf', meat:'#i-beef', staple:'#i-sack', fruit:'#i-apple', fish:'#i-fish' };
+  function bindImage(img){
+    var key  = img.getAttribute('data-img');
+    var kind = img.getAttribute('data-ph') || 'veg';
+    var crop = img.getAttribute('data-crop');
+
+    function applyCrop(){
+      if (!crop) return;
+      /* Zoom into a named part of the one real market photograph so it never
+         reads as the same flat picture twice. */
+      img.style.objectPosition = crop;
+      img.style.transformOrigin = crop;
+      img.style.transform = 'scale(' + (img.getAttribute('data-zoom') || '2.6') + ')';
+    }
+    function tile(){
+      var ph = el('<span class="ph ' + kind + '"><svg class="ic"><use href="' +
+                  (PH_ICON[kind] || PH_ICON.veg) + '"></use></svg></span>');
+      if (img.className) ph.className += ' ' + img.className;
+      var promo = img.closest ? img.closest('.promo') : null;
+      if (promo) promo.classList.add('noimg');
+      if (img.parentNode) img.parentNode.replaceChild(ph, img);
+    }
+
+    if (key === '__market__'){
+      img.src = MARKET_PHOTO;
+      applyCrop();
+      img.onerror = tile;
+    } else if (key === '__banner__'){
+      /* Banner art is not shot yet. Rather than leave a flat colour block in
+         the fold, each slide falls back to its own produce photograph, and
+         only then to the palette tile. No two slides share a photo. */
+      img.src = BANNER_DIR + img.getAttribute('data-file') + '.png';
+      img.onerror = function(){
+        img.onerror = tile;
+        img.style.transform = '';
+        img.style.objectPosition = '50% 55%';
+        img.src = PRODUCT_DIR + (img.getAttribute('data-fb') || 'kamatis') + '.png';
+      };
+    } else {
+      img.src = PRODUCT_DIR + key + '.png';
+      img.onerror = tile;
+    }
+    img.loading = 'eager';
+    img.decoding = 'sync';
+  }
+  function bindAllImages(scope){
+    (scope || document).querySelectorAll('img[data-img]').forEach(function(i){
+      if (!i.dataset.bound){ i.dataset.bound = '1'; bindImage(i); }
+    });
+  }
+
+  /* Header background: generated wide header if present, else the real
+     Lipa market photograph. Probed once, no layout jump either way. */
+  (function heroImage(){
+    var target = document.getElementById('heroPhoto');
+    if (!target) return;
+    target.style.setProperty('--hero-img', 'url("' + MARKET_PHOTO + '")');
+    var probe = new Image();
+    probe.onload = function(){
+      target.style.setProperty('--hero-img', 'url("' + HEADER_WIDE + '")');
+      target.style.backgroundPosition = '50% 55%';
+    };
+    probe.src = HEADER_WIDE;
+  })();
+
+  /* ---------------- data ----------------
+     Real vocabulary from the repo (Tagalog produce dictionary, market
+     sections, unit model). Stall names, prices, ratings and promo copy
+     are plausible placeholders - the repo ships no seed data.
+  ------------------------------------------------------------------ */
+  var CATS = [
+    { fil:'Gulay',   en:'Vegetables', ic:'#i-leaf'  },
+    { fil:'Karne',   en:'Meat',       ic:'#i-beef'  },
+    { fil:'Isda',    en:'Fish',       ic:'#i-fish'  },
+    { fil:'Prutas',  en:'Fruits',     ic:'#i-apple' },
+    { fil:'Manok',   en:'Poultry',    ic:'#i-egg'   },
+    { fil:'Bigas',   en:'Rice',       ic:'#i-sack'  },
+    { fil:'Iba Pa',  en:'Other',      ic:'#i-grid'  }
+  ];
+
+  var PROMOS = [
+    { file:'fresh-harvest', fb:'repolyo', kick:'Sariwang Ani', h:'Bagong dating na gulay tuwing umaga',
+      p:'Hanggang 20% off sa Vegetable Section, 5:00 AM pataas.', cls:'' },
+    { file:'market-morning', fb:'calamansi', kick:'Umaga sa Palengke', h:'Mag-order bago mag-9 AM',
+      p:'Ready for pickup ng 10:00 AM sa mismong stall ng vendor.', cls:'alt' },
+    { file:'__market__', fb:'', kick:'Pickup lang', h:'Bili online, sundo sa Lipa',
+      p:'Walang delivery fee. GCash lang ang bayad.', cls:'alt2' }
+  ];
+
+  var P = [
+    { id:'kamatis',   name:'Kamatis',   en:'Tomato',       kind:'veg',    price:60,  unit:'kg',     avg:69,  was:72,  stall:'Aling Nena Gulayan',    sec:'Vegetable Section', no:12, rate:4.8, rev:312, sold:'1,240' },
+    { id:'talong',    name:'Talong',    en:'Eggplant',     kind:'veg',    price:52,  unit:'kg',     avg:58,  was:0,   stall:'Kuya Boy Fresh Veg',    sec:'Vegetable Section', no:7,  rate:4.6, rev:188, sold:'860' },
+    { id:'repolyo',   name:'Repolyo',   en:'Cabbage',      kind:'veg',    price:48,  unit:'kg',     avg:46,  was:0,   stall:'Gulayan ni Aling Rosing', sec:'Vegetable Section', no:31, rate:4.5, rev:96,  sold:'410' },
+    { id:'sitaw',     name:'Sitaw',     en:'String beans', kind:'veg',    price:18,  unit:'tali',   avg:20,  was:0,   stall:'Aling Nena Gulayan',    sec:'Vegetable Section', no:12, rate:4.8, rev:312, sold:'720' },
+    { id:'saging',    name:'Saging',    en:'Latundan',     kind:'fruit',  price:65,  unit:'kg',     avg:62,  was:0,   stall:'Prutas ni Nanay Cely',  sec:'Fruit Section',     no:16, rate:4.7, rev:154, sold:'530' },
+    { id:'mangga',    name:'Mangga',    en:'Carabao',      kind:'fruit',  price:145, unit:'kg',     avg:168, was:175, stall:'Prutas ni Nanay Cely',  sec:'Fruit Section',     no:16, rate:4.7, rev:154, sold:'980' },
+    { id:'calamansi', name:'Kalamansi', en:'Calamansi',    kind:'fruit',  price:90,  unit:'kg',     avg:84,  was:0,   stall:'Aling Nena Gulayan',    sec:'Vegetable Section', no:12, rate:4.8, rev:312, sold:'640' },
+    { id:'liempo',    name:'Liempo',    en:'Pork belly',   kind:'meat',   price:340, unit:'kg',     avg:355, was:0,   stall:"Mang Juan's Meat Shop", sec:'Meat Section',      no:4,  rate:4.9, rev:418, sold:'1,510' },
+    { id:'manok',     name:'Manok',     en:'Whole chicken',kind:'meat',   price:195, unit:'kg',     avg:190, was:0,   stall:"Mang Juan's Meat Shop", sec:'Meat Section',      no:4,  rate:4.9, rev:418, sold:'870' },
+    { id:'itlog',     name:'Itlog',     en:'Eggs',         kind:'staple', price:96,  unit:'dozen',  avg:105, was:110, stall:'Bigasan ni Mang Ador',  sec:'Rice Section',      no:9,  rate:4.6, rev:151, sold:'1,090' },
+    { id:'bigas',     name:'Bigas',     en:'Sinandomeng',  kind:'staple', price:58,  unit:'kg',     avg:56,  was:0,   stall:'Bigasan ni Mang Ador',  sec:'Rice Section',      no:9,  rate:4.6, rev:151, sold:'2,300' },
+    { id:'bangus',    name:'Bangus',    en:'Milkfish',     kind:'fish',   price:180, unit:'kg',     avg:205, was:210, stall:'Isdaan ni Kuya Rene',   sec:'Fish Section',      no:42, rate:4.7, rev:203, sold:'1,180' }
+  ];
+  var byId = {};
+  P.forEach(function(p){ byId[p.id] = p; });
+
+  /* Each stall shows the produce it is known for. No stall repeats another
+     stall's photograph, and none of them borrows the market-building shot. */
+  var STALLS = [
+    { name:"Mang Juan's Meat Shop",   sec:'Meat Section',      no:4,  rate:4.9, rev:418, lo:180, hi:420, tags:'Karne, Frozen Goods',  open:true,  img:'liempo',    kind:'meat'   },
+    { name:'Aling Nena Gulayan',      sec:'Vegetable Section', no:12, rate:4.8, rev:312, lo:35,  hi:180, tags:'Gulay, Pampalasa',     open:true,  img:'kamatis',   kind:'veg'    },
+    { name:'Isdaan ni Kuya Rene',     sec:'Fish Section',      no:42, rate:4.7, rev:203, lo:120, hi:480, tags:'Isda, Hipon',          open:true,  img:'bangus',    kind:'fish'   },
+    { name:'Bigasan ni Mang Ador',    sec:'Rice Section',      no:9,  rate:4.6, rev:151, lo:52,  hi:68,  tags:'Bigas, Groceries',     open:true,  img:'bigas',     kind:'staple' },
+    { name:'Prutas ni Nanay Cely',    sec:'Fruit Section',     no:16, rate:4.7, rev:154, lo:45,  hi:260, tags:'Prutas',               open:false, img:'mangga',    kind:'fruit'  },
+    { name:'Kuya Boy Fresh Veg',      sec:'Vegetable Section', no:7,  rate:4.6, rev:188, lo:30,  hi:150, tags:'Gulay',                open:true,  img:'talong',    kind:'veg'    }
+  ];
+
+  /* Kamatis across six stalls. Two stalls quote a non-kilo unit; both are
+     normalized to a per-kilo figure before ranking. This is the fix for the
+     bug in the live app, which ranks on raw price and ignores the unit. */
+  var COMPARE = {
+    kamatis: {
+      name:'Kamatis', unit:'kg',   /* avg, min and max are computed from rows below */
+      rows:[
+        { stall:'Aling Nena Gulayan',      sec:'Vegetable Section', no:12, rate:4.8, rev:312, shown:'60',    shownUnit:'kg',   perKg:60 },
+        { stall:'Kuya Boy Fresh Veg',      sec:'Vegetable Section', no:7,  rate:4.6, rev:188, shown:'32',    shownUnit:'500g', perKg:64 },
+        { stall:'Tindahan ni Mareng Baby', sec:'Vegetable Section', no:23, rate:4.9, rev:241, shown:'68',    shownUnit:'kg',   perKg:68 },
+        { stall:'Gulayan ni Aling Rosing', sec:'Vegetable Section', no:31, rate:4.5, rev:96,  shown:'70',    shownUnit:'kg',   perKg:70 },
+        { stall:'Mang Tonyo Veggies',      sec:'Vegetable Section', no:18, rate:4.4, rev:73,  shown:'18.50', shownUnit:'250g', perKg:74 },
+        { stall:'Nanay Cely Sariwa',       sec:'Vegetable Section', no:5,  rate:4.7, rev:154, shown:'78',    shownUnit:'kg',   perKg:78 }
+      ]
+    }
+  };
+
+  var TABS = [
+    { id:'home',    label:'Home',       ic:'#i-home' },
+    { id:'cart',    label:'PalengKart', ic:'#i-basket', badge:4 },
+    { id:'orders',  label:'Orders',     ic:'#i-receipt' },
+    { id:'chats',   label:'Chats',      ic:'#i-chat', badge:2 },
+    { id:'profile', label:'Profile',    ic:'#i-user' }
+  ];
+
+  /* ---------------- builders ---------------- */
+  function starMeta(rate, rev, extra){
+    return '<span class="meta"><svg class="ic ic-xs ic-fill"><use href="#i-star"></use></svg>' +
+           '<b class="num" style="color:var(--ink);font-weight:700">' + rate.toFixed(1) + '</b>' +
+           '<span class="num">(' + rev + ')</span>' +
+           (extra ? '<span class="sep">&middot;</span><span>' + extra + '</span>' : '') + '</span>';
+  }
+
+  function productCard(p, opts){
+    opts = opts || {};
+    var v = verdictOf(p.price, p.avg);
+    var off = p.was ? Math.round((1 - p.price / p.was) * 100) : 0;
+    var h = '';
+    h += '<button class="pcard rv" data-open="' + p.id + '">';
+    h +=   '<span class="pmedia">';
+    h +=     '<img data-img="' + p.id + '" data-ph="' + p.kind + '" alt="' + p.name + '">';
+    if (off) h += '<span class="flag num">' + off + '% OFF</span>';
+    h +=     '<span class="fav' + (opts.fav ? ' on' : '') + '"><svg class="ic ic-sm"><use href="#i-heart"></use></svg></span>';
+    h +=   '</span>';
+    h +=   '<span class="pbody">';
+    h +=     '<span class="ptitle">' + p.name + ' <i>' + p.en + '</i></span>';
+    h +=     '<span class="priceline"><b class="price num">' + peso(p.price) + '</b>' +
+             '<span class="per">/ ' + p.unit + '</span>' +
+             (p.was ? '<span class="was num">' + peso(p.was) + '</span>' : '') + '</span>';
+    h +=     verdictChip(v);
+    h +=     '<span class="stallname">' + p.stall + '</span>';
+    h +=     starMeta(p.rate, p.rev, '');
+    h +=     '<span class="cmpbtn" data-compare="' + p.id + '"><svg class="ic ic-xs"><use href="#i-scale"></use></svg> Ikumpara presyo</span>';
+    h +=   '</span>';
+    h += '</button>';
+    return el(h);
+  }
+
+  function stallCard(s){
+    var h = '';
+    h += '<button class="scard rv" data-go="browse">';
+    h +=   '<span class="smedia">';
+    h +=     '<img data-img="' + s.img + '" data-ph="' + s.kind + '" alt="' + s.name + '">';
+    h +=     '<span class="sbadge' + (s.open ? '' : ' shut') + '">' + (s.open ? 'BUKAS' : 'SARADO') + '</span>';
+    h +=   '</span>';
+    h +=   '<span class="sbody">';
+    h +=     '<span class="sname">' + s.name + '</span>';
+    h +=     starMeta(s.rate, s.rev, s.sec + ' &middot; #' + s.no);
+    h +=     '<span class="meta">' + s.tags + '</span>';
+    h +=     '<span class="srange num">' + peso(s.lo) + ' - ' + peso(s.hi) + ' <span>/ kg</span></span>';
+    h +=   '</span>';
+    h += '</button>';
+    return el(h);
+  }
+
+  function promoCard(pr){
+    var h = '';
+    h += '<button class="promo rv ' + pr.cls + '">';
+    h +=   '<img class="bg" data-img="' + (pr.file === '__market__' ? '__market__' : '__banner__') +
+             '" data-file="' + pr.file + '" data-fb="' + pr.fb + '" data-crop="58% 88%" data-zoom="1.5" data-ph="veg" alt="">';
+    h +=   '<span class="veil"></span>';
+    h +=   '<span class="body"><span class="kick">' + pr.kick + '</span>' +
+           '<span class="h">' + pr.h + '</span><span class="p">' + pr.p + '</span></span>';
+    h += '</button>';
+    return el(h);
+  }
+
+  function compareRowCompact(r){
+    var h = '';
+    h += '<div class="cmprow' + (r.rank === 1 ? ' best' : '') + '">';
+    h +=   '<span class="rank num">' + r.rank + '</span>';
+    h +=   '<span class="who"><b>' + r.stall + '</b><span class="num">' + r.sec + ' &middot; #' + r.no +
+           ' &middot; ' + r.rate.toFixed(1) + '</span></span>';
+    h +=   '<span class="pr"><b class="num">' + peso(r.perKg) + '</b><span class="num">/ kg</span></span>';
+    h += '</div>';
+    return el(h);
+  }
+
+  function compareRowFull(r, data){
+    var v = verdictOf(r.perKg, data.avg);
+    var span = data.max - data.min;
+    var w = Math.max(6, Math.min(100, ((r.perKg - data.min) / span) * 100));
+    var avgLeft = ((data.avg - data.min) / span) * 100;
+    var isBest = r.rank === 1;
+    var chip = isBest
+      ? '<span class="verdict mura">PINAKAMURA</span>'
+      : verdictChip(v);
+    var h = '';
+    h += '<button class="crow' + (isBest ? ' best' : '') + (v === 'mahal' ? ' over' : '') + '">';
+    h +=   '<span class="rk num">' + r.rank + '</span>';
+    h +=   '<span class="nm"><b>' + r.stall + '</b><span class="num">' + r.sec + ' &middot; #' + r.no +
+           ' &middot; ' + r.rate.toFixed(1) + ' (' + r.rev + ')</span>' +
+           (r.shownUnit === 'kg' ? ''
+             : '<span class="quoted num">Nakalista: ' + PESO + r.shown + ' / ' + r.shownUnit + '</span>') +
+           '</span>';
+    h +=   '<span class="pz"><b class="num">' + peso(r.perKg) +
+           ' <span style="font-size:13px;font-weight:600;color:var(--ink-3)">/ kg</span></b>' + chip + '</span>';
+    h +=   '<span class="bar"><u style="width:' + w + '%"></u><em style="left:' + avgLeft + '%"></em></span>';
+    h += '</button>';
+    return el(h);
+  }
+
+  /* Lowest, average and highest are derived from the roster, never authored.
+     Every verdict on this page - feed card, detail chip, compare row - runs
+     through verdictOf() against this same average, with the same 5% band. */
+  Object.keys(COMPARE).forEach(function(k){
+    var d = COMPARE[k], sum = 0;
+    d.rows.forEach(function(r){ sum += r.perKg; });
+    d.avg = Math.round((sum / d.rows.length) * 100) / 100;
+    d.min = Math.min.apply(null, d.rows.map(function(r){ return r.perKg; }));
+    d.max = Math.max.apply(null, d.rows.map(function(r){ return r.perKg; }));
+  });
+
+  /* ---------------- render ---------------- */
+  function ranked(key){
+    var data = COMPARE[key];
+    var rows = data.rows.slice().sort(function(a,b){ return a.perKg - b.perKg; });
+    rows.forEach(function(r,i){ r.rank = i + 1; });
+    return { data:data, rows:rows };
+  }
+
+  /* One source of truth for every number the compare story prints: the home
+     card, the product detail and the sheet all read the same roster. */
+  function syncFacts(rk){
+    var d = rk.data, n = rk.rows.length, p = byId.kamatis;
+    function set(id, txt){ var n2 = document.getElementById(id); if (n2) n2.textContent = txt; }
+
+    set('homeCmpSub', n + ' na puwesto ngayon');
+    var bestNode = document.getElementById('homeBest');
+    if (bestNode) bestNode.innerHTML = peso(d.min) + ' <i>/ kg</i>';
+    set('homeAvg', peso(d.avg) + ' / kg');
+    set('homeCmpAll', 'Ikumpara lahat ng ' + n + ' na puwesto');
+
+    set('dPrice', peso(p.price));
+    var wasNode = document.getElementById('dWas');
+    if (wasNode) wasNode.textContent = p.was ? peso(p.was) : '';
+    var v = verdictOf(p.price, d.avg);
+    var vNode = document.getElementById('dVerdict');
+    if (vNode){
+      vNode.className = 'verdict ' + v;
+      vNode.innerHTML = (v === 'mura' ? '<svg class="ic ic-xs"><use href="#i-trend-d"></use></svg> ' : '') +
+        (v === 'mura' ? 'MURA' : v === 'mahal' ? 'MAHAL' : 'KATAMTAMAN');
+      vNode.style.marginTop = '0';
+    }
+    var pct = Math.round(Math.abs((p.price - d.avg) / d.avg) * 100);
+    set('dNorm', peso(p.price) + ' kada kilo · ' + pct + '% ' +
+        (p.price < d.avg ? 'below' : 'above') + ' the market average of ' + peso(d.avg) + ' / kg');
+    set('dAvg', peso(d.avg) + ' / kg');
+    set('dCmpAll', 'Tingnan lahat ng ' + n + ' na presyo');
+
+    set('kpiLow', peso(d.min));
+    set('kpiAvg', peso(d.avg));
+    set('kpiHigh', peso(d.max));
+    set('sheetAvg', peso(d.avg) + ' / kg');
+    set('sheetSave', 'Sa pinakamurang puwesto, tipid ka ng ' + peso(d.avg - d.min) +
+        ' kada kilo kumpara sa average sa palengke.');
+  }
+
+  function render(){
+    // categories
+    var cr = document.getElementById('catRail');
+    CATS.forEach(function(c){
+      cr.appendChild(el('<button class="cat" data-go="browse"><span class="cat-ic"><svg class="ic"><use href="' +
+        c.ic + '"></use></svg></span><b>' + c.fil + '</b><i>' + c.en + '</i></button>'));
+    });
+
+    // promos
+    var pr = document.getElementById('promoRail');
+    PROMOS.forEach(function(p){ pr.appendChild(promoCard(p)); });
+
+    // home compare (top 3)
+    var hc = document.getElementById('homeCompareRows');
+    var rk = ranked('kamatis');
+    rk.rows.slice(0,3).forEach(function(r){ hc.appendChild(compareRowCompact(r)); });
+
+    // detail compare (top 3)
+    var dc = document.getElementById('detailCompareRows');
+    rk.rows.slice(0,3).forEach(function(r){ dc.appendChild(compareRowCompact(r)); });
+
+    // sheet rows
+    var sr = document.getElementById('sheetRows');
+    rk.rows.forEach(function(r){ sr.appendChild(compareRowFull(r, rk.data)); });
+
+    // deals
+    var dr = document.getElementById('dealRail');
+    ['kamatis','mangga','bangus','itlog'].forEach(function(id){ dr.appendChild(productCard(byId[id])); });
+
+    // stalls
+    var sRail = document.getElementById('stallRail');
+    STALLS.forEach(function(s){ sRail.appendChild(stallCard(s)); });
+
+    var bRail = document.getElementById('browseStalls');
+    STALLS.slice(1,5).forEach(function(s){ bRail.appendChild(stallCard(s)); });
+
+    // home grid: only what actually prices below the market average today
+    var hg = document.getElementById('homeGrid');
+    var mura = P.filter(function(p){ return verdictOf(p.price, p.avg) === 'mura'; });
+    mura.forEach(function(p){ hg.appendChild(productCard(p)); });
+    document.getElementById('muraCount').textContent =
+      mura.length + (mura.length === 1 ? ' produkto' : ' na produkto');
+    if (!mura.length){
+      hg.appendChild(el('<p style="grid-column:1 / -1;margin:0;color:var(--ink-3);font-weight:600">' +
+        'Walang produkto sa ilalim ng average ngayon. Balik ka bukas ng umaga.</p>'));
+    }
+
+    // browse grid: everything, ranked by distance below the market average
+    var bg = document.getElementById('browseGrid');
+    P.slice().sort(function(a,b){
+      return (a.price/a.avg) - (b.price/b.avg);
+    }).forEach(function(p){ bg.appendChild(productCard(p)); });
+
+    // more from this stall
+    var mr = document.getElementById('moreRail');
+    ['sitaw','calamansi','talong','repolyo'].forEach(function(id){ mr.appendChild(productCard(byId[id])); });
+
+    // tabs, both bars
+    function tabMarkup(t){
+      return '<button class="tab" data-tab="' + t.id + '">' +
+             '<span class="pillbg"></span>' +
+             '<svg class="ic"><use href="' + t.ic + '"></use></svg>' +
+             '<b>' + t.label + '</b>' +
+             (t.badge ? '<span class="cbadge num">' + t.badge + '</span>' : '') + '</button>';
+    }
+    var tb = document.getElementById('tabbar');
+    var sb = document.getElementById('sideTabs');
+    TABS.forEach(function(t){
+      tb.appendChild(el(tabMarkup(t)));
+      sb.appendChild(el('<li>' + tabMarkup(t) + '</li>'));
+    });
+
+    syncFacts(rk);
+
+    // greeting reflects the real clock, like the app does
+    var hr = new Date().getHours();
+    document.getElementById('greet').textContent =
+      hr < 12 ? 'Magandang umaga' : (hr < 18 ? 'Magandang hapon' : 'Magandang gabi');
+
+    bindAllImages();
+  }
+
+  /* ---------------- logo fallback (single reference) ---------------- */
+  var logo = document.getElementById('brandLogo');
+  logo.onerror = function(){
+    var s = el('<svg class="ic fallback" viewBox="0 0 24 24" style="stroke-width:1.8"><use href="#i-basket"></use></svg>');
+    if (logo.parentNode) logo.parentNode.replaceChild(s, logo);
+  };
+
+  /* ---------------- toast ---------------- */
+  var toastEl = document.getElementById('toast'), toastTimer;
+  function toast(msg){
+    toastEl.textContent = msg;
+    toastEl.classList.add('on');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ toastEl.classList.remove('on'); }, 2600);
+  }
+
+  /* ---------------- router ---------------- */
+  var SCREENS = ['home','browse','product','cart'];
+  var ACTION = {
+    product: { label:'Total Amount', amount:peso(60), cta:'Add to Cart' },
+    cart:    { label:'Total &middot; 2 stalls', amount:peso(610), cta:'Proceed to Checkout' }
+  };
+  var current = 'home';
+
+  function go(name){
+    if (SCREENS.indexOf(name) === -1){
+      toast('This direction shows Home, Browse, Product and PalengKart.');
+      return;
+    }
+    current = name;
+    root.setAttribute('data-screen', name);
+    SCREENS.forEach(function(s){
+      var node = document.getElementById('screen-' + s);
+      if (node) node.classList.toggle('is-active', s === name);
+    });
+    var activeTab = (name === 'cart') ? 'cart' : 'home';
+    document.querySelectorAll('.tab').forEach(function(t){
+      t.classList.toggle('on', t.getAttribute('data-tab') === activeTab);
+    });
+    if (ACTION[name]){
+      document.getElementById('actionLabel').innerHTML = ACTION[name].label;
+      document.getElementById('actionAmount').textContent = ACTION[name].amount;
+      document.getElementById('actionCtaText').textContent = ACTION[name].cta;
+    }
+    scrollTop();
+    root.classList.remove('scrolled');
+    refreshMotion();
+  }
+  function scrollTop(){
+    function jump(){
+      window.scrollTo(0, 0);
+      if (window.__lenis){
+        window.__lenis.resize();
+        window.__lenis.scrollTo(0, { immediate:true, force:true });
+      }
+    }
+    jump();
+    requestAnimationFrame(jump);
+  }
+
+  /* ---------------- compare sheet ---------------- */
+  var sheet = document.getElementById('compareSheet');
+  var scrim = document.getElementById('scrim');
+  var lastFocus = null;
+  function openSheet(id){
+    var p = byId[id];
+    document.getElementById('sheetTitle').textContent = (p ? p.name : 'Kamatis');
+    var roster = COMPARE[id] || COMPARE.kamatis;
+    document.getElementById('sheetSub').innerHTML =
+      'Presyo ngayon sa ' + roster.rows.length + ' na puwesto &middot; per kilo';
+    lastFocus = document.activeElement;
+    scrim.classList.add('on');
+    sheet.classList.add('on');
+    root.classList.add('sheet-open');
+    if (window.__lenis) window.__lenis.stop();
+    document.getElementById('sheetClose').focus();
+  }
+  function closeSheet(){
+    scrim.classList.remove('on');
+    sheet.classList.remove('on');
+    root.classList.remove('sheet-open');
+    if (window.__lenis) window.__lenis.start();
+    if (lastFocus) lastFocus.focus();
+  }
+
+  /* ---------------- events ---------------- */
+  document.addEventListener('click', function(e){
+    var cmp = e.target.closest('[data-compare]');
+    if (cmp){ e.preventDefault(); e.stopPropagation(); openSheet(cmp.getAttribute('data-compare')); return; }
+
+    var tab = e.target.closest('[data-tab]');
+    if (tab){ go(tab.getAttribute('data-tab')); return; }
+
+    var open = e.target.closest('[data-open]');
+    if (open){ go('product'); return; }
+
+    var goBtn = e.target.closest('[data-go]');
+    if (goBtn){ go(goBtn.getAttribute('data-go')); return; }
+
+    var fav = e.target.closest('.fav');
+    if (fav){ e.stopPropagation(); fav.classList.toggle('on'); return; }
+  });
+
+  document.getElementById('sheetClose').addEventListener('click', closeSheet);
+  scrim.addEventListener('click', closeSheet);
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape' && sheet.classList.contains('on')) closeSheet();
+  });
+
+  document.getElementById('backBtn').addEventListener('click', function(){ go('home'); });
+  document.getElementById('searchBtn').addEventListener('click', function(){ go('browse'); });
+  document.getElementById('bellBtn').addEventListener('click', function(){
+    toast('Abiso: bumaba ang presyo ng kamatis sa 2 puwesto.');
+  });
+  document.getElementById('toTop').addEventListener('click', scrollTop);
+  document.getElementById('actionCta').addEventListener('click', function(){
+    toast(current === 'cart' ? 'Checkout: GCash lang ang bayad.' : 'Naidagdag sa PalengKart.');
+  });
+
+  // unit chips re-price the screen, like the real app
+  document.querySelectorAll('.unitrow .unit').forEach(function(u){
+    u.addEventListener('click', function(){
+      document.querySelectorAll('.unitrow .unit').forEach(function(x){ x.classList.remove('on'); });
+      u.classList.add('on');
+      var v = u.querySelector('span').textContent.replace(/[^\d.]/g,'');
+      document.getElementById('actionAmount').textContent = peso(parseFloat(v));
+    });
+  });
+
+  // filter chips
+  document.querySelectorAll('.filterbar .chip').forEach(function(c, i){
+    if (i === 0) return;
+    c.addEventListener('click', function(){ c.classList.toggle('on'); });
+  });
+
+  /* ---------------- promo carousel progress (user-driven state) ---------------- */
+  (function promoProgress(){
+    var rail = document.getElementById('promoRail');
+    var bar  = document.getElementById('promoProgress');
+    var dots = document.getElementById('promoDots').children;
+    function update(){
+      var total = rail.scrollWidth || 1;
+      var frac = Math.min(1, rail.clientWidth / total);
+      var max = rail.scrollWidth - rail.clientWidth;
+      var p = max > 0 ? rail.scrollLeft / max : 0;
+      bar.style.width = (frac * 100) + '%';
+      bar.style.marginLeft = ((rail.scrollLeft / total) * 100) + '%';
+      var idx = Math.round(p * (dots.length - 1));
+      for (var i = 0; i < dots.length; i++) dots[i].classList.toggle('on', i === idx);
+    }
+    window.addEventListener('resize', update);
+    rail.addEventListener('scroll', function(){ requestAnimationFrame(update); }, { passive:true });
+    update();
+  })();
+
+  /* ============================================================
+     MOTION LAYER
+     Everything below is progressive enhancement. If GSAP or Lenis
+     fail to load, or the user prefers reduced motion, the page keeps
+     working on native scroll with every element already visible.
+     ============================================================ */
+  var allowMotion = window.matchMedia('(prefers-reduced-motion: no-preference)').matches;
+  var hasGsap = typeof window.gsap !== 'undefined' && typeof window.ScrollTrigger !== 'undefined';
+  var hasLenis = typeof window.Lenis !== 'undefined';
+  var gsapDrives = allowMotion && hasGsap;
+  var refreshMotion = function(){};
+
+  /* Header collapse. ScrollTrigger owns it on Home when the motion layer is
+     live; a passive native listener owns every other case, so the collapse
+     never depends on a CDN being reachable. */
+  window.addEventListener('scroll', function(){
+    var y = window.scrollY || window.pageYOffset || 0;
+    if (current !== 'home'){ root.classList.toggle('scrolled', y > 40); return; }
+    if (!gsapDrives) root.classList.toggle('scrolled', y > 96);
+  }, { passive:true });
+
+  if (gsapDrives){
+    root.classList.add('motion');
+    gsap.registerPlugin(ScrollTrigger);
+    ScrollTrigger.config({ ignoreMobileResize:true });
+
+    // Lenis smooth scroll, wired to the GSAP ticker (Ben's parallax guide, 5a)
+    if (hasLenis){
+      var lenis = new Lenis({ duration:0.9, smoothWheel:true });
+      window.__lenis = lenis;
+      lenis.on('scroll', ScrollTrigger.update);
+      gsap.ticker.add(function(time){ lenis.raf(time * 1000); });
+      gsap.ticker.lagSmoothing(0);
+    }
+
+    // layered header: three depths, short travel, never pinned (guide 5d)
+    gsap.to('.hero-sky',   { yPercent:-5,  ease:'none', scrollTrigger:{ trigger:'#hero', start:'top top', end:'bottom top', scrub:true }});
+    gsap.to('.hero-photo', { yPercent:-14, ease:'none', scrollTrigger:{ trigger:'#hero', start:'top top', end:'bottom top', scrub:true }});
+    gsap.to('.hero-fg',    { yPercent:-24, opacity:0.25, ease:'none', scrollTrigger:{ trigger:'#hero', start:'top top', end:'bottom top', scrub:true }});
+
+    // sticky header collapse: ScrollTrigger watches a fixed scroll offset
+    ScrollTrigger.create({
+      start:96, end:'max',
+      onToggle:function(self){ root.classList.toggle('scrolled', self.isActive); }
+    });
+
+    /* One-time card entrance reveal. IntersectionObserver decides WHEN
+       (it survives viewport resizes and route swaps); GSAP does the tween
+       at the 400ms standard tier over a 14px distance. A safety net reveals
+       anything still hidden shortly after load, so no card can ever be
+       stranded invisible if an observer callback is missed. */
+    var revealed = new WeakSet();
+    function reveal(nodes, animate){
+      var todo = nodes.filter(function(n){
+        if (revealed.has(n)) return false;
+        revealed.add(n); return true;
+      });
+      if (!todo.length) return;
+      if (animate) gsap.to(todo, { opacity:1, y:0, duration:0.42, ease:'power2.out', stagger:0.06, overwrite:true });
+      else gsap.set(todo, { opacity:1, y:0 });
+    }
+    var io = null;
+    if ('IntersectionObserver' in window){
+      io = new IntersectionObserver(function(entries){
+        var hit = [];
+        entries.forEach(function(e){
+          if (!e.isIntersecting) return;
+          io.unobserve(e.target);
+          hit.push(e.target);
+        });
+        reveal(hit, true);
+      }, { rootMargin:'0px 0px -6% 0px' });
+      document.querySelectorAll('.rv').forEach(function(n){ io.observe(n); });
+    }
+    function safetyNet(){
+      var rest = [];
+      document.querySelectorAll('.rv').forEach(function(n){
+        if (io) io.unobserve(n);
+        rest.push(n);
+      });
+      reveal(rest, false);
+    }
+    if (io) setTimeout(safetyNet, 1200); else safetyNet();
+
+    // route change: 240ms content swap (standard tier), then re-measure
+    refreshMotion = function(){
+      var scr = document.querySelector('.screen.is-active');
+      if (!scr) return;
+      reveal(Array.prototype.slice.call(scr.querySelectorAll('.rv')), false);
+      gsap.fromTo(scr, { opacity:0, y:8 }, { opacity:1, y:0, duration:0.24, ease:'power2.out' });
+      ScrollTrigger.refresh();
+    };
+
+    if (document.fonts && document.fonts.ready){
+      document.fonts.ready.then(function(){ ScrollTrigger.refresh(); });
+    }
+    window.addEventListener('load', function(){ ScrollTrigger.refresh(); });
+  }
+
+  /* ---------------- boot ---------------- */
+  render();
+  root.setAttribute('data-screen', 'home');
+  document.querySelectorAll('.tab').forEach(function(t){
+    t.classList.toggle('on', t.getAttribute('data-tab') === 'home');
+  });
+})();
+</script>
+</body>
+</html>

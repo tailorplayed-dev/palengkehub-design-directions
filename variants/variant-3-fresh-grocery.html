@@ -1,0 +1,1624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>PalengkeHub - Lipa City Public Market</title>
+<meta name="description" content="Order now, pick up at Lipa City Public Market. Compare stall prices per kilo before you walk.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   PalengkeHub - Variant 3 "Fresh Grocery"
+   Direction: Instacart / HappyFresh clarity. Warm off-white paper
+   surfaces, large produce photography, muted market green with one
+   warm clay accent, generous whitespace, one soft shadow layer.
+   ============================================================ */
+
+:root {
+  /* ---- brand mark: the ONLY place the logo file is referenced ---- */
+  --brand-mark: url("../02-audit/logo/app-icon.png");
+  --brand-mark-fallback: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%23E4EEE4'/%3E%3Cpath d='M14 27h36l-4 20a4 4 0 0 1-4 3H22a4 4 0 0 1-4-3z' fill='%23EFEBE0'/%3E%3Cpath d='M14 27h36' stroke='%232C6B4A' stroke-width='3' stroke-linecap='round'/%3E%3Ccircle cx='26' cy='23' r='6' fill='%23B85B2E'/%3E%3Cpath d='M38 24c0-5 4-8 9-8 0 5-4 8-9 8z' fill='%234B8B63'/%3E%3C/svg%3E");
+
+  /* ---- palette: off-white paper, muted green, one warm clay ---- */
+  --bg:        #F4F1E9;
+  --surface:   #FDFBF6;
+  --surface-2: #EFEBE0;
+  --line:      #E3DED1;
+  --ink:       #1E241D;
+  --ink-2:     #4B554A;
+  --ink-3:     #6E7767;
+
+  --green-900: #1C4432;
+  --green-700: #2C6B4A;
+  --green-500: #4B8B63;
+  --green-100: #E4EEE4;
+
+  --warm:      #B85B2E;
+  --warm-100:  #F6E6DA;
+
+  --gcash:     #007DFE;
+
+  /* ---- one radius family ---- */
+  --r-lg: 18px;
+  --r-md: 12px;
+  --r-pill: 999px;
+
+  /* ---- one shadow, single layer, green tinted ---- */
+  --sh: 0 6px 18px rgba(28,68,50,.09);
+  --sh-lift: 0 10px 26px rgba(28,68,50,.14);
+
+  /* ---- motion: soft, 200-250ms ---- */
+  --t: 220ms cubic-bezier(.2,0,0,1);
+  --t-fast: 160ms cubic-bezier(.2,0,0,1);
+
+  --pad: 16px;
+  --tabbar-h: 68px;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Be Vietnam Pro", "Segoe UI", system-ui, -apple-system, sans-serif;
+  font-size: 17px;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+  padding-bottom: calc(var(--tabbar-h) + env(safe-area-inset-bottom));
+}
+
+h1, h2, h3, h4 { font-family: Nunito, "Be Vietnam Pro", system-ui, sans-serif; margin: 0; letter-spacing: -.01em; }
+button { font: inherit; color: inherit; border: 0; background: none; cursor: pointer; }
+img { display: block; max-width: 100%; }
+s { text-decoration-thickness: 1.5px; }
+ul { margin: 0; padding: 0; list-style: none; }
+
+:focus-visible { outline: 3px solid var(--green-500); outline-offset: 2px; border-radius: 6px; }
+
+.icon { width: 22px; height: 22px; flex: none; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.icon.sm { width: 18px; height: 18px; }
+.icon.fill { fill: currentColor; stroke: none; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* ============================ shell ============================ */
+.shell { display: block; }
+.rail { display: none; }
+.viewport { max-width: 100%; }
+
+/* ============================ app bar ============================ */
+.appbar {
+  position: sticky; top: 0; z-index: 40;
+  background: var(--bg);
+  padding: 10px var(--pad) 12px;
+  border-bottom: 1px solid transparent;
+  transition: border-color var(--t), box-shadow var(--t);
+}
+.appbar.is-compact { border-bottom-color: var(--line); box-shadow: 0 4px 14px rgba(28,68,50,.05); }
+
+.brandrow { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.brandname, .brandsub { display: block; }
+.brand-mark {
+  width: 36px; height: 36px; flex: none; border-radius: 11px;
+  background-image: var(--brand-mark), var(--brand-mark-fallback);
+  background-size: cover; background-position: center; background-repeat: no-repeat;
+}
+.brand-mark.lg { width: 48px; height: 48px; border-radius: 14px; }
+.brandname { font-family: Nunito; font-weight: 800; font-size: 20px; line-height: 1.1; }
+.brandsub { font-size: 13px; color: var(--ink-3); line-height: 1.2; }
+.iconbtn {
+  position: relative; flex: none;
+  width: 44px; height: 44px; border-radius: var(--r-pill);
+  display: grid; place-items: center; color: var(--ink-2);
+  background: var(--surface); box-shadow: var(--sh);
+  transition: transform var(--t-fast), background var(--t-fast);
+}
+.iconbtn:active { transform: scale(.94); }
+.iconbtn .dot { position: absolute; width: 9px; height: 9px; border-radius: 50%; background: var(--warm); transform: translate(9px,-9px); border: 2px solid var(--surface); }
+
+.locrow {
+  display: flex; align-items: center; gap: 8px; width: 100%; min-height: 44px;
+  padding: 2px 2px 8px; color: var(--ink-2); text-align: left;
+}
+.locrow .place { font-weight: 600; color: var(--ink); font-size: 17px; }
+.status-pill {
+  margin-left: auto; display: inline-flex; align-items: center; gap: 6px;
+  font-size: 13px; font-weight: 600; color: var(--green-900);
+  background: var(--green-100); padding: 5px 11px; border-radius: var(--r-pill);
+}
+.status-pill i { width: 7px; height: 7px; border-radius: 50%; background: var(--green-500); display: block; }
+
+.searchwrap { display: flex; gap: 10px; align-items: center; }
+.search {
+  flex: 1; min-width: 0; display: flex; align-items: center; gap: 10px;
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--r-pill); padding: 0 16px; height: 52px;
+  color: var(--ink-3); box-shadow: var(--sh); text-align: left;
+  transition: box-shadow var(--t), border-color var(--t);
+}
+.search span { font-size: 17px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.search:hover { border-color: var(--green-500); }
+.appbar.is-compact .brandrow,
+.appbar.is-compact .locrow { display: none; }
+.backrow { display: none; }
+@media (max-width: 1023px) {
+  body[data-view="product"] .appbar { display: none; }
+}
+.appbar.is-compact { padding-top: 8px; padding-bottom: 8px; }
+.appbar.is-compact .search { height: 46px; }
+
+/* ============================ screens ============================ */
+.screen { display: none; padding: 0 0 40px; }
+.screen.is-active { display: block; }
+.pad { padding-left: var(--pad); padding-right: var(--pad); }
+
+.greeting { padding: 12px var(--pad) 2px; }
+.greeting h1 { font-size: 24px; font-weight: 800; line-height: 1.15; }
+.greeting p { margin: 6px 0 0; color: var(--ink-2); font-size: 17px; }
+
+/* section heads use the gentle display face */
+.sechead { display: flex; align-items: flex-end; gap: 12px; padding: 18px var(--pad) 11px; }
+.sechead h2 { font-size: 20px; font-weight: 800; }
+.sechead p { margin: 3px 0 0; font-size: 15px; color: var(--ink-3); }
+.sechead .seeall { margin-left: auto; display: inline-flex; align-items: center; min-height: 44px; gap: 2px; color: var(--green-700); font-weight: 600; font-size: 15px; padding: 8px 0 8px 8px; white-space: nowrap; }
+
+/* horizontal rails with peek */
+.rail-scroll {
+  display: flex; gap: 14px; overflow-x: auto; scroll-snap-type: x proximity;
+  padding: 4px var(--pad) 8px; scrollbar-width: none;
+}
+.rail-scroll::-webkit-scrollbar { display: none; }
+.rail-scroll > * { scroll-snap-align: start; }
+
+/* ---------------- category chips ---------------- */
+.cats { padding-top: 8px; }
+.cat {
+  width: 74px; flex: none; display: flex; flex-direction: column; align-items: center; gap: 7px;
+  color: var(--ink); transition: transform var(--t-fast);
+}
+.cat:active { transform: scale(.95); }
+/* flat category glyphs, readable at chip scale; photography stays on cards */
+.cat .thumb {
+  width: 64px; height: 64px; border-radius: 50%;
+  display: grid; place-items: center;
+  background: var(--green-100); box-shadow: var(--sh); color: var(--green-700);
+}
+.cat .thumb .icon { width: 30px; height: 30px; stroke-width: 1.6; }
+.cat b { font-family: Nunito; font-size: 15px; font-weight: 700; line-height: 1.15; }
+.cat span { font-size: 13px; color: var(--ink-3); line-height: 1.1; }
+
+/* ---------------- promo carousel ---------------- */
+.promos { padding: 6px var(--pad) 0; }
+.promo-track {
+  display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory;
+  scrollbar-width: none; padding-bottom: 10px;
+}
+.promo-track::-webkit-scrollbar { display: none; }
+.promo {
+  position: relative; flex: none; width: calc(100% - 26px); aspect-ratio: 2.4/1;
+  border-radius: var(--r-lg); overflow: hidden; scroll-snap-align: center;
+  box-shadow: var(--sh); background: var(--green-100);
+}
+.promo img { width: 100%; height: 100%; object-fit: cover; }
+.promo .veil { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(20,40,28,.78) 0%, rgba(20,40,28,.45) 52%, rgba(20,40,28,.05) 100%); }
+.promo .copy { position: absolute; inset: 0; padding: 16px 18px; display: flex; flex-direction: column; justify-content: center; color: #FDFBF6; }
+.promo .kicker { font-size: 13px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; opacity: .9; }
+.promo h3 { font-size: 24px; font-weight: 800; margin: 6px 0 4px; max-width: 15ch; line-height: 1.15; }
+.promo p { margin: 0; font-size: 15px; opacity: .92; max-width: 24ch; }
+.dots { display: flex; gap: 7px; justify-content: center; padding: 4px 0 2px; }
+.dots i { width: 7px; height: 7px; border-radius: 50%; background: var(--line); display: block; transition: width var(--t), background var(--t); }
+.dots i.on { width: 20px; background: var(--green-700); border-radius: var(--r-pill); }
+
+/* ---------------- presyo ngayon strip ---------------- */
+.watch {
+  flex: none; width: 218px; background: var(--surface); border-radius: var(--r-lg);
+  padding: 13px 14px 12px; box-shadow: var(--sh); text-align: left;
+  border: 1px solid var(--line); transition: transform var(--t), box-shadow var(--t);
+}
+.watch:hover { transform: translateY(-2px); box-shadow: var(--sh-lift); }
+.watch:active { transform: scale(.985); }
+.watch .whead { display: flex; align-items: center; gap: 11px; }
+.watch .wthumb {
+  width: 58px; height: 58px; flex: none; border-radius: 15px; overflow: hidden;
+  background: var(--green-100);
+}
+.watch .wthumb img { width: 100%; height: 100%; object-fit: cover; }
+.watch .wmeta { min-width: 0; display: block; }
+.watch .wname { display: block; font-family: Nunito; font-weight: 700; font-size: 17px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.watch .wprice { display: block; font-family: Nunito; font-weight: 800; font-size: 24px; margin-top: 2px; letter-spacing: -.02em; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.watch .wprice span { font-family: "Be Vietnam Pro"; font-size: 15px; font-weight: 500; color: var(--ink-3); letter-spacing: 0; }
+.watch .wchip { display: block; margin-top: 10px; }
+.watch .wfoot { display: flex; align-items: center; gap: 8px; margin-top: 9px; padding-top: 9px; border-top: 1px solid var(--line); font-size: 13px; color: var(--ink-3); }
+.watch .wfoot .icon { margin-left: auto; color: var(--green-700); }
+
+/* ---------------- verdict chips ---------------- */
+.verdict {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 13px; font-weight: 700; letter-spacing: .04em;
+  padding: 4px 10px; border-radius: var(--r-pill); white-space: nowrap;
+}
+.verdict.mura { background: var(--green-100); color: var(--green-900); }
+.verdict.mahal { background: var(--warm-100); color: var(--warm); }
+.verdict.katamtaman { background: var(--surface-2); color: var(--ink-2); }
+
+/* ---------------- product card ---------------- */
+.grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; padding: 4px var(--pad) 0; }
+.pcard {
+  background: var(--surface); border-radius: var(--r-lg); overflow: hidden;
+  box-shadow: var(--sh); border: 1px solid var(--line); display: flex; flex-direction: column;
+  transition: transform var(--t), box-shadow var(--t);
+}
+.pcard:hover { transform: translateY(-3px); box-shadow: var(--sh-lift); }
+.rail-scroll .pcard { flex: none; width: 172px; }
+.pcard-media { position: relative; aspect-ratio: 1/1; background: var(--green-100); }
+.pcard-media img { width: 100%; height: 100%; object-fit: cover; }
+.badge {
+  position: absolute; top: 10px; left: 10px; font-size: 13px; font-weight: 700;
+  padding: 4px 9px; border-radius: var(--r-pill); background: var(--warm); color: #fff;
+  letter-spacing: .02em;
+}
+.badge.best { background: var(--green-700); }
+.fav {
+  position: absolute; top: 8px; right: 8px; width: 40px; height: 40px; border-radius: 50%;
+  background: rgba(253,251,246,.92); color: var(--ink-2); display: grid; place-items: center;
+  transition: color var(--t-fast), transform var(--t-fast);
+}
+/* keeps the glyph light while the real touch target measures 44x44 */
+.fav::after { content: ""; position: absolute; inset: -2px; border-radius: 50%; }
+.fav:active { transform: scale(.9); }
+.fav.on { color: var(--warm); }
+.add {
+  position: absolute; right: 10px; bottom: -18px; width: 44px; height: 44px; border-radius: 50%;
+  background: var(--green-700); color: #fff; display: grid; place-items: center;
+  box-shadow: var(--sh); transition: transform var(--t-fast), background var(--t-fast);
+}
+.add:hover { background: var(--green-900); }
+.add:active { transform: scale(.9); }
+.pcard-body { padding: 22px 14px 14px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
+.pcard-title { font-size: 17px; font-weight: 700; line-height: 1.2; }
+.pcard-title span { display: block; font-family: "Be Vietnam Pro"; font-size: 15px; font-weight: 400; color: var(--ink-3); }
+.priceline { display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap; margin-top: 2px; }
+.price { font-family: Nunito; font-weight: 800; font-size: 24px; line-height: 1.05; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+.per { font-size: 15px; color: var(--ink-3); font-weight: 500; }
+.was { font-size: 15px; color: var(--ink-3); }
+.metaline { display: flex; align-items: center; gap: 6px; font-size: 15px; color: var(--ink-3); }
+.metaline .star { color: var(--warm); }
+.metaline b { color: var(--ink-2); font-weight: 600; }
+.stallline { font-size: 15px; color: var(--ink-3); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cmpbtn {
+  margin-top: auto; display: flex; flex-direction: column; align-items: flex-start; gap: 1px;
+  width: 100%; text-align: left; min-height: 48px; padding: 8px 12px; border-radius: var(--r-md);
+  background: var(--green-100); color: var(--green-900); font-size: 15px; font-weight: 500;
+  transition: background var(--t-fast);
+}
+.cmpbtn:hover { background: #D7E7D9; }
+.cmpbtn .cl { display: flex; align-items: center; gap: 7px; white-space: nowrap; }
+.cmpbtn .icon { color: var(--green-700); }
+.cmpbtn b { font-family: Nunito; font-size: 15px; font-weight: 800; white-space: nowrap; }
+
+/* ---------------- stall card ---------------- */
+.scard {
+  flex: none; width: 280px; background: var(--surface); border-radius: var(--r-lg);
+  overflow: hidden; box-shadow: var(--sh); border: 1px solid var(--line); text-align: left;
+  transition: transform var(--t), box-shadow var(--t);
+}
+.scard:hover { transform: translateY(-3px); box-shadow: var(--sh-lift); }
+.scard-media { position: relative; aspect-ratio: 16/9; background: var(--green-100); }
+.scard-media img { width: 100%; height: 100%; object-fit: cover; }
+.scard-body { padding: 14px 15px 16px; }
+.scard h3 { font-size: 17px; font-weight: 700; }
+.scard .sec { font-size: 15px; color: var(--ink-3); margin-top: 3px; }
+.scard .rangerow { display: flex; align-items: baseline; gap: 6px; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--line); }
+.scard .range { font-family: Nunito; font-weight: 800; font-size: 20px; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+
+/* ---------------- info strip ---------------- */
+.infostrip { display: flex; gap: 10px; padding: 16px var(--pad) 0; }
+.infocard {
+  flex: 1; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-md);
+  padding: 12px; display: flex; gap: 9px; align-items: flex-start;
+}
+.infocard .icon { color: var(--green-700); margin-top: 1px; }
+.infocard b { display: block; font-size: 15px; font-weight: 600; }
+.infocard span { font-size: 13px; color: var(--ink-3); }
+
+/* ============================ browse screen ============================ */
+.screenhead { padding: 18px var(--pad) 0; }
+.screenhead h1 { font-size: 24px; font-weight: 800; }
+.screenhead p { margin: 4px 0 0; color: var(--ink-3); font-size: 15px; }
+.filterbar {
+  position: sticky; top: 68px; z-index: 30; background: var(--bg);
+  padding: 12px 0 10px; margin-top: 6px;
+}
+.chips { display: flex; gap: 9px; overflow-x: auto; padding: 0 var(--pad); scrollbar-width: none; }
+.chips::-webkit-scrollbar { display: none; }
+.chip {
+  flex: none; min-height: 44px; padding: 10px 16px; border-radius: var(--r-pill);
+  background: var(--surface); border: 1px solid var(--line); font-size: 15px; font-weight: 500;
+  color: var(--ink-2); white-space: nowrap; transition: background var(--t-fast), color var(--t-fast), border-color var(--t-fast);
+}
+.chip.on { background: var(--green-700); border-color: var(--green-700); color: #fff; font-weight: 600; }
+.sortrow { display: flex; align-items: center; gap: 10px; padding: 12px var(--pad) 4px; }
+.sortrow .count { font-size: 15px; color: var(--ink-3); }
+.sortbtn {
+  margin-left: auto; display: inline-flex; align-items: center; gap: 7px; min-height: 44px;
+  padding: 9px 15px; border-radius: var(--r-pill); background: var(--surface);
+  border: 1px solid var(--line); font-size: 15px; font-weight: 600; box-shadow: var(--sh);
+}
+.totop {
+  position: fixed; right: 16px; bottom: calc(var(--tabbar-h) + 18px); z-index: 35;
+  width: 46px; height: 46px; border-radius: 50%; background: var(--surface);
+  box-shadow: var(--sh-lift); display: none; place-items: center; color: var(--green-900);
+  border: 1px solid var(--line);
+}
+.totop.on { display: grid; }
+
+/* ============================ product detail ============================ */
+.gallery { position: relative; }
+.gal-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; }
+.gal-track::-webkit-scrollbar { display: none; }
+.gal-track > figure { margin: 0; flex: none; width: 100%; aspect-ratio: 4/3; scroll-snap-align: center; background: var(--green-100); }
+.gal-track img { width: 100%; height: 100%; object-fit: cover; }
+.gal-controls { position: absolute; top: 12px; left: 0; right: 0; display: flex; padding: 0 12px; gap: 10px; }
+.gal-controls .iconbtn { background: rgba(253,251,246,.94); }
+.gal-controls .spacer { flex: 1; }
+.gallery .dots { position: absolute; bottom: 10px; left: 0; right: 0; }
+.gallery .dots i { background: rgba(253,251,246,.6); }
+.gallery .dots i.on { background: #FDFBF6; }
+
+.detailsheet {
+  position: relative; margin-top: -22px; background: var(--bg);
+  border-radius: 22px 22px 0 0; padding: 20px var(--pad) 0;
+}
+.detail-title { font-size: 24px; font-weight: 800; line-height: 1.15; }
+.detail-title span { display: block; font-family: "Be Vietnam Pro"; font-size: 17px; font-weight: 400; color: var(--ink-3); margin-top: 2px; }
+.bigprice { display: flex; align-items: baseline; gap: 9px; flex-wrap: wrap; margin-top: 14px; }
+.bigprice .price { font-size: 38px; }
+.bigprice .per { font-size: 17px; }
+.unitnote { margin: 8px 0 0; font-size: 15px; color: var(--ink-2); }
+.trustrow { display: flex; align-items: center; gap: 10px; margin-top: 14px; font-size: 15px; color: var(--ink-2); flex-wrap: wrap; }
+.trustrow .star { color: var(--warm); }
+.trustrow .sep { width: 4px; height: 4px; border-radius: 50%; background: var(--line); }
+
+.block { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg); padding: 16px; margin-top: 18px; box-shadow: var(--sh); }
+.block > h3 { font-size: 17px; font-weight: 800; }
+.block > p.sub { margin: 4px 0 0; font-size: 15px; color: var(--ink-3); }
+
+.swatches { display: flex; gap: 9px; flex-wrap: wrap; margin-top: 13px; }
+.swatch {
+  min-height: 48px; padding: 9px 16px; border-radius: var(--r-md); border: 1.5px solid var(--line);
+  background: var(--bg); text-align: center; transition: border-color var(--t-fast), background var(--t-fast);
+}
+.swatch b { display: block; font-family: Nunito; font-size: 17px; font-weight: 700; }
+.swatch span { display: block; font-size: 13px; color: var(--ink-3); }
+.swatch.on { border-color: var(--green-700); background: var(--green-100); }
+.swatch.on span { color: var(--green-900); }
+
+.stallstrip { display: flex; align-items: center; gap: 12px; }
+.stallstrip .avatar { width: 52px; height: 52px; border-radius: 14px; overflow: hidden; background: var(--green-100); flex: none; }
+.stallstrip .avatar img { width: 100%; height: 100%; object-fit: cover; }
+.stallstrip > div { flex: 1; min-width: 0; }
+.stallstrip h4, .stallstrip .sec { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.stallstrip h4 { font-family: Nunito; font-size: 17px; font-weight: 700; }
+.stallstrip .sec { display: block; font-size: 15px; color: var(--ink-3); }
+.ghost {
+  flex: none; margin-left: auto; min-height: 44px; padding: 10px 15px; border-radius: var(--r-pill);
+  border: 1.5px solid var(--green-700); color: var(--green-900); font-weight: 600; font-size: 15px;
+  transition: background var(--t-fast);
+}
+.ghost:hover { background: var(--green-100); }
+
+/* compare rows */
+.cmprow {
+  display: flex; align-items: center; gap: 10px; padding: 11px 10px; border-radius: var(--r-md);
+  text-align: left; width: 100%; transition: background var(--t-fast);
+}
+.cmprow + .cmprow { margin-top: 4px; }
+.cmprow:hover { background: var(--surface-2); }
+.cmprow.best { background: var(--green-100); }
+.cmprow .rank { width: 22px; font-family: Nunito; font-weight: 800; font-size: 17px; color: var(--ink-3); flex: none; }
+.cmprow.best .rank { color: var(--green-700); }
+.cmprow .body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+.cmprow .l1, .cmprow .l2 { display: flex; align-items: baseline; gap: 10px; }
+.cmprow .l1 b { flex: 1; min-width: 0; font-size: 17px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cmprow .amt { flex: none; text-align: right; }
+.cmprow .pline { display: flex; align-items: baseline; gap: 4px; white-space: nowrap; justify-content: flex-end; }
+.cmprow .price { font-size: 20px; }
+.cmprow .norm { display: block; font-size: 13px; color: var(--ink-3); white-space: nowrap; margin-top: 1px; }
+.cmprow .meta { flex: 1; min-width: 0; font-size: 15px; color: var(--ink-3); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cmprow .meta .star { color: var(--warm); vertical-align: -3px; margin-right: 2px; }
+.cmprow .l2 .verdict { flex: none; }
+.avgline {
+  display: flex; align-items: center; gap: 10px; margin-top: 12px; padding-top: 12px;
+  border-top: 1.5px dashed var(--line); font-size: 15px; color: var(--ink-2);
+}
+.avgline b { margin-left: auto; font-family: Nunito; font-weight: 800; font-size: 17px; color: var(--ink); font-variant-numeric: tabular-nums; }
+.wide {
+  display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%;
+  min-height: 48px; margin-top: 14px; border-radius: var(--r-md);
+  background: var(--green-100); color: var(--green-900); font-weight: 700; font-size: 17px;
+  transition: background var(--t-fast);
+}
+.wide:hover { background: #D7E7D9; }
+
+.spark { display: flex; flex-direction: column; align-items: stretch; gap: 10px; margin-top: 12px; }
+.spark svg { flex: none; width: 100%; height: 56px; }
+.spark p { margin: 0; font-size: 15px; color: var(--ink-2); }
+.spark .down { color: var(--green-900); font-weight: 600; display: inline-flex; align-items: center; gap: 5px; }
+
+.factlist { margin-top: 12px; }
+.factlist li { display: flex; gap: 10px; align-items: flex-start; padding: 9px 0; font-size: 15px; color: var(--ink-2); }
+.factlist li + li { border-top: 1px solid var(--line); }
+.factlist .icon { color: var(--green-700); margin-top: 1px; }
+.factlist b { color: var(--ink); font-weight: 600; }
+
+.desc { font-size: 17px; color: var(--ink-2); margin: 10px 0 0; }
+
+/* sticky bottom action bar */
+.actionbar {
+  position: fixed; left: 0; right: 0; bottom: calc(var(--tabbar-h) + env(safe-area-inset-bottom));
+  z-index: 38; display: none; align-items: center; gap: 14px;
+  padding: 12px var(--pad) 12px; background: var(--surface);
+  border-top: 1px solid var(--line); box-shadow: 0 -8px 22px rgba(28,68,50,.07);
+}
+body[data-view="product"] .actionbar { display: flex; }
+.actionbar .total span { display: block; font-size: 13px; color: var(--ink-3); }
+.actionbar .total b { font-family: Nunito; font-size: 24px; font-weight: 800; font-variant-numeric: tabular-nums; }
+.cta {
+  flex: 1; min-height: 52px; border-radius: var(--r-pill); background: var(--green-700); color: #fff;
+  font-weight: 700; font-size: 17px; display: flex; align-items: center; justify-content: center; gap: 9px;
+  transition: background var(--t-fast), transform var(--t-fast);
+}
+.cta:hover { background: var(--green-900); }
+.cta:active { transform: scale(.985); }
+
+/* ============================ bottom tabs ============================ */
+.tabbar {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 45;
+  height: calc(var(--tabbar-h) + env(safe-area-inset-bottom));
+  padding-bottom: env(safe-area-inset-bottom);
+  background: var(--surface); border-top: 1px solid var(--line);
+  display: flex; align-items: stretch;
+}
+.tab {
+  flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
+  color: var(--ink-3); font-size: 13px; font-weight: 500; position: relative;
+  transition: color var(--t-fast);
+}
+.tab .icon { width: 24px; height: 24px; }
+.tab.on { color: var(--green-900); font-weight: 700; }
+.tab.on .icon { stroke-width: 2.2; }
+.tab .cartbadge {
+  position: absolute; top: 8px; left: 50%; margin-left: 6px;
+  min-width: 20px; height: 20px; padding: 0 5px; border-radius: var(--r-pill);
+  background: var(--warm); color: #fff; font-size: 13px; font-weight: 700;
+  display: grid; place-items: center; border: 2px solid var(--surface);
+}
+
+/* ============================ sheets ============================ */
+.sheet { position: fixed; inset: 0; z-index: 60; display: none; }
+.sheet.open { display: block; }
+.scrim { position: absolute; inset: 0; background: rgba(24,38,28,.45); animation: fade var(--t) ease-out; }
+.panel {
+  position: absolute; left: 0; right: 0; bottom: 0; max-height: 88vh; overflow-y: auto;
+  background: var(--bg); border-radius: 22px 22px 0 0; padding: 8px var(--pad) 26px;
+  animation: rise 250ms cubic-bezier(.2,0,0,1);
+}
+.grab { width: 44px; height: 5px; border-radius: 999px; background: var(--line); margin: 6px auto 14px; }
+.panelhead { display: flex; align-items: flex-start; gap: 12px; padding-bottom: 6px; }
+.panelhead h2 { font-size: 24px; font-weight: 800; }
+.panelhead p { margin: 4px 0 0; font-size: 15px; color: var(--ink-3); }
+.panelhead .iconbtn { margin-left: auto; }
+.savenote {
+  display: flex; gap: 10px; align-items: center; background: var(--green-100); color: var(--green-900);
+  border-radius: var(--r-md); padding: 12px 14px; font-size: 15px; margin-bottom: 14px;
+}
+.sortopt {
+  display: flex; align-items: center; gap: 12px; width: 100%; text-align: left;
+  min-height: 54px; padding: 12px 12px; border-radius: var(--r-md); font-size: 17px;
+  transition: background var(--t-fast);
+}
+.sortopt:hover { background: var(--surface-2); }
+.sortopt.on { background: var(--green-100); color: var(--green-900); font-weight: 600; }
+.sortopt .icon { margin-left: auto; color: var(--green-700); opacity: 0; }
+.sortopt.on .icon { opacity: 1; }
+
+@keyframes rise { from { transform: translateY(18px); opacity: .4; } to { transform: none; opacity: 1; } }
+@keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+
+/* toast */
+.toast {
+  position: fixed; left: 50%; bottom: calc(var(--tabbar-h) + 26px); transform: translateX(-50%) translateY(10px);
+  z-index: 70; background: var(--green-900); color: #FDFBF6; padding: 12px 18px; border-radius: var(--r-pill);
+  font-size: 15px; opacity: 0; pointer-events: none; transition: opacity var(--t), transform var(--t);
+  max-width: calc(100% - 32px); text-align: center;
+}
+.toast.on { opacity: 1; transform: translateX(-50%); }
+
+/* ============================ desktop: widened app ============================ */
+@media (min-width: 1024px) {
+  body { padding-bottom: 0; }
+  /* the rail column keeps its surface tone for the full page height, not just
+     the first viewport, so the left edge never reads as an unfinished band */
+  .shell { display: grid; grid-template-columns: 268px 1fr; min-height: 100vh; background: var(--surface); }
+  .viewport { background: var(--bg); border-left: 1px solid var(--line); }
+  .rail {
+    display: flex; flex-direction: column; gap: 4px; padding: 22px 16px;
+    position: sticky; top: 0; height: 100vh;
+  }
+  .rail .railbrand { display: flex; align-items: center; gap: 11px; padding: 0 8px 22px; }
+  .rail-tab {
+    display: flex; align-items: center; gap: 12px; min-height: 50px; padding: 10px 14px;
+    border-radius: var(--r-md); color: var(--ink-2); font-size: 17px; font-weight: 500; width: 100%;
+    text-align: left; transition: background var(--t-fast), color var(--t-fast);
+    position: relative;
+  }
+  .rail-tab:hover { background: var(--surface-2); }
+  .rail-tab.on { background: var(--green-100); color: var(--green-900); font-weight: 700; }
+  .rail-tab .cartbadge {
+    margin-left: auto; min-width: 22px; height: 22px; padding: 0 6px; border-radius: var(--r-pill);
+    background: var(--warm); color: #fff; font-size: 13px; font-weight: 700; display: grid; place-items: center;
+  }
+  .rail .railfoot { margin-top: auto; padding: 14px; border-radius: var(--r-md); background: var(--green-100); font-size: 15px; color: var(--green-900); }
+  .rail .railfoot b { display: block; font-family: Nunito; font-size: 15px; }
+
+  .tabbar { display: none; }
+  .viewport { padding: 0 0 60px; }
+  :root { --pad: 32px; }
+
+  .appbar { padding: 16px var(--pad); }
+  .appbar .brandrow { display: none; }
+  .appbar.is-compact .locrow { display: flex; }
+  .appbar .inner { max-width: 1280px; margin: 0 auto; display: flex; align-items: center; gap: 24px; }
+  .appbar .locrow { width: auto; padding: 0; flex: none; }
+  .appbar .status-pill { margin-left: 12px; }
+  .appbar .searchwrap { flex: 1; }
+  .appbar.is-compact .search { height: 52px; }
+
+  .screen { max-width: 1280px; margin: 0 auto; }
+  .greeting { padding-top: 26px; }
+  .greeting h1 { font-size: 30px; }
+  .sechead h2 { font-size: 24px; }
+  .grid { grid-template-columns: repeat(4, 1fr); gap: 20px; }
+  .rail-scroll .pcard { width: auto; }
+  .rail-scroll.homefeed { display: grid; grid-template-columns: repeat(5, 1fr); overflow: visible; }
+  .stallrail { display: grid; grid-template-columns: repeat(3, 1fr); overflow: visible; }
+  .stallrail .scard { width: auto; }
+  .watchrail { display: grid; grid-template-columns: repeat(5, 1fr); overflow: visible; }
+  .watchrail .watch { width: auto; }
+  .catrail { gap: 22px; }
+  .promo-track { display: grid; grid-template-columns: 1fr 1fr; }
+  .promo { width: 100%; aspect-ratio: 21/9; }
+  .promos .dots { display: none; }
+
+  .browsegrid { grid-template-columns: repeat(5, 1fr); }
+  .filterbar { top: 84px; }
+
+  /* detail becomes two columns */
+  .backrow {
+    display: inline-flex; align-items: center; gap: 8px; margin: 22px var(--pad) 0;
+    min-height: 44px; padding: 10px 16px 10px 12px; border-radius: var(--r-pill);
+    background: var(--surface); border: 1px solid var(--line); font-size: 15px; font-weight: 600;
+    color: var(--ink-2); box-shadow: var(--sh);
+  }
+  .detailwrap { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 40px; align-items: start; padding: 14px var(--pad) 0; }
+  .gallery { border-radius: var(--r-lg); overflow: hidden; box-shadow: var(--sh); position: sticky; top: 104px; }
+  .gal-track > figure { aspect-ratio: 1/1; }
+  .gal-controls { display: none; }
+  .detailsheet { margin-top: 0; padding: 0 0 40px; background: transparent; }
+  .actionbar {
+    position: sticky; bottom: 24px; display: flex; margin-top: 20px; border: 1px solid var(--line);
+    border-radius: var(--r-lg); box-shadow: var(--sh-lift); padding: 14px 16px;
+  }
+  .panel { left: auto; right: 0; top: 0; bottom: 0; width: 480px; max-height: none; border-radius: 22px 0 0 22px; animation: slidein 250ms cubic-bezier(.2,0,0,1); padding: 24px 24px 40px; }
+  .grab { display: none; }
+  @keyframes slidein { from { transform: translateX(24px); opacity: .4; } to { transform: none; opacity: 1; } }
+  .totop { bottom: 28px; }
+  .toast { bottom: 28px; }
+}
+
+/* ============================ reduced motion ============================ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .pcard:hover, .watch:hover, .scard:hover { transform: none; }
+  .rail-scroll, .promo-track, .gal-track, .chips { scroll-behavior: auto; }
+}
+</style>
+</head>
+<body data-view="home">
+
+<!-- ===================== icon sprite (single set, one stroke style) ===================== -->
+<svg class="sr" aria-hidden="true"><defs>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></symbol>
+  <symbol id="i-chev-down" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+  <symbol id="i-chev-right" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></symbol>
+  <symbol id="i-bell" viewBox="0 0 24 24"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 8-3 8h18s-3-1-3-8"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></symbol>
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 21v-7h6v7"/></symbol>
+  <symbol id="i-basket" viewBox="0 0 24 24"><path d="M5 9h14l-1.4 9.3A2 2 0 0 1 15.6 20H8.4a2 2 0 0 1-2-1.7z"/><path d="M9 9 12 3l3 6"/><path d="M3 9h18"/></symbol>
+  <symbol id="i-receipt" viewBox="0 0 24 24"><path d="M5 3h14v18l-2.5-1.6L14 21l-2-1.6L10 21l-2.5-1.6L5 21z"/><path d="M9 8h6M9 12h6"/></symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 21l1.9-5.4A8 8 0 1 1 21 12z"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6 8-6s8 2 8 6"/></symbol>
+  <symbol id="i-star" viewBox="0 0 24 24"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/></symbol>
+  <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-9.3A4 4 0 0 1 12 8a4 4 0 0 1 7 2.7c0 4.9-7 9.3-7 9.3z"/></symbol>
+  <symbol id="i-arrow-left" viewBox="0 0 24 24"><path d="M19 12H5"/><path d="m11 6-6 6 6 6"/></symbol>
+  <symbol id="i-arrow-up" viewBox="0 0 24 24"><path d="M12 19V5"/><path d="m6 11 6-6 6 6"/></symbol>
+  <symbol id="i-sort" viewBox="0 0 24 24"><path d="M4 7h12M4 12h8M4 17h4"/><path d="M18 9v9m0 0 3-3m-3 3-3-3"/></symbol>
+  <symbol id="i-scale" viewBox="0 0 24 24"><path d="M12 4v16"/><path d="M6 8h12"/><path d="m6 8-3 7h6z"/><path d="m18 8-3 7h6z"/></symbol>
+  <symbol id="i-trend-down" viewBox="0 0 24 24"><path d="m3 8 6.5 6.5 4-4L21 18"/><path d="M21 13v5h-5"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+  <symbol id="i-wallet" viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h12v4"/><path d="M3 7v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9H5a2 2 0 0 1-2-2z"/><circle cx="17" cy="14" r="1.2"/></symbol>
+  <symbol id="i-leaf" viewBox="0 0 24 24"><path d="M4 20c0-9 6-15 16-16 0 10-5 15-12 15H4z"/><path d="M4 20c4-6 8-8 12-9"/></symbol>
+  <symbol id="i-meat" viewBox="0 0 24 24"><path d="M6.6 17.4a5.1 5.1 0 0 1 0-7.2l3.6-3.6a5.1 5.1 0 0 1 7.2 7.2l-3.6 3.6a5.1 5.1 0 0 1-7.2 0z"/><path d="M10.2 14a2.6 2.6 0 0 1 3.6-3.6"/></symbol>
+  <symbol id="i-fish" viewBox="0 0 24 24"><path d="M3 12c3-4.2 8.6-5 12-2.3L18.7 6l-1 6 1 6-3.7-3.7C11.6 17 6 16.2 3 12z"/><path d="M8 10.4h.01"/></symbol>
+  <symbol id="i-fruit" viewBox="0 0 24 24"><path d="M12 8.3c1.6-2 5.5-2 6.8 1.1 1.5 3.7-1.3 9.3-4.8 10.3-.9.3-1.6 0-2-.2-.4.2-1.1.5-2 .2C6.5 18.7 3.7 13.1 5.2 9.4 6.5 6.3 10.4 6.3 12 8.3z"/><path d="M12 8.3c0-2 1.3-3.5 3.2-3.8"/></symbol>
+  <symbol id="i-bird" viewBox="0 0 24 24"><path d="M15.6 14.8c-2 .9-4.5.6-6.2-1.1a4.7 4.7 0 0 1 0-6.6c2-2 5.9-1.8 7.9.5 1.6 1.9 1.6 4.4.2 6.2"/><path d="m13.7 14.9-1.7 1.7a1.9 1.9 0 1 1-2.7 2.7l-.6-.6-.6.6a1.9 1.9 0 1 1-2.7-2.7l1.7-1.7"/></symbol>
+  <symbol id="i-grain" viewBox="0 0 24 24"><path d="M8.2 6.2c0-1.7 1.5-2.7 3.8-2.7s3.8 1 3.8 2.7c0 1.4-1.2 2-1.2 3.2 0 1.5 4.2 2.6 4.2 7.2 0 2.6-2.6 4.1-6.8 4.1s-6.8-1.5-6.8-4.1c0-4.6 4.2-5.7 4.2-7.2 0-1.2-1.2-1.8-1.2-3.2z"/><path d="M9.6 16.2h4.8"/></symbol>
+  <symbol id="i-grid" viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7" rx="2.2"/><rect x="13" y="4" width="7" height="7" rx="2.2"/><rect x="4" y="13" width="7" height="7" rx="2.2"/><rect x="13" y="13" width="7" height="7" rx="2.2"/></symbol>
+  <symbol id="i-share" viewBox="0 0 24 24"><circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="m8.3 10.8 7.4-4.3M8.3 13.2l7.4 4.3"/></symbol>
+  <symbol id="i-walk" viewBox="0 0 24 24"><circle cx="13" cy="4" r="2"/><path d="m10 21 2-6-2.5-3 1-5 3.5 2 2.5 1"/><path d="M9.5 12 7 15m8 0 1.5 6"/></symbol>
+</defs></svg>
+
+<div class="shell">
+
+  <!-- ===================== desktop side rail ===================== -->
+  <aside class="rail" aria-label="Main navigation">
+    <div class="railbrand">
+      <span class="brand-mark lg" role="img" aria-label="PalengkeHub"></span>
+      <span><span class="brandname">PalengkeHub</span><span class="brandsub">Lipa City Public Market</span></span>
+    </div>
+    <button class="rail-tab on" data-tab="home"><svg class="icon"><use href="#i-home"/></svg>Home</button>
+    <button class="rail-tab" data-tab="cart"><svg class="icon"><use href="#i-basket"/></svg>PalengKart<span class="cartbadge">3</span></button>
+    <button class="rail-tab" data-tab="orders"><svg class="icon"><use href="#i-receipt"/></svg>Orders</button>
+    <button class="rail-tab" data-tab="chats"><svg class="icon"><use href="#i-chat"/></svg>Chats</button>
+    <button class="rail-tab" data-tab="profile"><svg class="icon"><use href="#i-user"/></svg>Profile</button>
+    <div class="railfoot">
+      <b>Bukas ang Palengke</b>
+      Lunes hanggang Linggo, 5:00 AM to 7:00 PM. Pickup lang, walang delivery fee.
+    </div>
+  </aside>
+
+  <div class="viewport">
+
+    <!-- ===================== app bar ===================== -->
+    <header class="appbar" id="appbar">
+      <div class="inner">
+        <div class="brandrow">
+          <span class="brand-mark" role="img" aria-label="PalengkeHub"></span>
+          <span>
+            <span class="brandname">PalengkeHub</span>
+            <span class="brandsub">Lipa City Public Market</span>
+          </span>
+        </div>
+
+        <button class="locrow" data-toast="Only one market is live for now: Lipa City Public Market.">
+          <svg class="icon" style="color:var(--green-700)"><use href="#i-pin"/></svg>
+          <span class="place">Lipa City Public Market</span>
+          <svg class="icon sm"><use href="#i-chev-down"/></svg>
+          <span class="status-pill"><i></i>Bukas</span>
+        </button>
+
+        <div class="searchwrap">
+          <button class="search" data-toast="Search is not wired in this design mock.">
+            <svg class="icon"><use href="#i-search"/></svg>
+            <span>Maghanap ng produkto, puwesto...</span>
+          </button>
+          <button class="iconbtn" data-toast="Walang bagong abiso ngayon." aria-label="Notifications">
+            <svg class="icon"><use href="#i-bell"/></svg><span class="dot"></span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main>
+
+      <!-- ===================== SCREEN: HOME ===================== -->
+      <section class="screen is-active" id="screen-home">
+
+        <div class="greeting">
+          <h1>Magandang umaga</h1>
+          <p>Umorder na, i-pickup sa Pamilihang Bayan ng Lipa.</p>
+        </div>
+
+        <div class="rail-scroll cats catrail" role="list" aria-label="Shop by category"></div>
+
+        <div class="promos">
+          <div class="promo-track" id="promoTrack">
+            <article class="promo">
+              <img data-src="../assets/generated/banners/banner-fresh-harvest.png" data-fb="banner-veg" alt="Sariwang gulay mula sa Vegetable Section">
+              <div class="veil"></div>
+              <div class="copy">
+                <span class="kicker">Sariwa ngayong umaga</span>
+                <h3>Gulay galing sa bukid ng Batangas</h3>
+                <p>Bagong dating sa Vegetable Section bago mag 7 AM.</p>
+              </div>
+            </article>
+            <article class="promo">
+              <img data-src="../assets/generated/banners/banner-market-morning.png" data-fb="banner-market" alt="Lipa City Public Market in the morning">
+              <div class="veil"></div>
+              <div class="copy">
+                <span class="kicker">Mga Deal Ngayong Araw</span>
+                <h3>Hanggang 20% off sa 40 puwesto</h3>
+                <p>Bayad GCash, sundo mo sa mismong stall.</p>
+              </div>
+            </article>
+          </div>
+          <div class="dots" id="promoDots"><i class="on"></i><i></i></div>
+        </div>
+
+        <div class="sechead">
+          <div>
+            <h2>Presyo Ngayon</h2>
+            <p>Presyo kada kilo ngayong araw sa palengke</p>
+          </div>
+          <button class="seeall" data-screen="browse" data-reset="1">Tingnan Lahat <svg class="icon sm"><use href="#i-chev-right"/></svg></button>
+        </div>
+        <div class="rail-scroll watchrail" id="watchRail"></div>
+
+        <div class="sechead">
+          <div>
+            <h2>Mga Deal Ngayong Araw</h2>
+            <p>Huwag palampasin ang mga diskwento na ito</p>
+          </div>
+          <button class="seeall" data-screen="browse" data-reset="1">Tingnan Lahat <svg class="icon sm"><use href="#i-chev-right"/></svg></button>
+        </div>
+        <div class="rail-scroll homefeed" id="dealsRail"></div>
+
+        <div class="sechead">
+          <div>
+            <h2>Mga Pinagkakatiwalaang Tindahan</h2>
+            <p>Pinagkakatiwalaan ng mga mamimili</p>
+          </div>
+          <button class="seeall" data-toast="Stall directory is not part of this design mock.">Tingnan Lahat <svg class="icon sm"><use href="#i-chev-right"/></svg></button>
+        </div>
+        <div class="rail-scroll stallrail" id="stallRail"></div>
+
+        <div class="sechead">
+          <div>
+            <h2>Sariwa Ngayong Araw</h2>
+            <p>Bagong presyo mula sa 7 na seksyon ng palengke</p>
+          </div>
+        </div>
+        <div class="grid" id="homeGrid"></div>
+
+        <div class="infostrip">
+          <div class="infocard">
+            <svg class="icon"><use href="#i-walk"/></svg>
+            <div><b>Pickup lang</b><span>Sunduin sa mismong stall ng vendor</span></div>
+          </div>
+          <div class="infocard">
+            <svg class="icon"><use href="#i-wallet"/></svg>
+            <div><b>GCash lang</b><span>Bayad bawat puwesto, may Pickup Pass</span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== SCREEN: BROWSE / LISTING ===================== -->
+      <section class="screen" id="screen-browse">
+        <div class="screenhead">
+          <h1 id="browseTitle">Lahat ng Produkto</h1>
+          <p id="browseSub">Presyo ngayong araw sa Lipa City Public Market</p>
+        </div>
+
+        <div class="filterbar">
+          <div class="chips" role="group" aria-label="Filters">
+            <button class="chip on">Lahat</button>
+            <button class="chip">Mura</button>
+            <button class="chip">Malapit</button>
+            <button class="chip">Bukas ngayon</button>
+            <button class="chip">4.5 pataas</button>
+            <button class="chip">May promo</button>
+          </div>
+          <div class="sortrow">
+            <span class="count" id="browseCount">19 na produkto</span>
+            <button class="sortbtn" id="sortOpen">
+              <svg class="icon sm"><use href="#i-sort"/></svg><span id="sortLabel">Pinakamura</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="grid browsegrid" id="browseGrid"></div>
+      </section>
+
+      <!-- ===================== SCREEN: PRODUCT DETAIL ===================== -->
+      <section class="screen" id="screen-product">
+        <button class="backrow" data-screen="browse"><svg class="icon sm"><use href="#i-arrow-left"/></svg> Bumalik sa listahan</button>
+        <div class="detailwrap">
+
+          <div class="gallery">
+            <div class="gal-track" id="galTrack"></div>
+            <div class="gal-controls">
+              <button class="iconbtn" data-screen="browse" aria-label="Back"><svg class="icon"><use href="#i-arrow-left"/></svg></button>
+              <span class="spacer"></span>
+              <button class="iconbtn" data-toast="Copied to clipboard!" aria-label="Share"><svg class="icon"><use href="#i-share"/></svg></button>
+              <button class="iconbtn" data-toast="Please login to save favorites." aria-label="Save"><svg class="icon"><use href="#i-heart"/></svg></button>
+            </div>
+            <div class="dots" id="galDots"><i class="on"></i><i></i></div>
+          </div>
+
+          <div class="detailsheet">
+            <h1 class="detail-title" id="dTitle">Kamatis <span>Tomato</span></h1>
+
+            <div class="bigprice">
+              <span class="price" id="dPrice">₱60</span>
+              <span class="per" id="dPer">/ kg</span>
+              <s class="was" id="dWas">₱72</s>
+              <span class="badge" style="position:static" id="dOff">17% OFF</span>
+              <span class="verdict mura" id="dVerdict">MURA</span>
+            </div>
+            <p class="unitnote" id="dUnitNote">₱60 kada kilo. Average sa palengke ngayon: ₱71 kada kilo.</p>
+
+            <div class="trustrow">
+              <svg class="icon sm star fill"><use href="#i-star"/></svg>
+              <b>4.8</b><span>(214 reviews)</span>
+              <span class="sep"></span>
+              <span>Aling Nena Gulayan</span>
+              <span class="sep"></span>
+              <span>Vegetable Section &bull; #12</span>
+            </div>
+
+            <div class="block">
+              <h3>Select Unit</h3>
+              <p class="sub">Bawat unit may sariling presyo. Pinapakita namin ang katumbas kada kilo.</p>
+              <div class="swatches" id="dSwatches"></div>
+            </div>
+
+            <div class="block">
+              <h3>Ibang presyo sa ibang stall</h3>
+              <p class="sub" id="dCmpSub">Kamatis, presyo ngayon sa 6 na puwesto, kada kilo</p>
+              <div id="dCompareRows" style="margin-top:12px"></div>
+              <div class="avgline">
+                <svg class="icon sm"><use href="#i-scale"/></svg>
+                Average sa palengke <b id="dAvg">₱71 / kg</b>
+              </div>
+              <button class="wide" id="dCompareOpen">
+                <svg class="icon sm"><use href="#i-scale"/></svg> Tingnan lahat ng 6 na presyo
+              </button>
+            </div>
+
+            <div class="block">
+              <h3>Presyo ngayong linggo</h3>
+              <div class="spark">
+                <svg viewBox="0 0 320 56" preserveAspectRatio="none" aria-hidden="true">
+                  <polyline points="4,14 56,20 108,10 160,26 212,34 264,38 316,44" fill="none" stroke="#2C6B4A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>
+                </svg>
+                <p><span class="down"><svg class="icon sm"><use href="#i-trend-down"/></svg>Bumaba ang presyo ng ₱5 ngayong linggo.</span><br>Pinakamababa sa nakaraang 30 araw. Presyo mula noong Agosto 20.</p>
+              </div>
+            </div>
+
+            <div class="block">
+              <h3>Sold by</h3>
+              <div class="stallstrip" style="margin-top:12px">
+                <span class="avatar"><img data-src="../assets/generated/products/product-kamatis.png" data-fb="round" alt="Aling Nena Gulayan"></span>
+                <div>
+                  <h4>Aling Nena Gulayan</h4>
+                  <span class="sec">Vegetable Section &bull; #12</span>
+                </div>
+                <button class="ghost" data-toast="Stall page is not part of this design mock.">Bisitahin</button>
+              </div>
+              <ul class="factlist">
+                <li><svg class="icon sm"><use href="#i-clock"/></svg><span id="dOpenFact"><b>Bukas ngayon</b>, ready for pickup sa oras ng palengke, 5:00 AM to 7:00 PM</span></li>
+                <li><svg class="icon sm"><use href="#i-wallet"/></svg><span><b>GCash lang ang bayad</b>, bayad diretso sa puwesto</span></li>
+                <li><svg class="icon sm"><use href="#i-walk"/></svg><span id="dWalkFact"><b>2 min lakad</b> mula sa main entrance, Vegetable Section</span></li>
+              </ul>
+            </div>
+
+            <div class="block">
+              <h3>Product Details</h3>
+              <p class="desc" id="dDesc">Sariwang kamatis na inaani sa Lipa at Malvar tuwing madaling araw at dinadala sa puwesto bago mag alas sais. Matigas pa ang laman, pang salad o pang sinigang.</p>
+            </div>
+
+            <div class="actionbar">
+              <div class="total">
+                <span>Total Amount</span>
+                <b id="dTotal">₱60</b>
+              </div>
+              <button class="cta" data-toast="Please login to add items to cart.">
+                <svg class="icon"><use href="#i-basket"/></svg> Add to PalengKart
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<button class="totop" id="toTop" aria-label="Back to top"><svg class="icon"><use href="#i-arrow-up"/></svg></button>
+
+<!-- ===================== bottom tab bar ===================== -->
+<nav class="tabbar" aria-label="Main navigation">
+  <button class="tab on" data-tab="home"><svg class="icon"><use href="#i-home"/></svg>Home</button>
+  <button class="tab" data-tab="cart"><svg class="icon"><use href="#i-basket"/></svg>PalengKart<span class="cartbadge">3</span></button>
+  <button class="tab" data-tab="orders"><svg class="icon"><use href="#i-receipt"/></svg>Orders</button>
+  <button class="tab" data-tab="chats"><svg class="icon"><use href="#i-chat"/></svg>Chats</button>
+  <button class="tab" data-tab="profile"><svg class="icon"><use href="#i-user"/></svg>Profile</button>
+</nav>
+
+<!-- ===================== compare sheet ===================== -->
+<div class="sheet" id="cmpSheet" role="dialog" aria-modal="true" aria-label="Price comparison">
+  <div class="scrim" data-close></div>
+  <div class="panel">
+    <div class="grab"></div>
+    <div class="panelhead">
+      <div>
+        <h2 id="cmpTitle">Kamatis</h2>
+        <p id="cmpSub">Presyo ngayon sa 6 na puwesto, kada kilo</p>
+      </div>
+      <button class="iconbtn" data-close aria-label="Close"><svg class="icon"><use href="#i-x"/></svg></button>
+    </div>
+    <div class="savenote" id="cmpSave"></div>
+    <div id="cmpRows"></div>
+    <div class="avgline">
+      <svg class="icon sm"><use href="#i-scale"/></svg>
+      Average sa palengke <b id="cmpAvg"></b>
+    </div>
+    <p style="font-size:15px;color:var(--ink-3);margin:14px 0 0">Ang mga presyong nakalista sa ibang unit ay ginagawang katumbas kada kilo bago i-ranggo, kaya patas ang paghahambing.</p>
+  </div>
+</div>
+
+<!-- ===================== sort sheet ===================== -->
+<div class="sheet" id="sortSheet" role="dialog" aria-modal="true" aria-label="Sort products">
+  <div class="scrim" data-close></div>
+  <div class="panel">
+    <div class="grab"></div>
+    <div class="panelhead">
+      <div><h2>Sort By</h2><p>Paano mo gustong isaayos ang listahan</p></div>
+      <button class="iconbtn" data-close aria-label="Close"><svg class="icon"><use href="#i-x"/></svg></button>
+    </div>
+    <div id="sortOpts"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+(function () {
+  "use strict";
+
+  /* =========================================================
+     Produce-toned SVG fallbacks. Every generated image degrades
+     into a soft flat illustration in the page palette, never a
+     gray box, so the layout still reads as intentional.
+     ========================================================= */
+  /* Fallback art is restricted to the declared palette. Categories are told
+     apart by SHAPE, never by an off-palette hue. */
+  var PAPER = "#F4F1E9";
+  var GREEN_100 = "#E4EEE4", GREEN_500 = "#4B8B63", GREEN_700 = "#2C6B4A", GREEN_900 = "#1C4432";
+  var WARM = "#B85B2E", WARM_100 = "#F6E6DA", SURF_2 = "#EFEBE0", INK_3 = "#6E7767";
+  var FB = {
+    round:  { bg: WARM_100,  a: WARM,      b: GREEN_700 },
+    long:   { bg: SURF_2,    a: GREEN_700, b: GREEN_500 },
+    leafy:  { bg: GREEN_100, a: GREEN_500, b: GREEN_700 },
+    beans:  { bg: GREEN_100, a: GREEN_500, b: GREEN_700 },
+    banana: { bg: SURF_2,    a: WARM,      b: GREEN_700 },
+    mango:  { bg: WARM_100,  a: WARM,      b: GREEN_500 },
+    citrus: { bg: GREEN_100, a: GREEN_700, b: GREEN_500 },
+    meat:   { bg: WARM_100,  a: WARM,      b: SURF_2 },
+    bird:   { bg: SURF_2,    a: INK_3,     b: GREEN_900 },
+    egg:    { bg: SURF_2,    a: GREEN_100, b: INK_3 },
+    grain:  { bg: SURF_2,    a: INK_3,     b: GREEN_900 },
+    fish:   { bg: GREEN_100, a: GREEN_700, b: WARM },
+    sausage:{ bg: WARM_100,  a: WARM,      b: SURF_2 },
+    onion:  { bg: WARM_100,  a: WARM,      b: GREEN_500 },
+    squash: { bg: WARM_100,  a: WARM,      b: GREEN_700 },
+    gourd:  { bg: GREEN_100, a: GREEN_700, b: GREEN_900 }
+  };
+
+  function svgURI(inner, w, h) {
+    return "data:image/svg+xml;charset=utf-8," + encodeURIComponent(
+      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + w + ' ' + h + '">' + inner + '</svg>'
+    );
+  }
+
+  function produceFallback(kind) {
+    var c = FB[kind] || FB.leafy;
+    var body = '';
+    switch (kind) {
+      case "round":
+        body = '<circle cx="100" cy="112" r="52" fill="' + c.a + '"/><circle cx="152" cy="88" r="34" fill="' + c.a + '" opacity=".85"/>' +
+               '<path d="M100 62c2-14 14-20 24-19-2 12-11 19-24 19z" fill="' + c.b + '"/>'; break;
+      case "long":
+        body = '<path d="M74 66c30-14 66 6 66 46s-32 58-58 46-30-46-8-92z" fill="' + c.a + '"/>' +
+               '<path d="M76 66c-6-14 2-24 14-24 2 10-4 20-14 24z" fill="' + c.b + '"/>'; break;
+      case "leafy":
+        body = '<circle cx="112" cy="112" r="56" fill="' + c.a + '"/><path d="M56 112c22-22 50-30 78-24" stroke="' + c.b + '" stroke-width="7" fill="none" stroke-linecap="round"/>' +
+               '<path d="M112 56c-18 16-26 38-24 62" stroke="' + c.b + '" stroke-width="7" fill="none" stroke-linecap="round"/>'; break;
+      case "beans":
+        body = '<path d="M58 150c30-70 70-96 108-100" stroke="' + c.a + '" stroke-width="14" fill="none" stroke-linecap="round"/>' +
+               '<path d="M44 158c30-70 70-96 108-100" stroke="' + c.b + '" stroke-width="10" fill="none" stroke-linecap="round" opacity=".8"/>'; break;
+      case "banana":
+        body = '<path d="M56 78c8 60 44 88 96 82-8-46-44-80-96-82z" fill="' + c.a + '"/>' +
+               '<path d="M56 78c8 60 44 88 96 82" stroke="' + c.b + '" stroke-width="6" fill="none" stroke-linecap="round"/>'; break;
+      case "mango":
+        body = '<path d="M96 56c40-8 68 22 62 62-6 38-52 60-82 40s-22-92 20-102z" fill="' + c.a + '"/>' +
+               '<path d="M100 58c0-10 8-16 18-14-2 10-8 14-18 14z" fill="' + c.b + '"/>'; break;
+      case "citrus":
+        body = '<circle cx="96" cy="118" r="40" fill="' + c.a + '"/><circle cx="150" cy="96" r="28" fill="' + c.a + '" opacity=".85"/>' +
+               '<path d="M96 78c0-12 10-18 20-16-2 10-9 16-20 16z" fill="' + c.b + '"/>'; break;
+      case "meat":
+        body = '<rect x="40" y="74" width="140" height="92" rx="32" fill="' + c.a + '"/>' +
+               '<path d="M56 104c22-11 46-11 68 0s36 10 54 2" stroke="' + c.bg + '" stroke-width="10" fill="none" stroke-linecap="round"/>' +
+               '<path d="M52 134c22-11 46-11 68 0s38 10 56 2" stroke="' + c.bg + '" stroke-width="10" fill="none" stroke-linecap="round"/>'; break;
+      case "sausage":
+        body = '<path d="M56 82c36-16 72-4 96 24" stroke="' + c.a + '" stroke-width="34" stroke-linecap="round" fill="none"/>' +
+               '<path d="M50 132c36-16 76-4 102 24" stroke="' + c.a + '" stroke-width="34" stroke-linecap="round" fill="none"/>'; break;
+      case "bird":
+        body = '<path d="M172 74c14 26 4 60-24 74-26 13-56 6-70-16-13-21-6-50 18-64 26-15 60-13 76 6z" fill="' + c.a + '"/>' +
+               '<path d="M98 142 78 162" stroke="' + c.a + '" stroke-width="18" stroke-linecap="round" fill="none"/>' +
+               '<circle cx="66" cy="158" r="16" fill="' + c.a + '"/><circle cx="82" cy="176" r="16" fill="' + c.a + '"/>'; break;
+      case "egg":
+        body = '<ellipse cx="86" cy="110" rx="34" ry="42" fill="' + PAPER + '" stroke="' + c.b + '" stroke-width="5"/>' +
+               '<ellipse cx="143" cy="128" rx="30" ry="38" fill="' + PAPER + '" stroke="' + c.b + '" stroke-width="5"/>'; break;
+      case "grain":
+        body = '<path d="M70 68h80l-6 22c-2 8 4 12 10 18 12 13 18 27 18 41 0 16-22 25-62 25s-62-9-62-25c0-14 6-28 18-41 6-6 12-10 10-18z" fill="' + c.a + '"/>' +
+               '<path d="M70 68h80" stroke="' + c.bg + '" stroke-width="11" fill="none" stroke-linecap="round"/>' +
+               '<path d="M84 146h52" stroke="' + c.bg + '" stroke-width="10" fill="none" stroke-linecap="round"/>'; break;
+      case "fish":
+        body = '<path d="M46 116c26-34 78-40 106-16l24-18-6 34 6 34-24-18c-28 24-80 18-106-16z" fill="' + c.a + '"/>' +
+               '<circle cx="78" cy="108" r="6" fill="' + c.b + '"/>'; break;
+      case "onion":
+        body = '<path d="M110 62c26 20 36 40 36 58 0 24-16 40-36 40s-36-16-36-40c0-18 10-38 36-58z" fill="' + c.a + '"/>' +
+               '<path d="M110 62c-4-10 0-18 8-20 2 10-2 17-8 20z" fill="' + c.b + '"/>' +
+               '<path d="M96 92c-6 24-6 46 0 62m28-62c6 24 6 46 0 62" stroke="' + c.bg + '" stroke-width="4" fill="none"/>'; break;
+      case "squash":
+        body = '<ellipse cx="106" cy="120" rx="56" ry="44" fill="' + c.a + '"/>' +
+               '<path d="M78 84c0 24 0 48 0 72M134 84c0 24 0 48 0 72" stroke="' + c.bg + '" stroke-width="5" fill="none"/>' +
+               '<path d="M106 76c0-10 8-16 18-14-2 10-8 14-18 14z" fill="' + c.b + '"/>'; break;
+      case "gourd":
+        body = '<path d="M84 54c26 6 44 36 50 76 3 22-10 34-26 30-24-6-46-44-44-78 1-18 10-31 20-28z" fill="' + c.a + '"/>' +
+               '<path d="M88 68c6 26 18 54 34 74M72 86c8 24 20 46 36 62M104 62c4 26 12 52 24 72" stroke="' + c.b +
+               '" stroke-width="4" fill="none" stroke-linecap="round"/>'; break;
+      default:
+        body = '<circle cx="110" cy="112" r="52" fill="' + c.a + '"/>';
+    }
+    return svgURI('<rect width="220" height="220" fill="' + c.bg + '"/>' +
+      '<circle cx="110" cy="118" r="86" fill="' + PAPER + '" opacity=".55"/>' + body, 220, 220);
+  }
+
+  function bannerFallback(kind) {
+    if (kind === "banner-market") {
+      return svgURI(
+        '<rect width="640" height="360" fill="' + GREEN_100 + '"/>' +
+        '<rect y="200" width="640" height="160" fill="' + SURF_2 + '"/>' +
+        '<rect x="60" y="120" width="150" height="82" rx="8" fill="' + PAPER + '"/>' +
+        '<rect x="240" y="96" width="170" height="106" rx="8" fill="' + PAPER + '"/>' +
+        '<rect x="440" y="130" width="140" height="72" rx="8" fill="' + PAPER + '"/>' +
+        '<path d="M60 120h150l-14-26H74z" fill="' + WARM + '" opacity=".5"/>' +
+        '<path d="M240 96h170l-16-28H256z" fill="' + GREEN_700 + '" opacity=".45"/>' +
+        '<path d="M440 130h140l-14-26H454z" fill="' + WARM + '" opacity=".4"/>' +
+        '<circle cx="120" cy="248" r="26" fill="' + WARM + '" opacity=".55"/>' +
+        '<circle cx="182" cy="258" r="18" fill="' + GREEN_500 + '" opacity=".7"/>' +
+        '<circle cx="500" cy="252" r="22" fill="' + GREEN_700 + '" opacity=".5"/>', 640, 360);
+    }
+    return svgURI(
+      '<rect width="640" height="360" fill="' + GREEN_100 + '"/>' +
+      '<circle cx="150" cy="180" r="120" fill="' + PAPER + '" opacity=".6"/>' +
+      '<circle cx="470" cy="220" r="150" fill="' + PAPER + '" opacity=".45"/>' +
+      '<circle cx="220" cy="150" r="46" fill="' + WARM + '" opacity=".5"/>' +
+      '<circle cx="300" cy="210" r="60" fill="' + GREEN_500 + '" opacity=".6"/>' +
+      '<circle cx="410" cy="140" r="38" fill="' + GREEN_700 + '" opacity=".5"/>' +
+      '<path d="M470 250c40-40 90-52 140-46-8 52-52 84-104 84z" fill="' + GREEN_700 + '" opacity=".45"/>' +
+      '<path d="M90 300c50-30 120-40 180-28" stroke="' + GREEN_500 + '" stroke-width="10" fill="none" stroke-linecap="round"/>', 640, 360);
+  }
+
+  /* Banner slots degrade to a REAL photograph before they degrade to art, so
+     the first screenful stays image-led even with no generated banner present.
+     banner-veg lands on studio produce, banner-market on the market building. */
+  var BANNER_PHOTO = {
+    "banner-veg":    { src: "../assets/generated/products/product-repolyo.png", pos: "62% 46%" },
+    "banner-market": { src: "../02-audit/logo/Lipapublicmarket.jpg",            pos: "58% 62%" }
+  };
+
+  /* Attach every image with a graceful fallback. Images carry
+     data-src so the fallback is applied even before load fails. */
+  function mountImage(img) {
+    var fb = img.getAttribute("data-fb") || "leafy";
+    var isBanner = fb.indexOf("banner") === 0;
+    img.addEventListener("error", function () {
+      if (img.dataset.fallen === "2") return;
+      if (isBanner && !img.dataset.fallen && BANNER_PHOTO[fb]) {
+        img.dataset.fallen = "1";
+        img.style.objectPosition = BANNER_PHOTO[fb].pos;
+        img.src = BANNER_PHOTO[fb].src;
+        return;
+      }
+      img.dataset.fallen = "2";
+      img.style.objectPosition = "";
+      img.src = isBanner ? bannerFallback(fb) : produceFallback(fb);
+    });
+    var src = img.getAttribute("data-src");
+    if (src) img.src = src; else img.dispatchEvent(new Event("error"));
+  }
+  function mountAllImages(root) {
+    (root || document).querySelectorAll("img[data-src]:not([data-mounted])").forEach(function (img) {
+      img.setAttribute("data-mounted", "1");
+      mountImage(img);
+    });
+  }
+
+  /* =========================================================
+     Data. Product names come from PalengkeHub's own Tagalog
+     produce dictionary. Prices, stalls, ratings and promo copy
+     are plausible placeholders (see report).
+     ========================================================= */
+  var CATEGORIES = [
+    { key: "gulay",  fil: "Gulay",  en: "Vegetables", icon: "i-leaf",  desc: "Fresh vegetables from Lipa City Public Market" },
+    { key: "karne",  fil: "Karne",  en: "Meat",       icon: "i-meat",  desc: "Premium meat cuts from trusted vendors" },
+    { key: "isda",   fil: "Isda",   en: "Fish",       icon: "i-fish",  desc: "Sariwang isda mula sa Fish Section" },
+    { key: "prutas", fil: "Prutas", en: "Fruits",     icon: "i-fruit", desc: "Sweet and fresh fruits from the market" },
+    { key: "manok",  fil: "Manok",  en: "Poultry",    icon: "i-bird",  desc: "Farm fresh poultry products" },
+    { key: "bigas",  fil: "Bigas",  en: "Rice",       icon: "i-grain", desc: "Daily rice essentials from local suppliers" },
+    { key: "iba",    fil: "Iba Pa", en: "Other",      icon: "i-grid",  desc: "More products from Lipa City Public Market" }
+  ];
+
+  /* pos = this stall's rank inside its compare roster, so the card verdict and
+     the compare sheet always agree. rk = which roster the product is compared in. */
+  var P = [
+    { id: "kamatis",   fil: "Kamatis",   en: "Tomato",         cat: "gulay",  rk: "gulay",  pos: 0, price: 60,  was: 72,  unit: "kg",     rating: 4.8, reviews: 214, fb: "round" },
+    { id: "talong",    fil: "Talong",    en: "Eggplant",       cat: "gulay",  rk: "gulay",  pos: 2, price: 75,  was: 0,   unit: "kg",     rating: 4.7, reviews: 132, fb: "long" },
+    { id: "repolyo",   fil: "Repolyo",   en: "Cabbage",        cat: "gulay",  rk: "gulay",  pos: 3, price: 95,  was: 110, unit: "kg",     rating: 4.6, reviews: 88,  fb: "leafy" },
+    { id: "sitaw",     fil: "Sitaw",     en: "String beans",   cat: "gulay",  rk: "gulay",  pos: 0, price: 22,  was: 0,   unit: "tali",   rating: 4.8, reviews: 61,  fb: "beans", best: true },
+    { id: "saging",    fil: "Saging",    en: "Lakatan banana", cat: "prutas", rk: "prutas", pos: 0, price: 85,  was: 0,   unit: "kg",     rating: 4.9, reviews: 176, fb: "banana", best: true },
+    { id: "mangga",    fil: "Mangga",    en: "Carabao mango",  cat: "prutas", rk: "prutas", pos: 0, price: 145, was: 175, unit: "kg",     rating: 4.9, reviews: 203, fb: "mango" },
+    { id: "calamansi", fil: "Kalamansi", en: "Calamansi",      cat: "prutas", rk: "prutas", pos: 4, price: 90,  was: 105, unit: "kg",     rating: 4.3, reviews: 54,  fb: "citrus" },
+    { id: "liempo",    fil: "Liempo",    en: "Pork belly",     cat: "karne",  rk: "karne",  pos: 0, price: 380, was: 420, unit: "kg",     rating: 4.7, reviews: 168, fb: "meat" },
+    { id: "manok",     fil: "Manok",     en: "Whole chicken",  cat: "manok",  rk: "karne",  pos: 3, price: 215, was: 0,   unit: "kg",     rating: 4.6, reviews: 121, fb: "bird" },
+    { id: "itlog",     fil: "Itlog",     en: "Chicken eggs",   cat: "iba",    rk: "iba",    pos: 1, price: 108, was: 0,   unit: "dosena", rating: 4.5, reviews: 97,  fb: "egg" },
+    { id: "bigas",     fil: "Bigas",     en: "Sinandomeng",    cat: "bigas",  rk: "iba",    pos: 0, price: 58,  was: 64,  unit: "kg",     rating: 4.4, reviews: 73,  fb: "grain" },
+    { id: "bangus",    fil: "Bangus",    en: "Milkfish",       cat: "isda",   rk: "isda",   pos: 0, price: 195, was: 0,   unit: "kg",     rating: 4.7, reviews: 143, fb: "fish", best: true },
+    /* the five below have no generated photo and fall back to illustration */
+    { id: "sibuyas",   fil: "Sibuyas",   en: "Red onion",      cat: "gulay",  rk: "gulay",  pos: 4, price: 140, was: 0,   unit: "kg",     rating: 4.3, reviews: 66,  fb: "onion" },
+    { id: "kalabasa",  fil: "Kalabasa",  en: "Squash",         cat: "gulay",  rk: "gulay",  pos: 0, price: 45,  was: 0,   unit: "kg",     rating: 4.8, reviews: 42,  fb: "squash", best: true },
+    { id: "ampalaya",  fil: "Ampalaya",  en: "Bitter gourd",   cat: "gulay",  rk: "gulay",  pos: 3, price: 85,  was: 0,   unit: "kg",     rating: 4.6, reviews: 38,  fb: "gourd" },
+    { id: "kasim",     fil: "Kasim",     en: "Pork shoulder",  cat: "karne",  rk: "karne",  pos: 2, price: 320, was: 0,   unit: "kg",     rating: 4.6, reviews: 91,  fb: "meat" },
+    { id: "longganisa",fil: "Longganisa",en: "Local sausage",  cat: "karne",  rk: "karne",  pos: 0, price: 260, was: 290, unit: "kg",     rating: 4.7, reviews: 112, fb: "sausage" },
+    { id: "tilapia",   fil: "Tilapia",   en: "Tilapia",        cat: "isda",   rk: "isda",   pos: 2, price: 160, was: 0,   unit: "kg",     rating: 4.5, reviews: 87,  fb: "fish" },
+    { id: "tuyo",      fil: "Tuyo",      en: "Dried fish",     cat: "iba",    rk: "iba",    pos: 4, price: 240, was: 0,   unit: "kg",     rating: 4.4, reviews: 51,  fb: "fish" }
+  ];
+  var byId = {};
+  P.forEach(function (p) { byId[p.id] = p; });
+
+  var STALLS = [
+    { name: "Aling Nena Gulayan",      sec: "Vegetable Section", no: 12, rating: 4.8, reviews: 214, tags: "Gulay, Halamang gamot", lo: 22,  hi: 120, img: "repolyo", fb: "leafy",  open: true },
+    { name: "Mang Juan's Meat Shop",   sec: "Meat Section",      no: 7,  rating: 4.7, reviews: 168, tags: "Baboy, Baka",          lo: 180, hi: 420, img: "liempo",  fb: "meat",   open: true },
+    { name: "Nanay Cora Prutasan",     sec: "Fruit Section",     no: 23, rating: 4.9, reviews: 176, tags: "Prutas, Pasalubong",   lo: 45,  hi: 175, img: "mangga",  fb: "mango",  open: true },
+    { name: "Mang Ising Isdaan",       sec: "Fish Section",      no: 42, rating: 4.7, reviews: 143, tags: "Isda, Hipon",          lo: 120, hi: 460, img: "bangus",  fb: "fish",   open: false },
+    { name: "Kuya Boy Fresh Veg",      sec: "Vegetable Section", no: 18, rating: 4.5, reviews: 96,  tags: "Gulay, Halo halo",     lo: 25,  hi: 130, img: "sitaw",   fb: "beans",  open: true },
+    { name: "Aling Rosing Bigasan",    sec: "Rice Section",      no: 4,  rating: 4.4, reviews: 73,  tags: "Bigas, Butil",         lo: 52,  hi: 78,  img: "bigas",   fb: "grain",  open: true }
+  ];
+
+  /* compare rosters, one per family of sections */
+  var ROSTERS = {
+    gulay: [
+      { name: "Aling Nena Gulayan",      sec: "Vegetable Section", no: 12, rating: 4.8, walk: "2 min lakad", f: 0.82 },
+      { name: "Kuya Boy Fresh Veg",      sec: "Vegetable Section", no: 18, rating: 4.5, walk: "3 min lakad", f: 0.90, half: true },
+      { name: "Tindahan ni Mareng Baby", sec: "Vegetable Section", no: 31, rating: 4.7, walk: "4 min lakad", f: 0.96 },
+      { name: "Ka Delia Sariwang Gulay", sec: "Vegetable Section", no: 26, rating: 4.6, walk: "5 min lakad", f: 1.05 },
+      { name: "Mang Tonyo Gulayan",      sec: "Vegetable Section", no: 44, rating: 4.3, walk: "6 min lakad", f: 1.12 },
+      { name: "Nanay Luming Talipapa",   sec: "Dry Goods",         no: 9,  rating: 4.4, walk: "7 min lakad", f: 1.20 }
+    ],
+    karne: [
+      { name: "Mang Juan's Meat Shop",   sec: "Meat Section",    no: 7,  rating: 4.7, walk: "3 min lakad", f: 0.82 },
+      { name: "Aling Baby Karinderya",   sec: "Meat Section",    no: 14, rating: 4.5, walk: "3 min lakad", f: 0.90, half: true },
+      { name: "Kuya Dante Baboyan",      sec: "Meat Section",    no: 21, rating: 4.6, walk: "4 min lakad", f: 0.96 },
+      { name: "Nanay Luming Manukan",    sec: "Poultry Section", no: 9,  rating: 4.6, walk: "5 min lakad", f: 1.05 },
+      { name: "Mang Ambo Karne",         sec: "Meat Section",    no: 33, rating: 4.2, walk: "6 min lakad", f: 1.12 },
+      { name: "Ate Vilma Frozen Goods",  sec: "Frozen Goods",    no: 5,  rating: 4.3, walk: "8 min lakad", f: 1.20 }
+    ],
+    prutas: [
+      { name: "Nanay Cora Prutasan",     sec: "Fruit Section", no: 23, rating: 4.9, walk: "3 min lakad", f: 0.82 },
+      { name: "Ate Marites Prutas",      sec: "Fruit Section", no: 30, rating: 4.6, walk: "4 min lakad", f: 0.90, half: true },
+      { name: "Mang Rudy Prutasan",      sec: "Fruit Section", no: 17, rating: 4.5, walk: "4 min lakad", f: 0.96 },
+      { name: "Aling Tess Prutas",       sec: "Fruit Section", no: 35, rating: 4.4, walk: "5 min lakad", f: 1.05 },
+      { name: "Kuya Nilo Prutas",        sec: "Fruit Section", no: 12, rating: 4.3, walk: "6 min lakad", f: 1.12 },
+      { name: "Nanay Iska Talipapa",     sec: "Dry Goods",     no: 9,  rating: 4.2, walk: "7 min lakad", f: 1.20 }
+    ],
+    isda: [
+      { name: "Mang Ising Isdaan",       sec: "Fish Section",  no: 42, rating: 4.7, walk: "4 min lakad", f: 0.82, closed: true },
+      { name: "Aling Vicky Isdaan",      sec: "Fish Section",  no: 38, rating: 4.5, walk: "4 min lakad", f: 0.90, half: true },
+      { name: "Kuya Rey Seafood",        sec: "Fish Section",  no: 29, rating: 4.6, walk: "5 min lakad", f: 0.96 },
+      { name: "Nanay Bining Isdaan",     sec: "Fish Section",  no: 16, rating: 4.4, walk: "6 min lakad", f: 1.05 },
+      { name: "Mang Pepe Fresh Fish",    sec: "Fish Section",  no: 51, rating: 4.2, walk: "6 min lakad", f: 1.12 },
+      { name: "Ate Vilma Frozen Goods",  sec: "Frozen Goods",  no: 5,  rating: 4.3, walk: "8 min lakad", f: 1.20 }
+    ],
+    iba: [
+      { name: "Aling Rosing Bigasan",    sec: "Rice Section", no: 4,  rating: 4.4, walk: "4 min lakad", f: 0.82 },
+      { name: "Aling Puring Itlugan",    sec: "Dry Goods",    no: 15, rating: 4.5, walk: "4 min lakad", f: 0.90, half: true },
+      { name: "Mang Berting Sari-sari",  sec: "Dry Goods",    no: 22, rating: 4.3, walk: "5 min lakad", f: 0.96 },
+      { name: "Ka Nena Bigasan",         sec: "Rice Section", no: 11, rating: 4.6, walk: "6 min lakad", f: 1.05 },
+      { name: "Ate Girlie Groceries",    sec: "Dry Goods",    no: 38, rating: 4.2, walk: "7 min lakad", f: 1.12 },
+      { name: "Mang Elmer Bigasan",      sec: "Rice Section", no: 27, rating: 4.1, walk: "8 min lakad", f: 1.20 }
+    ]
+  };
+  function rosterFor(p) { return ROSTERS[p.rk] || ROSTERS.gulay; }
+
+  var UNIT_LABEL = { kg: "/ kg", tali: "/ tali", dosena: "/ dosena" };
+  function per(p) { return UNIT_LABEL[p.unit] || ("/ " + p.unit); }
+  function peso(n) { return "₱" + Math.round(n).toLocaleString("en-PH"); }
+
+  function verdictFor(price, avg) {
+    var d = (price - avg) / avg;
+    if (d <= -0.05) return { cls: "mura", text: "MURA" };
+    if (d >= 0.05) return { cls: "mahal", text: "MAHAL" };
+    return { cls: "katamtaman", text: "KATAMTAMAN" };
+  }
+
+  function comparisonFor(p) {
+    var roster = rosterFor(p);
+    var base = p.price / roster[p.pos].f;
+    var rows = roster.map(function (s) {
+      var norm = Math.round(base * s.f);
+      var isHalf = !!s.half && p.unit === "kg";
+      return {
+        stall: s, norm: norm,
+        amount: isHalf ? peso(Math.round(norm / 2)) : peso(norm),
+        suffix: isHalf ? "/ 500g" : per(p),
+        normalized: isHalf ? "= " + peso(norm) + " kada kilo" : ""
+      };
+    }).sort(function (a, b) { return a.norm - b.norm; });
+    var sum = rows.reduce(function (t, r) { return t + r.norm; }, 0);
+    return { rows: rows, avg: Math.round(sum / rows.length), unit: per(p) };
+  }
+
+  /* Each product inherits its identity and its market average from its own
+     roster row, so a card, a detail page and the compare sheet cannot disagree. */
+  P.forEach(function (p) {
+    var own = rosterFor(p)[p.pos];
+    p.stall = own.name; p.sec = own.sec; p.no = own.no; p.walk = own.walk;
+    p.avg = comparisonFor(p).avg;
+  });
+
+  /* ===================== templates ===================== */
+  function imgTag(name, fb, alt) {
+    return '<img data-src="../assets/generated/products/product-' + name + '.png" data-fb="' + fb + '" alt="' + alt + '">';
+  }
+
+  function productCard(p) {
+    var v = verdictFor(p.price, p.avg);
+    var cmp = comparisonFor(p);
+    var off = p.was ? Math.round((1 - p.price / p.was) * 100) : 0;
+    var badge = off ? '<span class="badge">' + off + '% OFF</span>'
+                    : (p.best ? '<span class="badge best">PINAKAMURA</span>' : '');
+    return '' +
+      '<article class="pcard" data-open="' + p.id + '">' +
+        '<div class="pcard-media">' + imgTag(p.id, p.fb, p.fil + " (" + p.en + ")") + badge +
+          '<button class="fav" aria-label="Save ' + p.fil + '"><svg class="icon sm"><use href="#i-heart"/></svg></button>' +
+          '<button class="add" aria-label="Add ' + p.fil + ' to PalengKart"><svg class="icon"><use href="#i-plus"/></svg></button>' +
+        '</div>' +
+        '<div class="pcard-body">' +
+          '<h3 class="pcard-title">' + p.fil + '<span>' + p.en + '</span></h3>' +
+          '<div class="priceline"><span class="price">' + peso(p.price) + '</span><span class="per">' + per(p) + '</span>' +
+            (p.was ? '<s class="was">' + peso(p.was) + '</s>' : '') + '</div>' +
+          '<div class="metaline">' + (v.cls === "katamtaman" ? "" : '<span class="verdict ' + v.cls + '">' + v.text + '</span>') +
+            '<svg class="icon sm star fill"><use href="#i-star"/></svg><b>' + p.rating.toFixed(1) + '</b></div>' +
+          '<div class="stallline">' + p.stall + '</div>' +
+          '<button class="cmpbtn" data-compare="' + p.id + '">' +
+            '<span class="cl"><svg class="icon sm"><use href="#i-scale"/></svg>6 na puwesto</span>' +
+            '<b>mula ' + peso(cmp.rows[0].norm) + '</b></button>' +
+        '</div>' +
+      '</article>';
+  }
+
+  function stallCard(s) {
+    return '' +
+      '<article class="scard" data-toast="Stall page is not part of this design mock.">' +
+        '<div class="scard-media">' + imgTag(s.img, s.fb, s.name) +
+          '<span class="badge ' + (s.open ? "best" : "") + '">' + (s.open ? "BUKAS" : "SARADO") + '</span>' +
+        '</div>' +
+        '<div class="scard-body">' +
+          '<h3>' + s.name + '</h3>' +
+          '<div class="sec">' + s.sec + ' &bull; #' + s.no + ' &bull; ' + s.tags + '</div>' +
+          '<div class="metaline" style="margin-top:8px"><svg class="icon sm star fill"><use href="#i-star"/></svg>' +
+            '<b>' + s.rating.toFixed(1) + '</b><span>(' + s.reviews + ' reviews)</span></div>' +
+          '<div class="rangerow"><span class="range">' + peso(s.lo) + ' to ' + peso(s.hi) + '</span><span class="per">/ kg</span></div>' +
+        '</div>' +
+      '</article>';
+  }
+
+  function watchCard(p) {
+    var v = verdictFor(p.price, p.avg);
+    return '' +
+      '<button class="watch" data-compare="' + p.id + '">' +
+        '<span class="whead">' +
+          '<span class="wthumb">' + imgTag(p.id, p.fb, p.fil + " (" + p.en + ")") + '</span>' +
+          '<span class="wmeta">' +
+            '<span class="wname">' + p.fil + '</span>' +
+            '<span class="wprice">' + peso(p.price) + ' <span>' + per(p) + '</span></span>' +
+          '</span>' +
+        '</span>' +
+        '<span class="wchip"><span class="verdict ' + v.cls + '">' + v.text + '</span></span>' +
+        '<span class="wfoot">6 na puwesto<svg class="icon sm"><use href="#i-scale"/></svg></span>' +
+      '</button>';
+  }
+
+  function catChip(c) {
+    return '' +
+      '<button class="cat" data-cat="' + c.key + '" role="listitem">' +
+        '<span class="thumb"><svg class="icon"><use href="#' + c.icon + '"/></svg></span>' +
+        '<b>' + c.fil + '</b><span>' + c.en + '</span>' +
+      '</button>';
+  }
+
+  /* ===================== render ===================== */
+  function fill(id, html) { var el = document.getElementById(id); if (el) el.innerHTML = html; }
+
+  /* Presyo Ngayon leads with the five products that have real photography, and
+     deliberately skips repolyo so no photograph repeats inside the first screenful. */
+  fill("watchRail", ["kamatis", "talong", "sitaw", "saging", "mangga"].map(function (id) {
+    return watchCard(byId[id]);
+  }).join(""));
+  document.querySelector(".catrail").innerHTML = CATEGORIES.map(catChip).join("");
+  /* Every card here really does carry a struck original price, and the set avoids
+     reusing a photograph that is already on screen higher up. */
+  fill("dealsRail", ["kamatis", "calamansi", "liempo", "longganisa", "bigas"].map(function (id) {
+    return productCard(byId[id]);
+  }).join(""));
+  fill("stallRail", STALLS.map(stallCard).join(""));
+  fill("homeGrid", ["repolyo", "saging", "bangus", "itlog", "sitaw", "talong", "kalabasa", "sibuyas"].map(function (id) {
+    return productCard(byId[id]);
+  }).join(""));
+  function resetBrowse() {
+    document.getElementById("browseTitle").textContent = "Lahat ng Produkto";
+    document.getElementById("browseSub").textContent = "Presyo ngayong araw sa Lipa City Public Market";
+    fill("browseGrid", P.map(productCard).join(""));
+    document.getElementById("browseCount").textContent = P.length + " na produkto";
+    mountAllImages(document);
+  }
+  fill("browseGrid", P.map(productCard).join(""));
+  document.getElementById("browseCount").textContent = P.length + " na produkto";
+  fill("galTrack", '<figure>' + imgTag("kamatis", "round", "Kamatis") + '</figure>' +
+                   '<figure>' + imgTag("talong", "long", "Iba pang gulay sa puwesto") + '</figure>');
+  mountAllImages(document);
+
+  var SORTS = ["Pinakamura", "Presyo kada kilo", "Pinakamalapit", "Pinakamataas na rating", "Pinakabago"];
+  fill("sortOpts", SORTS.map(function (s, i) {
+    return '<button class="sortopt' + (i === 0 ? " on" : "") + '" data-sort="' + s + '">' + s +
+      '<svg class="icon sm"><use href="#i-check"/></svg></button>';
+  }).join(""));
+
+  /* ===================== product detail ===================== */
+  var UNITS = [
+    { key: "250g",   label: "250g",   sub: "1/4 kilo", mult: 0.25 },
+    { key: "500g",   label: "500g",   sub: "1/2 kilo", mult: 0.5 },
+    { key: "kg",     label: "1 kilo", sub: "kada kilo", mult: 1 },
+    { key: "bundle", label: "Tali",   sub: "isang tali", mult: 0.35 }
+  ];
+  var current = byId.kamatis;
+  var currentUnit = "kg";
+
+  function renderDetail(p) {
+    current = p; currentUnit = "kg";
+    var cmp = comparisonFor(p);
+    var v = verdictFor(p.price, cmp.avg);
+    document.getElementById("dTitle").innerHTML = p.fil + '<span>' + p.en + '</span>';
+    document.getElementById("dPer").textContent = per(p);
+    document.getElementById("dVerdict").className = "verdict " + v.cls;
+    document.getElementById("dVerdict").textContent = v.text;
+    var was = document.getElementById("dWas");
+    var off = document.getElementById("dOff");
+    if (p.was) {
+      was.style.display = ""; off.style.display = "";
+      was.textContent = peso(p.was);
+      off.textContent = Math.round((1 - p.price / p.was) * 100) + "% OFF";
+    } else { was.style.display = "none"; off.style.display = "none"; }
+
+    document.getElementById("dUnitNote").textContent =
+      peso(p.price) + " kada " + (p.unit === "kg" ? "kilo" : p.unit) + ". Average sa palengke ngayon: " + peso(cmp.avg) + " kada " + (p.unit === "kg" ? "kilo" : p.unit) + ".";
+
+    var trust = document.querySelector(".trustrow");
+    trust.innerHTML = '<svg class="icon sm star fill"><use href="#i-star"/></svg><b>' + p.rating.toFixed(1) + '</b>' +
+      '<span>(' + p.reviews + ' reviews)</span><span class="sep"></span><span>' + p.stall + '</span>' +
+      '<span class="sep"></span><span>' + p.sec + ' &bull; #' + p.no + '</span>';
+
+    var units = p.unit === "kg" ? UNITS : [{ key: p.unit, label: "1 " + p.unit, sub: "kada " + p.unit, mult: 1 }];
+    fill("dSwatches", units.map(function (u) {
+      return '<button class="swatch' + (u.key === "kg" || units.length === 1 ? " on" : "") + '" data-unit="' + u.key + '" data-mult="' + u.mult + '">' +
+        '<b>' + u.label + '</b><span>' + peso(p.price * u.mult) + '</span></button>';
+    }).join(""));
+
+    document.getElementById("dCmpSub").textContent = p.fil + ", presyo ngayon sa " + cmp.rows.length +
+      " na puwesto, " + (p.unit === "kg" ? "kada kilo" : "kada " + p.unit);
+    document.getElementById("dDesc").textContent = "Sariwang " + p.fil.toLowerCase() +
+      " na dinadala sa " + p.sec + " tuwing madaling araw, bago pa magbukas ang palengke. " +
+      (p.unit === "kg" ? "Binebenta kada kilo, kada kalahating kilo at kada tali. " : "Binebenta kada " + p.unit + ". ") +
+      "Sundo mo na lang sa puwesto ni " + p.stall + ", " + p.walk + " mula sa main entrance.";
+    fill("dCompareRows", cmp.rows.slice(0, 3).map(function (r, i) { return compareRow(r, i, cmp); }).join(""));
+    document.getElementById("dAvg").textContent = peso(cmp.avg) + " " + cmp.unit;
+    document.getElementById("dCompareOpen").innerHTML =
+      '<svg class="icon sm"><use href="#i-scale"/></svg> Tingnan lahat ng ' + cmp.rows.length + ' na presyo';
+
+    document.querySelector(".block .stallstrip h4").textContent = p.stall;
+    document.querySelector(".block .stallstrip .sec").textContent = p.sec + " • #" + p.no;
+    document.getElementById("dWalkFact").innerHTML = "<b>" + p.walk + "</b> mula sa main entrance, " + p.sec;
+    /* No opening-hours data exists per stall, so only the market-wide hours and
+       the is_temporarily_closed state are shown. */
+    document.getElementById("dOpenFact").innerHTML = rosterFor(p)[p.pos].closed
+      ? "<b>Pansamantalang sarado</b> ang puwestong ito. Bukas ang palengke, 5:00 AM to 7:00 PM."
+      : "<b>Bukas ngayon</b>, ready for pickup sa oras ng palengke, 5:00 AM to 7:00 PM";
+    var avatarImg = document.querySelector(".stallstrip .avatar img");
+    avatarImg.removeAttribute("data-mounted"); avatarImg.removeAttribute("data-fallen");
+    avatarImg.setAttribute("data-src", "../assets/generated/products/product-" + p.id + ".png");
+    avatarImg.setAttribute("data-fb", p.fb);
+
+    fill("galTrack", '<figure>' + imgTag(p.id, p.fb, p.fil) + '</figure>' +
+                     '<figure><img data-src="../assets/generated/banners/banner-market-morning.png" data-fb="banner-market" alt="' + p.stall + '"></figure>');
+    mountAllImages(document);
+    setUnit(units.length === 1 ? p.unit : "kg", 1);
+    updateGalDots(0);
+  }
+
+  function compareRow(r, i, cmp) {
+    var v = verdictFor(r.norm, cmp.avg);
+    return '<button class="cmprow' + (i === 0 ? " best" : "") + '" data-toast="Stall page is not part of this design mock.">' +
+      '<span class="rank">' + (i + 1) + '</span>' +
+      '<span class="body">' +
+        '<span class="l1"><b>' + r.stall.name + '</b>' +
+          '<span class="amt"><span class="pline"><span class="price">' + r.amount + '</span>' +
+            '<span class="per">' + r.suffix + '</span></span>' +
+            (r.normalized ? '<span class="norm">' + r.normalized + '</span>' : '') + '</span></span>' +
+        '<span class="l2"><span class="meta">' +
+          '<svg class="icon sm star fill"><use href="#i-star"/></svg>' + r.stall.rating.toFixed(1) +
+          ' &bull; #' + r.stall.no + ' &bull; ' + r.stall.walk + '</span>' +
+          '<span class="verdict ' + v.cls + '">' + v.text + '</span></span>' +
+      '</span></button>';
+  }
+
+  function setUnit(key, mult) {
+    currentUnit = key;
+    var val = current.price * mult;
+    document.getElementById("dPrice").textContent = peso(val);
+    document.getElementById("dTotal").textContent = peso(val);
+    document.getElementById("dPer").textContent = key === "kg" ? per(current) : "/ " + (key === "bundle" ? "tali" : key);
+    document.querySelectorAll("#dSwatches .swatch").forEach(function (b) {
+      b.classList.toggle("on", b.getAttribute("data-unit") === key);
+    });
+  }
+
+  /* ===================== compare sheet ===================== */
+  function openCompare(id) {
+    var p = byId[id] || current;
+    var cmp = comparisonFor(p);
+    document.getElementById("cmpTitle").textContent = p.fil + " (" + p.en + ")";
+    document.getElementById("cmpSub").textContent = "Presyo ngayon sa " + cmp.rows.length + " na puwesto, " +
+      (p.unit === "kg" ? "kada kilo" : "kada " + p.unit);
+    var save = cmp.rows[cmp.rows.length - 1].norm - cmp.rows[0].norm;
+    document.getElementById("cmpSave").innerHTML =
+      '<svg class="icon"><use href="#i-scale"/></svg><span><b>Average sa palengke: ' + peso(cmp.avg) + " " + cmp.unit +
+      '.</b> Tipid ka ng ' + peso(save) + " " + cmp.unit + ' kay ' + cmp.rows[0].stall.name + '.</span>';
+    fill("cmpRows", cmp.rows.map(function (r, i) { return compareRow(r, i, cmp); }).join(""));
+    document.getElementById("cmpAvg").textContent = peso(cmp.avg) + " " + cmp.unit;
+    openSheet("cmpSheet");
+  }
+
+  function openSheet(id) { document.getElementById(id).classList.add("open"); document.body.style.overflow = "hidden"; }
+  function closeSheets() {
+    document.querySelectorAll(".sheet.open").forEach(function (s) { s.classList.remove("open"); });
+    document.body.style.overflow = "";
+  }
+
+  /* ===================== navigation ===================== */
+  function show(screen) {
+    document.body.setAttribute("data-view", screen);
+    document.querySelectorAll(".screen").forEach(function (s) {
+      s.classList.toggle("is-active", s.id === "screen-" + screen);
+    });
+    window.scrollTo({ top: 0, behavior: "auto" });
+    document.getElementById("appbar").classList.remove("is-compact");
+  }
+
+  /* ===================== toast ===================== */
+  var toastEl = document.getElementById("toast"), toastTimer;
+  function toast(msg) {
+    toastEl.textContent = msg;
+    toastEl.classList.add("on");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { toastEl.classList.remove("on"); }, 2400);
+  }
+
+  /* ===================== events ===================== */
+  document.addEventListener("click", function (e) {
+    var t;
+
+    if ((t = e.target.closest("[data-close]"))) { closeSheets(); return; }
+    if ((t = e.target.closest("[data-compare]"))) { e.stopPropagation(); openCompare(t.getAttribute("data-compare")); return; }
+
+    if ((t = e.target.closest(".fav"))) { e.stopPropagation(); t.classList.toggle("on"); toast(t.classList.contains("on") ? "Naidagdag sa paborito." : "Inalis sa paborito."); return; }
+    if ((t = e.target.closest(".add"))) { e.stopPropagation(); toast("Please login to add items to cart."); return; }
+
+    if ((t = e.target.closest("[data-open]"))) { renderDetail(byId[t.getAttribute("data-open")]); show("product"); return; }
+
+    if ((t = e.target.closest("[data-cat]"))) {
+      var c = CATEGORIES.filter(function (x) { return x.key === t.getAttribute("data-cat"); })[0];
+      document.getElementById("browseTitle").textContent = c.fil + " (" + c.en + ")";
+      document.getElementById("browseSub").textContent = c.desc;
+      var all = P.filter(function (p) { return p.cat === c.key; });
+      fill("browseGrid", all.map(productCard).join(""));
+      document.getElementById("browseCount").textContent = all.length + " na produkto";
+      mountAllImages(document);
+      show("browse");
+      return;
+    }
+
+    if ((t = e.target.closest("[data-screen]"))) {
+      if (t.hasAttribute("data-reset")) resetBrowse();
+      show(t.getAttribute("data-screen"));
+      return;
+    }
+
+    if ((t = e.target.closest(".swatch"))) { setUnit(t.getAttribute("data-unit"), parseFloat(t.getAttribute("data-mult"))); return; }
+
+    if ((t = e.target.closest("#dCompareOpen"))) { openCompare(current.id); return; }
+    if ((t = e.target.closest("#sortOpen"))) { openSheet("sortSheet"); return; }
+    if ((t = e.target.closest("[data-sort]"))) {
+      document.querySelectorAll("[data-sort]").forEach(function (o) { o.classList.remove("on"); });
+      t.classList.add("on");
+      document.getElementById("sortLabel").textContent = t.getAttribute("data-sort");
+      closeSheets();
+      return;
+    }
+
+    if ((t = e.target.closest(".chip"))) {
+      t.parentElement.querySelectorAll(".chip").forEach(function (c) { c.classList.remove("on"); });
+      t.classList.add("on");
+      return;
+    }
+
+    if ((t = e.target.closest("[data-tab]"))) {
+      var tab = t.getAttribute("data-tab");
+      if (tab === "home") {
+        document.querySelectorAll("[data-tab]").forEach(function (b) { b.classList.toggle("on", b.getAttribute("data-tab") === "home"); });
+        show("home");
+      } else {
+        toast("This design mock covers Home, browse, product and price compare only.");
+      }
+      return;
+    }
+
+    if ((t = e.target.closest("[data-toast]"))) { toast(t.getAttribute("data-toast")); return; }
+  });
+
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeSheets(); });
+
+  /* sticky collapsing search + scroll to top */
+  var appbar = document.getElementById("appbar"), toTop = document.getElementById("toTop");
+  window.addEventListener("scroll", function () {
+    var y = window.scrollY;
+    appbar.classList.toggle("is-compact", y > 70);
+    toTop.classList.toggle("on", y > 900 && document.body.getAttribute("data-view") === "browse");
+  }, { passive: true });
+  toTop.addEventListener("click", function () {
+    var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    window.scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" });
+  });
+
+  /* carousel dots follow the user, nothing auto-advances */
+  function wireDots(trackId, dotsId) {
+    var track = document.getElementById(trackId), dots = document.getElementById(dotsId);
+    if (!track || !dots) return;
+    track.addEventListener("scroll", function () {
+      var i = Math.round(track.scrollLeft / track.clientWidth);
+      dots.querySelectorAll("i").forEach(function (d, n) { d.classList.toggle("on", n === i); });
+    }, { passive: true });
+  }
+  wireDots("promoTrack", "promoDots");
+  wireDots("galTrack", "galDots");
+  function updateGalDots(i) {
+    document.querySelectorAll("#galDots i").forEach(function (d, n) { d.classList.toggle("on", n === i); });
+  }
+
+  renderDetail(byId.kamatis);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,1714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1F7A3A">
+<title>PalengkeHub - Lipa City Public Market</title>
+<meta name="description" content="Order from the Lipa City Public Market, compare stall prices, then pick up sa market.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800;900&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   PalengkeHub - Variant 1 "Sariwa Bold"
+   Color-block confidence. The deep produce green owns the top of
+   every screen: brand, greeting, search and category chips are all
+   reversed on saturated green. The content arrives as a warm paper
+   sheet that slides over the green with a 28px top radius.
+   One warm yellow accent, used only for deals and discounts.
+   Single file, no build step, no JS libraries.
+   ============================================================ */
+
+:root{
+  /* brand art: change these TWO lines to swap the logo everywhere */
+  --brand-mark:   url("../assets/generated/logo-final/mark.webp");
+  --brand-lockup: url("../assets/generated/logo-final/lockup.webp");
+
+  /* --- the green canvas --- */
+  --green:       #1F7A3A;
+  --green-deep:  #14562A;
+  --green-press: #175E2C;
+  --green-ink:   #0E3F1D;
+  --green-soft:  #E3F0E1;
+  --green-line:  rgba(255,255,255,.20);
+  --green-fill:  rgba(255,255,255,.14);
+  --green-sub:   rgba(255,255,255,.78);
+
+  /* --- the one accent --- */
+  --yellow:      #FFC43D;
+  --yellow-soft: #FFEFC9;
+  --yellow-line: #F4D48A;
+  --yellow-ink:  #402D00;
+
+  /* --- the sheet --- */
+  --paper: #FBF7EF;
+  --card:  #FFFFFF;
+  --ink:   #17140F;
+  --ink2:  #554E44;
+  --ink3:  #8A8177;
+  --line:  #EDE6D8;
+
+  /* semantic only, never a button */
+  --mahal:      #B93222;
+  --mahal-soft: #FBE6E2;
+  --gcash:      #007DFE;
+
+  /* radius system: 3 steps + pill */
+  --r-sm:  12px;
+  --r:     20px;
+  --r-lg:  28px;
+  --r-pill:999px;
+
+  --shadow:   0 2px 12px rgba(48,38,20,.07);
+  --shadow-2: 0 10px 30px rgba(20,45,25,.13);
+  --shadow-up:0 -3px 18px rgba(48,38,20,.10);
+
+  --ease: cubic-bezier(.2,0,0,1);
+  --pad: 16px;
+  --nav-h: 64px;
+}
+
+*,*::before,*::after{ box-sizing:border-box; }
+html{ -webkit-text-size-adjust:100%; background:var(--green); }
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:"Be Vietnam Pro","Segoe UI",system-ui,sans-serif;
+  font-size:15px;
+  line-height:1.45;
+  -webkit-font-smoothing:antialiased;
+}
+img{ display:block; max-width:100%; }
+button{ font:inherit; color:inherit; border:0; background:none; cursor:pointer; }
+a{ color:inherit; text-decoration:none; }
+ul{ margin:0; padding:0; list-style:none; }
+:focus-visible{ outline:3px solid var(--yellow); outline-offset:2px; border-radius:6px; }
+
+/* ---------- type scale ---------- */
+h1,h2,h3{ font-family:Archivo,"Be Vietnam Pro",system-ui,sans-serif; margin:0; letter-spacing:-.02em; }
+.display{ font-size:34px; font-weight:800; line-height:.98; letter-spacing:-.035em; }
+.h-screen{ font-size:22px; font-weight:800; }
+.h-sec{ font-size:21px; font-weight:800; letter-spacing:-.025em; }
+.meta{ font-size:13px; color:var(--ink3); }
+.micro{
+  font-family:Archivo,sans-serif; font-size:11px; font-weight:700;
+  letter-spacing:.09em; text-transform:uppercase;
+}
+.badge{ font-family:Archivo,sans-serif; font-size:11px; font-weight:700; letter-spacing:.05em; text-transform:uppercase; }
+.price{
+  font-family:Archivo,"Be Vietnam Pro",sans-serif;
+  font-size:21px; font-weight:800; letter-spacing:-.035em;
+  font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1;
+  color:var(--ink);
+}
+.price .unit{ font-family:"Be Vietnam Pro",sans-serif; font-size:12px; font-weight:500; color:var(--ink3); letter-spacing:0; }
+.price.strike{ font-size:13px; font-weight:500; color:var(--ink3); text-decoration:line-through; letter-spacing:0; }
+
+/* ---------- icons: one set only ---------- */
+.ic{ width:24px; height:24px; flex:none; fill:none; stroke:currentColor; stroke-width:1.85; stroke-linecap:round; stroke-linejoin:round; }
+.ic-sm{ width:18px; height:18px; }
+.ic-xs{ width:14px; height:14px; }
+
+/* ---------- shell ---------- */
+.app{ min-height:100vh; }
+.sidebar{ display:none; }
+.screen{ padding-bottom:0; }
+.screen[hidden]{ display:none; }
+.pad{ padding-left:var(--pad); padding-right:var(--pad); }
+
+/* ============================================================
+   THE GREEN CANVAS
+   ============================================================ */
+.canvas{
+  background:var(--green);
+  background-image:radial-gradient(120% 85% at 88% -18%, rgba(255,255,255,.11), rgba(255,255,255,0) 62%);
+  color:#fff;
+  padding-bottom:26px;
+  position:relative;
+}
+.appbar{
+  position:sticky; top:0; z-index:40;
+  background:var(--green);
+  transition:box-shadow .22s var(--ease);
+}
+.appbar.is-stuck{ box-shadow:0 6px 20px rgba(9,44,20,.28); }
+
+.brandrow{
+  display:flex; align-items:center; gap:10px;
+  padding:12px var(--pad) 6px;
+  transition:padding .22s var(--ease);
+}
+.brand-mark{
+  width:38px; height:38px; flex:none; border-radius:11px;
+  background-color:#fff;
+  background-image:var(--brand-mark);
+  background-size:80%; background-position:center; background-repeat:no-repeat;
+}
+.wordmark{ font-family:Archivo,sans-serif; font-weight:800; font-size:19px; letter-spacing:-.03em; color:#fff; }
+.wordmark span{ color:var(--yellow); }
+.bell{ margin-left:auto; position:relative; width:44px; height:44px; display:grid; place-items:center; color:#fff; }
+.dot{
+  position:absolute; top:6px; right:5px; min-width:18px; height:18px; padding:0 5px;
+  background:var(--yellow); color:var(--yellow-ink); border-radius:var(--r-pill);
+  border:2px solid var(--green);
+  font-family:Archivo,sans-serif; font-size:11px; font-weight:800; line-height:14px; text-align:center;
+}
+.locrow{
+  display:flex; align-items:center; gap:6px;
+  padding:0 var(--pad) 4px; overflow:hidden;
+  max-height:40px; opacity:1;
+  transition:max-height .22s var(--ease), opacity .18s var(--ease), padding .22s var(--ease);
+}
+.locrow .place{ font-weight:600; font-size:15px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; color:#fff; }
+.locrow .ic{ color:rgba(255,255,255,.8); }
+.openpill{
+  margin-left:auto; display:flex; align-items:center; gap:5px; flex:none;
+  background:var(--green-fill); color:#fff;
+  padding:4px 10px; border-radius:var(--r-pill); font-size:12px; font-weight:600;
+}
+.openpill .long{ display:none; }
+@media (min-width:400px){ .openpill .long{ display:inline; } }
+
+.greet{ padding:16px var(--pad) 0; }
+.greet h1{ color:#fff; }
+.greet p{ margin:8px 0 0; font-size:15px; color:var(--green-sub); max-width:30ch; }
+
+.searchwrap{ padding:16px var(--pad) 0; }
+.searchfield{
+  display:flex; align-items:center; gap:10px;
+  height:54px; padding:0 8px 0 16px;
+  background:#fff; border-radius:var(--r-pill);
+  color:var(--ink3);
+  box-shadow:0 6px 18px rgba(9,44,20,.18);
+  transition:height .22s var(--ease);
+}
+.searchfield .ic{ color:var(--green); }
+.searchfield input{
+  border:0; background:none; outline:none; flex:1 1 auto; min-width:0;
+  align-self:stretch; height:100%;
+  font:inherit; font-size:15px; color:var(--ink);
+}
+.searchfield input::placeholder{ color:var(--ink3); }
+.searchfield .sgo{
+  flex:none; width:38px; height:38px; border-radius:var(--r-pill);
+  background:var(--green); display:grid; place-items:center;
+}
+.searchfield .sgo .ic{ color:#fff; }
+.appbar.is-stuck .brandrow{ padding-top:6px; padding-bottom:2px; }
+.appbar.is-stuck .locrow{ max-height:0; opacity:0; padding-bottom:0; }
+
+/* category chips, reversed on green */
+.cats{ padding-top:18px; }
+.cat{ width:70px; display:flex; flex-direction:column; align-items:center; gap:7px; background:none; }
+.cat .disc{
+  width:60px; height:60px; border-radius:var(--r-pill);
+  background:var(--green-fill); color:#fff;
+  display:grid; place-items:center;
+  border:1.5px solid var(--green-line);
+  transition:transform .15s var(--ease), background .15s var(--ease), color .15s var(--ease);
+}
+.cat .disc .ic{ width:27px; height:27px; }
+.cat span{ font-size:12.5px; font-weight:600; color:rgba(255,255,255,.9); line-height:1.2; text-align:center; }
+.cat[aria-pressed="true"] .disc{ background:#fff; color:var(--green-deep); border-color:#fff; }
+.cat[aria-pressed="true"] span{ color:#fff; font-weight:700; }
+.cat:active .disc{ transform:scale(.93); }
+
+/* ---------- horizontal rails ---------- */
+.rail{
+  display:flex; gap:12px; overflow-x:auto; scroll-snap-type:x proximity;
+  padding:2px var(--pad) 4px; margin:0; scrollbar-width:none;
+  scroll-padding-left:var(--pad); scroll-padding-right:var(--pad);
+}
+.rail::-webkit-scrollbar{ display:none; }
+.rail > *{ scroll-snap-align:start; flex:none; }
+
+/* ============================================================
+   THE PAPER SHEET
+   ============================================================ */
+.sheet-surface{
+  position:relative; z-index:5;
+  background:var(--paper);
+  border-radius:var(--r-lg) var(--r-lg) 0 0;
+  margin-top:-20px;
+  padding-top:18px;
+  padding-bottom:calc(var(--nav-h) + 30px + env(safe-area-inset-bottom));
+  box-shadow:0 -10px 30px rgba(9,44,20,.16);
+}
+
+/* ---------- section headers ---------- */
+.sechead{ display:flex; align-items:flex-end; gap:10px; padding:26px var(--pad) 12px; }
+.sechead .sub{ display:block; font-family:"Be Vietnam Pro",sans-serif; font-size:13px; font-weight:400; color:var(--ink3); margin-top:3px; letter-spacing:0; }
+.seeall{
+  margin-left:auto; color:var(--green); font-weight:700; font-size:13px;
+  display:inline-flex; align-items:center; gap:2px; white-space:nowrap;
+  min-height:44px; padding:0 2px 0 8px;
+}
+
+/* ---------- presyo watch: the price spine ---------- */
+.watch{
+  margin:0 var(--pad); padding:16px 16px 16px;
+  background:var(--card); border-radius:var(--r);
+  border:1px solid var(--line);
+  box-shadow:var(--shadow-2);
+}
+.watch .top{ display:flex; align-items:center; gap:8px; padding-bottom:4px; }
+.watch .top .ic{ color:var(--green); }
+.watch .top h2{ font-size:12px; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:var(--green-ink); font-family:Archivo,sans-serif; }
+.watch .top .live{
+  margin-left:auto; font-family:Archivo,sans-serif; font-size:10.5px; font-weight:800; letter-spacing:.08em; text-transform:uppercase;
+  color:var(--yellow-ink); background:var(--yellow); padding:4px 9px; border-radius:var(--r-pill);
+}
+.watchrow{
+  display:grid; grid-template-columns:46px minmax(0,1fr) auto; column-gap:12px; row-gap:2px;
+  align-items:center; width:100%;
+  padding:11px 0; border-top:1px solid var(--line); text-align:left;
+}
+.watchrow:first-child{ border-top:0; }
+.watchrow .media{ grid-column:1; grid-row:1 / span 2; width:46px; height:46px; border-radius:var(--r-sm); overflow:hidden; position:relative; }
+.watchrow .nm{ grid-column:2; grid-row:1; font-weight:600; font-size:15px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.watchrow .rt{ grid-column:3; grid-row:1; text-align:right; white-space:nowrap; }
+.watchrow .rt .price{ font-size:20px; }
+.watchrow .sub{
+  grid-column:2 / span 2; grid-row:2; font-size:12.5px; color:var(--ink3);
+  display:flex; align-items:center; gap:6px; min-width:0;
+}
+.watchrow .sub span:first-child{ min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.tipchip{
+  flex:none; font-family:Archivo,sans-serif; font-size:10.5px; font-weight:800;
+  letter-spacing:.04em; text-transform:uppercase; white-space:nowrap;
+  color:var(--green-ink); background:var(--green-soft); padding:3px 8px; border-radius:var(--r-pill);
+}
+.tipchip.flat{ color:var(--ink2); background:#EFEADF; }
+.watch .cta{
+  margin-top:14px; width:100%; height:50px; border-radius:var(--r-sm);
+  background:var(--green); color:#fff; font-weight:700; font-size:15px;
+  display:flex; align-items:center; justify-content:center; gap:8px;
+  transition:background .15s var(--ease), transform .15s var(--ease);
+}
+.watch .cta:active{ background:var(--green-press); transform:scale(.985); }
+
+/* ---------- how it works, desktop rail only ---------- */
+.howto{ margin-top:20px; background:var(--green-deep); color:#fff; border-radius:var(--r); padding:20px; }
+.howto h2{ font-size:17px; font-weight:800; letter-spacing:-.02em; }
+.howto ol{ list-style:none; margin:14px 0 0; padding:0; display:flex; flex-direction:column; gap:14px; }
+.howto li{ display:flex; gap:12px; align-items:flex-start; }
+.howto li b{
+  flex:none; width:26px; height:26px; border-radius:var(--r-pill);
+  background:var(--yellow); color:var(--yellow-ink);
+  font-family:Archivo,sans-serif; font-size:13px; font-weight:800;
+  display:grid; place-items:center;
+}
+.howto li i{ display:block; font-style:normal; font-weight:700; font-size:14px; margin-bottom:2px; }
+.howto li span{ font-size:12.5px; color:rgba(255,255,255,.76); line-height:1.5; }
+
+/* ---------- verdict chips ---------- */
+.verdict{ display:inline-flex; align-items:center; gap:3px; padding:3px 8px; border-radius:var(--r-pill); }
+.verdict.mura{ background:var(--green-soft); color:var(--green-ink); }
+.verdict.mahal{ background:var(--mahal-soft); color:var(--mahal); }
+.verdict.katamtaman{ background:#EFEADF; color:var(--ink2); }
+
+/* ============================================================
+   MEDIA: photos, and color plates where there is no photo.
+   A plate is a deliberate type tile, never a missing image.
+   ============================================================ */
+.media{ position:relative; overflow:hidden; background:var(--green-soft); }
+.media img{ width:100%; height:100%; object-fit:cover; }
+.plate{
+  position:absolute; inset:0; display:flex; flex-direction:column; justify-content:flex-end;
+  padding:11px 12px; overflow:hidden;
+}
+.plate::before{
+  content:""; position:absolute; inset:0;
+  background:repeating-linear-gradient(128deg, rgba(255,255,255,.075) 0 9px, rgba(255,255,255,0) 9px 24px);
+}
+.plate .ghost{
+  position:absolute; top:44%; left:50%; transform:translate(-50%,-50%);
+  font-family:Archivo,sans-serif; font-weight:900; font-size:70px; line-height:1;
+  letter-spacing:-.06em; opacity:.19; white-space:nowrap;
+  font-variant-numeric:tabular-nums;
+}
+.plate .pe{ position:relative; font-family:Archivo,sans-serif; font-size:9.5px; font-weight:800; letter-spacing:.13em; text-transform:uppercase; opacity:.75; margin-bottom:4px; }
+.plate .pn{ position:relative; font-family:Archivo,sans-serif; font-weight:800; font-size:22px; line-height:.94; letter-spacing:-.035em; overflow-wrap:anywhere; }
+.plate.wide .pn{ font-size:26px; }
+.plate.wide .ghost{ font-size:62px; }
+.plate.tiny{ padding:0; align-items:center; justify-content:center; }
+.plate.tiny .mono{ position:relative; font-family:Archivo,sans-serif; font-weight:800; font-size:15px; letter-spacing:-.02em; }
+.plate.tiny::before{ background:repeating-linear-gradient(128deg, rgba(255,255,255,.10) 0 5px, rgba(255,255,255,0) 5px 13px); }
+.plate.hero .pn{ font-size:46px; }
+.plate.hero .pe{ font-size:12px; }
+.plate.hero .ghost{ font-size:132px; }
+.plate.hero{ padding:20px 22px 44px; }
+
+[data-tone="gulay"] { background:#8DB350; color:#1E2B0A; }
+[data-tone="karne"] { background:#C8402F; color:#FFF4F1; }
+[data-tone="manok"] { background:#E2BA87; color:#3A1D08; }
+[data-tone="prutas"]{ background:#E8833A; color:#3A1A02; }
+[data-tone="bigas"] { background:#14562A; color:#E8F2E1; }
+[data-tone="isda"]  { background:#6FAED6; color:#0F2E3E; }
+
+/* ---------- product card ---------- */
+.pcard{
+  background:var(--card); border-radius:var(--r); overflow:hidden;
+  border:1px solid var(--line); box-shadow:var(--shadow);
+  display:flex; flex-direction:column; text-align:left;
+  transition:transform .15s var(--ease), box-shadow .15s var(--ease);
+}
+.pcard:active{ transform:scale(.985); }
+.pcard .shot{ position:relative; display:block; width:100%; aspect-ratio:1/1; }
+.pcard .shot .media{ position:absolute; inset:0; }
+.pcard .flag{
+  position:absolute; top:9px; left:9px; z-index:2;
+  background:var(--ink); color:var(--yellow); padding:5px 9px; border-radius:var(--r-pill);
+  font-family:Archivo,sans-serif; font-size:11.5px; font-weight:800; letter-spacing:-.01em;
+}
+.pcard .fav{
+  position:absolute; top:7px; right:7px; z-index:2; width:34px; height:34px; border-radius:var(--r-pill);
+  background:rgba(255,255,255,.94); color:var(--ink2); display:grid; place-items:center;
+  box-shadow:0 1px 4px rgba(0,0,0,.12);
+}
+.pcard .fav .ic{ width:18px; height:18px; }
+.pcard .body{ padding:11px 12px 12px; display:flex; flex-direction:column; gap:2px; flex:1; }
+.pcard .nm{ font-size:15px; font-weight:700; line-height:1.25; letter-spacing:-.01em; }
+.pcard .en{ font-size:12.5px; color:var(--ink3); margin-bottom:5px; }
+.pcard .prow{ display:flex; align-items:baseline; gap:6px; flex-wrap:wrap; }
+.pcard .stall{ display:flex; align-items:center; gap:4px; font-size:12.5px; color:var(--ink3); margin-top:5px; }
+.pcard .rate{ display:flex; align-items:center; gap:4px; font-size:12.5px; color:var(--ink2); margin-top:2px; }
+.pcard .rate .ic{ color:#E0A21A; }
+.pcard .cmp{
+  margin-top:auto; height:42px; border-radius:var(--r-sm);
+  background:var(--green-soft); color:var(--green-ink); font-weight:700; font-size:13px;
+  display:flex; align-items:center; justify-content:center; gap:6px; white-space:nowrap;
+  transition:background .15s var(--ease);
+}
+.pcard .cmp:active{ background:#D3E6CF; }
+.pcard .body > button{ display:block; width:100%; text-align:left; padding-bottom:11px; }
+.grid2{ display:grid; grid-template-columns:1fr 1fr; gap:12px; padding:2px var(--pad) 0; }
+.rail .pcard{ width:168px; }
+
+/* ---------- deals band: the one yellow region ---------- */
+.dealband{
+  background:var(--yellow-soft);
+  border-radius:var(--r-lg);
+  margin:26px 0 0; padding:4px 0 20px;
+}
+.dealband .sechead{ padding-top:20px; }
+.dealband .sechead h2{ color:var(--yellow-ink); }
+.dealband .sechead .sub{ color:#8A6B22; }
+.dealband .seeall{ color:#8A5A00; }
+.dealband .pcard{ border-color:var(--yellow-line); }
+.saletag{
+  display:inline-flex; align-items:center; gap:6px;
+  background:var(--ink); color:var(--yellow);
+  padding:5px 11px; border-radius:var(--r-pill);
+  font-family:Archivo,sans-serif; font-size:11px; font-weight:800; letter-spacing:.09em; text-transform:uppercase;
+  margin:0 var(--pad);
+}
+
+/* ---------- promos ---------- */
+.promos{ scroll-snap-type:x mandatory; padding-top:0; }
+.promo{
+  position:relative; width:calc(100vw - 44px); max-width:520px;
+  aspect-ratio:16/9; border-radius:var(--r); overflow:hidden;
+}
+.promo .pcopy{ position:relative; z-index:3; padding:18px 20px; display:flex; flex-direction:column; justify-content:center; height:100%; }
+.promo .kick{ font-family:Archivo,sans-serif; font-size:10.5px; font-weight:800; letter-spacing:.13em; text-transform:uppercase; opacity:.9; }
+.promo h3{ font-size:24px; font-weight:800; margin:6px 0 3px; max-width:72%; line-height:1.02; letter-spacing:-.035em; }
+.promo p{ margin:0; font-size:13px; max-width:66%; opacity:.88; }
+.promo .tag{
+  align-self:flex-start; margin-top:12px;
+  padding:6px 12px; border-radius:var(--r-pill);
+  font-family:Archivo,sans-serif; font-size:12.5px; font-weight:800; letter-spacing:-.01em;
+}
+.promo-photo{ background:var(--green-deep); color:#fff; }
+.promo-photo .pshot{
+  position:absolute; inset:0; z-index:1;
+  background-image:url("../02-audit/logo/Lipapublicmarket.jpg");
+  background-size:cover; background-position:center 62%;
+  mix-blend-mode:luminosity; opacity:.62;
+}
+.promo-photo .veil{
+  position:absolute; inset:0; z-index:2;
+  background:linear-gradient(96deg, #0F4A24 6%, rgba(15,74,36,.86) 46%, rgba(15,74,36,.18) 100%);
+}
+.promo-photo .tag{ background:var(--yellow); color:var(--yellow-ink); }
+.promo-yellow{ background:var(--yellow); color:var(--yellow-ink); }
+.promo-yellow .cut{
+  position:absolute; right:-34px; bottom:-40px; z-index:2;
+  width:186px; height:186px; border-radius:50%;
+  background-image:url("../assets/generated/products/product-kamatis.png");
+  background-size:cover; background-position:center;
+  border:7px solid #FFD673;
+}
+.promo-yellow h3, .promo-yellow p{ max-width:60%; }
+.promo-yellow .tag{ background:var(--ink); color:var(--yellow); }
+.dots{ display:flex; gap:6px; justify-content:center; padding:12px 0 0; }
+.dots i{ width:6px; height:6px; border-radius:50%; background:#DED5C4; transition:width .2s var(--ease), background .2s var(--ease); }
+.dots i.on{ width:20px; background:var(--green); border-radius:var(--r-pill); }
+
+/* ---------- stall card ---------- */
+.scard{
+  width:272px; background:var(--card); border-radius:var(--r); overflow:hidden;
+  border:1px solid var(--line); box-shadow:var(--shadow); text-align:left;
+  transition:transform .15s var(--ease);
+}
+.scard:active{ transform:scale(.985); }
+.scard > button{ display:block; width:100%; text-align:left; }
+.scard .shot{ display:block; position:relative; width:100%; aspect-ratio:16/9; }
+.scard .shot .media{ position:absolute; inset:0; }
+.scard .state{
+  position:absolute; top:9px; left:9px; z-index:3; padding:4px 9px; border-radius:var(--r-pill);
+  color:#fff; background:var(--green);
+}
+.scard .state.shut{ background:#5A5248; }
+.scard .body{ display:block; padding:11px 13px 13px; }
+.scard .nm{ font-size:15px; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; letter-spacing:-.01em; }
+.scard .meta2{ display:flex; align-items:center; gap:5px; font-size:12.5px; color:var(--ink2); margin-top:3px; }
+.scard .meta2 .meta{ min-width:0; flex:1 1 auto; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.scard .meta2 .ic{ color:#E0A21A; }
+.scard .range{ margin-top:7px; display:flex; align-items:center; gap:6px; }
+.scard .range .price{ font-size:18px; }
+
+/* ---------- bottom tab bar ---------- */
+.tabbar{
+  position:fixed; left:0; right:0; bottom:0; z-index:50;
+  height:calc(var(--nav-h) + env(safe-area-inset-bottom));
+  padding-bottom:env(safe-area-inset-bottom);
+  background:var(--card); box-shadow:var(--shadow-up);
+  display:flex; align-items:stretch;
+}
+.tab{
+  flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px;
+  color:var(--ink3); position:relative; min-height:58px; padding-top:4px;
+}
+.tab .ib{
+  width:54px; height:28px; border-radius:var(--r-pill); display:grid; place-items:center;
+  position:relative; transition:background .18s var(--ease);
+}
+.tab .ic{ width:22px; height:22px; }
+.tab span.lb{ font-size:11px; font-weight:600; letter-spacing:-.01em; }
+.tab[aria-current="page"]{ color:var(--green-ink); }
+.tab[aria-current="page"] .ib{ background:var(--green-soft); }
+.tab[aria-current="page"] span.lb{ font-weight:700; }
+.tab .cnt{
+  position:absolute; top:-3px; right:6px;
+  min-width:17px; height:17px; padding:0 4px; border-radius:var(--r-pill);
+  background:var(--mahal); color:#fff; border:2px solid var(--card);
+  font-family:Archivo,sans-serif; font-size:10px; font-weight:800; line-height:13px; text-align:center;
+}
+
+/* ---------- sub screen header, still green ---------- */
+.subbar{
+  position:sticky; top:0; z-index:40; background:var(--green); color:#fff;
+  display:flex; align-items:center; gap:8px; padding:10px 8px 10px 6px;
+  transition:box-shadow .22s var(--ease);
+}
+.subbar.is-stuck{ box-shadow:0 6px 20px rgba(9,44,20,.28); }
+.iconbtn{ width:44px; height:44px; border-radius:var(--r-pill); display:grid; place-items:center; }
+.subbar h1{ font-size:22px; font-weight:800; letter-spacing:-.03em; }
+.subbar .right{ margin-left:auto; display:flex; }
+
+.browsehead{ background:var(--green); color:#fff; padding-bottom:16px; }
+.browsehead .lead{ padding:0 var(--pad) 12px; font-size:14px; color:var(--green-sub); max-width:34ch; }
+.filterbar{
+  display:flex; gap:8px; overflow-x:auto; padding:2px var(--pad) 2px; scrollbar-width:none;
+}
+.filterbar::-webkit-scrollbar{ display:none; }
+.fchip{
+  flex:none; height:42px; padding:0 15px; border-radius:var(--r-pill);
+  background:var(--green-fill); border:1.5px solid var(--green-line); color:#fff;
+  font-size:13px; font-weight:600; display:flex; align-items:center; gap:6px;
+  transition:background .15s var(--ease), color .15s var(--ease), border-color .15s var(--ease);
+}
+.fchip[aria-pressed="true"]{ background:#fff; border-color:#fff; color:var(--green-ink); font-weight:700; }
+.fchip .n{ background:rgba(255,255,255,.26); border-radius:var(--r-pill); padding:0 6px; font-size:11px; }
+.resultline{ padding:18px var(--pad) 12px; font-size:13px; color:var(--ink3); display:flex; align-items:center; margin:0; }
+.resultline b{ color:var(--ink); font-weight:700; font-family:Archivo,sans-serif; }
+
+.totop{
+  position:fixed; right:14px; bottom:calc(var(--nav-h) + 16px + env(safe-area-inset-bottom)); z-index:45;
+  width:46px; height:46px; border-radius:var(--r-pill); background:var(--green);
+  box-shadow:0 6px 18px rgba(9,44,20,.30); display:grid; place-items:center; color:#fff;
+  opacity:0; pointer-events:none; transition:opacity .2s var(--ease);
+}
+.totop.on{ opacity:1; pointer-events:auto; }
+
+/* ---------- product detail ---------- */
+.gallery{ position:relative; background:var(--green); }
+.gscroll{ display:flex; overflow-x:auto; scroll-snap-type:x mandatory; scrollbar-width:none; }
+.gscroll::-webkit-scrollbar{ display:none; }
+.gslide{ flex:none; width:100%; aspect-ratio:4/3; scroll-snap-align:start; position:relative; overflow:hidden; }
+.gslide img{ width:100%; height:100%; object-fit:cover; }
+.gfloat{ position:absolute; top:10px; left:10px; right:10px; display:flex; z-index:5; }
+.gfloat .iconbtn{ background:rgba(255,255,255,.95); color:var(--ink); box-shadow:0 2px 10px rgba(0,0,0,.20); }
+.gfloat .sp{ margin-left:auto; display:flex; gap:8px; }
+.gdots{ position:absolute; bottom:24px; left:0; right:0; z-index:5; padding:0; }
+.gdots i{ background:rgba(255,255,255,.5); }
+.gdots i.on{ background:#fff; }
+
+.sheetcard{
+  position:relative; z-index:6; margin-top:-22px; background:var(--paper);
+  border-radius:var(--r-lg) var(--r-lg) 0 0; padding-top:20px;
+}
+.pdtitle{ padding:0 var(--pad); }
+.pdtitle h1{ font-size:30px; font-weight:800; letter-spacing:-.035em; line-height:1.02; }
+.pdtitle .en{ color:var(--ink3); font-size:14px; margin-top:3px; }
+.pricebox{ padding:14px var(--pad) 0; display:flex; align-items:flex-end; gap:10px; flex-wrap:wrap; }
+.pricebox .big{
+  font-family:Archivo,sans-serif; font-size:44px; font-weight:800; letter-spacing:-.045em; line-height:1;
+  font-variant-numeric:tabular-nums;
+}
+.pricebox .big .unit{ font-family:"Be Vietnam Pro",sans-serif; font-size:15px; font-weight:500; color:var(--ink3); letter-spacing:0; }
+.pricebox .off{ background:var(--ink); color:var(--yellow); padding:5px 10px; border-radius:var(--r-pill); font-size:12px; }
+.trustrow{ display:flex; align-items:center; gap:10px; padding:12px var(--pad) 0; font-size:13px; color:var(--ink2); flex-wrap:wrap; }
+.trustrow .ic{ color:#E0A21A; }
+.sep{ width:4px; height:4px; border-radius:50%; background:#D8D0C0; }
+
+.block{ margin:16px var(--pad) 0; background:var(--card); border-radius:var(--r); padding:16px; border:1px solid var(--line); box-shadow:var(--shadow); }
+.block h2{ font-size:17px; font-weight:800; letter-spacing:-.02em; }
+.block .lead{ font-size:13px; color:var(--ink3); margin:3px 0 0; }
+.block.spine{ border-left:5px solid var(--green); }
+
+.units{ display:flex; gap:8px; flex-wrap:wrap; margin-top:12px; }
+.unit-sw{
+  min-width:78px; padding:9px 12px; border-radius:var(--r-sm);
+  background:#FAF6EE; border:1.5px solid var(--line); text-align:center;
+  transition:border-color .15s var(--ease), background .15s var(--ease);
+}
+.unit-sw b{ display:block; font-size:12.5px; font-weight:600; color:var(--ink2); }
+.unit-sw i{ display:block; font-style:normal; font-family:Archivo,sans-serif; font-weight:800; font-size:16px; margin-top:2px; letter-spacing:-.02em; }
+.unit-sw[aria-pressed="true"]{ border-color:var(--green); background:var(--green-soft); }
+.unit-sw[aria-pressed="true"] b, .unit-sw[aria-pressed="true"] i{ color:var(--green-ink); }
+
+.stallstrip{ display:flex; align-items:center; gap:12px; }
+.stallstrip .av{ width:48px; height:48px; border-radius:var(--r-sm); background:var(--green-soft); color:var(--green); display:grid; place-items:center; flex:none; }
+.stallstrip .go{ margin-left:auto; border:1.5px solid var(--green); color:var(--green); font-weight:700; font-size:13px; padding:9px 15px; border-radius:var(--r-pill); white-space:nowrap; }
+
+.crow{
+  display:flex; align-items:center; gap:10px; width:100%; text-align:left;
+  padding:11px; border-radius:var(--r-sm); background:#FAF6EE; margin-top:8px;
+  border:1.5px solid transparent;
+}
+.crow.best{ background:var(--green-soft); border-color:var(--green); }
+.crow .rank{
+  width:26px; height:26px; flex:none; border-radius:var(--r-pill); background:#fff;
+  display:grid; place-items:center; font-family:Archivo,sans-serif; font-weight:800; font-size:13px; color:var(--ink2);
+}
+.crow.best .rank{ background:var(--green); color:#fff; }
+.crow .who{ min-width:0; flex:1 1 auto; }
+.crow .who b{ font-weight:700; font-size:14.5px; display:block; line-height:1.25; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.crow .who small{ font-size:12.5px; color:var(--ink3); display:block; margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.crow .who small .ic{ color:#E0A21A; vertical-align:-2px; margin-right:2px; }
+.crow .who small .sep{ display:inline-block; vertical-align:middle; margin:0 5px; }
+.crow .amt{ text-align:right; flex:0 0 auto; margin-left:auto; display:flex; flex-direction:column; align-items:flex-end; gap:2px; }
+.crow .amt .price{ font-size:19px; }
+.crow .amt .norm{ font-size:11px; color:var(--ink3); display:block; margin-top:1px; }
+.cmpref{
+  margin-top:12px; padding:12px 13px; border-radius:var(--r-sm);
+  background:var(--green-deep); color:#fff;
+  display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+}
+.cmpref .tipid{ font-size:14.5px; font-weight:500; min-width:0; }
+.cmpref .tipid b{ font-family:Archivo,sans-serif; font-weight:800; font-variant-numeric:tabular-nums; color:var(--yellow); }
+.cmpref .avg{ margin-left:auto; display:flex; align-items:center; gap:6px; font-size:12.5px; color:rgba(255,255,255,.78); white-space:nowrap; }
+.cmpref .avg b{ font-family:Archivo,sans-serif; font-weight:800; font-variant-numeric:tabular-nums; color:#fff; }
+.textbtn{ margin-top:12px; width:100%; height:44px; border-radius:var(--r-sm); background:var(--green-soft); color:var(--green-ink); font-weight:700; font-size:13px; display:flex; align-items:center; justify-content:center; gap:6px; }
+
+.spark{ margin-top:12px; }
+.spark svg{ width:100%; height:68px; display:block; }
+.trendline{ display:flex; align-items:center; gap:6px; font-size:13px; color:var(--green-ink); margin-top:10px; font-weight:600; }
+.trendline .ic{ color:var(--green); }
+
+.factstrip{ display:flex; gap:8px; margin-top:12px; flex-wrap:wrap; }
+.fact{ display:flex; align-items:center; gap:6px; background:#FAF6EE; border-radius:var(--r-pill); padding:7px 12px; font-size:12.5px; color:var(--ink2); }
+.fact.gcash{ background:#E6F1FF; color:#03509E; }
+.fact.gcash .ic{ color:var(--gcash); }
+
+.stickybuy{
+  position:fixed; left:0; right:0; bottom:calc(var(--nav-h) + env(safe-area-inset-bottom)); z-index:45;
+  background:var(--card); box-shadow:var(--shadow-up);
+  display:flex; align-items:center; gap:12px; padding:10px var(--pad);
+}
+.stickybuy .lbl{ font-family:Archivo,sans-serif; font-size:10px; color:var(--ink3); text-transform:uppercase; letter-spacing:.11em; font-weight:800; }
+.stickybuy .price{ font-size:22px; display:block; }
+.stickybuy .go{
+  margin-left:auto; height:50px; padding:0 22px; border-radius:var(--r-sm);
+  background:var(--green); color:#fff; font-weight:700; font-size:15px;
+  display:flex; align-items:center; gap:8px;
+  transition:background .15s var(--ease), transform .15s var(--ease);
+}
+.stickybuy .go:active{ background:var(--green-press); transform:scale(.985); }
+
+/* ---------- sheets ---------- */
+.scrim{ position:fixed; inset:0; z-index:60; background:rgba(14,40,20,.52); opacity:0; pointer-events:none; transition:opacity .22s var(--ease); }
+.scrim.on{ opacity:1; pointer-events:auto; }
+.sheet{
+  position:fixed; left:0; right:0; bottom:0; z-index:61;
+  background:var(--paper); border-radius:var(--r-lg) var(--r-lg) 0 0;
+  max-height:88vh; display:flex; flex-direction:column;
+  transform:translateY(100%); transition:transform .28s var(--ease);
+  box-shadow:0 -10px 34px rgba(14,40,20,.24);
+}
+.sheet.on{ transform:translateY(0); }
+.sheet[hidden]{ display:none; }
+.sheet .grab{ width:38px; height:4px; border-radius:var(--r-pill); background:#DDD4C3; margin:10px auto 4px; }
+.sheet .shead{ display:flex; align-items:flex-start; gap:10px; padding:8px var(--pad) 12px; }
+.sheet .shead h2{ font-size:21px; font-weight:800; letter-spacing:-.03em; }
+.sheet .shead p{ margin:3px 0 0; font-size:13px; color:var(--ink3); }
+.sheet .sbody{ overflow-y:auto; padding:0 var(--pad) 18px; -webkit-overflow-scrolling:touch; }
+.sheet .sfoot{ padding:12px var(--pad) calc(14px + env(safe-area-inset-bottom)); border-top:1px solid var(--line); background:var(--card); }
+.sheet .sfoot .go{
+  width:100%; height:52px; border-radius:var(--r-sm); background:var(--green); color:#fff;
+  font-weight:700; font-size:15px; display:flex; align-items:center; justify-content:center; gap:8px;
+}
+.cmphead{ display:flex; align-items:center; gap:12px; background:var(--card); border-radius:var(--r); padding:12px; border:1px solid var(--line); }
+.cmphead .media{ width:58px; height:58px; border-radius:var(--r-sm); flex:none; position:relative; }
+.cmphead b{ font-size:15px; font-weight:700; display:block; }
+.cmphead small{ font-size:12.5px; color:var(--ink3); }
+.sortrow{ display:flex; align-items:center; gap:8px; margin:14px 0 2px; font-size:13px; color:var(--ink3); }
+.sortrow b{ color:var(--ink); font-weight:700; }
+.notebox{ margin-top:14px; background:var(--green-soft); color:var(--green-ink); border-radius:var(--r-sm); padding:12px; font-size:12.5px; display:flex; gap:8px; }
+.notebox .ic{ flex:none; }
+.optrow{ display:flex; align-items:center; gap:10px; width:100%; padding:15px 4px; border-bottom:1px solid var(--line); text-align:left; font-size:15px; }
+.optrow .ic{ margin-left:auto; color:var(--green); opacity:0; }
+.optrow[aria-checked="true"]{ font-weight:700; }
+.optrow[aria-checked="true"] .ic{ opacity:1; }
+
+.toast{
+  position:fixed; left:50%; bottom:calc(var(--nav-h) + 22px + env(safe-area-inset-bottom)); z-index:70;
+  transform:translate(-50%,10px); opacity:0; pointer-events:none;
+  background:var(--ink); color:#fff; padding:12px 16px; border-radius:var(--r-pill);
+  font-size:13px; max-width:calc(100% - 32px); text-align:center;
+  transition:opacity .2s var(--ease), transform .2s var(--ease);
+}
+.toast.on{ opacity:1; transform:translate(-50%,0); }
+
+.footnote{
+  margin:26px var(--pad) 0; font-size:12.5px; color:var(--ink3); line-height:1.55;
+  border-top:1px solid var(--line); padding-top:14px;
+}
+.footnote .fmark{ width:104px; height:30px; background-image:var(--brand-lockup); background-size:contain; background-position:left center; background-repeat:no-repeat; opacity:.5; margin-bottom:8px; }
+
+/* ============================================================
+   DESKTOP: the same app, widened. Tabs become a white rail,
+   the green canvas becomes the top band of the content area.
+   ============================================================ */
+@media (min-width:1024px){
+  :root{ --pad:32px; }
+  .app{ display:grid; grid-template-columns:264px 1fr; align-items:start; background:var(--paper); }
+  .main{ align-self:stretch; min-height:100vh; background:var(--paper); min-width:0; }
+
+  .sidebar{
+    display:block; position:sticky; top:0; height:100vh;
+    background:var(--card); border-right:1px solid var(--line);
+    padding:22px 16px; overflow-y:auto;
+  }
+  .sidebar .sbrand{ display:block; width:180px; height:52px; background-image:var(--brand-lockup); background-size:contain; background-position:left center; background-repeat:no-repeat; margin:0 6px 22px; }
+  .snav{ display:flex; flex-direction:column; gap:4px; }
+  .snav button{
+    display:flex; align-items:center; gap:12px; padding:13px 14px; border-radius:var(--r-sm);
+    color:var(--ink2); font-size:15px; font-weight:600; position:relative;
+    transition:background .15s var(--ease), color .15s var(--ease);
+  }
+  .snav button:hover{ background:#F7F2E8; }
+  .snav button[aria-current="page"]{ background:var(--green); color:#fff; font-weight:700; }
+  .snav .cnt{
+    margin-left:auto; min-width:22px; height:22px; border-radius:var(--r-pill);
+    background:var(--yellow); color:var(--yellow-ink); font-family:Archivo,sans-serif; font-size:11px; font-weight:800;
+    display:grid; place-items:center; padding:0 6px;
+  }
+  .snav button[aria-current="page"] .cnt{ background:#fff; color:var(--green-ink); }
+  .sidecard{ margin-top:22px; background:#F7F2E8; border-radius:var(--r); padding:15px; font-size:12.5px; color:var(--ink2); line-height:1.55; }
+  .sidecard b{ display:flex; align-items:center; gap:6px; color:var(--green-ink); font-size:13px; margin-bottom:6px; }
+
+  .tabbar{ display:none; }
+  .totop{ bottom:28px; right:28px; }
+  .screen{ padding-bottom:0; }
+
+  .canvas{ padding-bottom:56px; }
+  .brandrow{ display:none; }
+  .locrow{ padding-top:22px; max-height:48px; }
+  .appbar.is-stuck .locrow{ max-height:48px; opacity:1; padding-bottom:4px; }
+  .greet{ padding-top:10px; }
+  .display{ font-size:52px; letter-spacing:-.04em; }
+  .greet p{ font-size:17px; max-width:44ch; }
+  .canvastop{ display:flex; align-items:flex-end; gap:32px; max-width:1320px; }
+  .canvastop .gcol{ flex:1 1 auto; min-width:0; }
+  .searchwrap{ padding-top:24px; flex:none; width:min(460px, 40vw); }
+  .searchfield{ height:58px; }
+  .cats{ padding-top:26px; max-width:1320px; }
+  .cat{ width:88px; }
+  .cat .disc{ width:68px; height:68px; }
+  .cat span{ font-size:13px; }
+
+  .sheet-surface{ margin-top:-32px; border-radius:36px 36px 0 0; padding-top:8px; padding-bottom:64px; }
+  .h-sec{ font-size:25px; }
+  .sechead{ padding-top:34px; }
+
+  .homegrid{ display:grid; grid-template-columns:minmax(0,1fr) 356px; gap:32px; align-items:start; max-width:1320px; padding:0 var(--pad); }
+  .homegrid > .main-col{ order:1; }
+  .homegrid > .railcol{ order:2; }
+  .watch{ margin:0; padding:20px; }
+  .railcol{ padding-top:26px; position:sticky; top:92px; }
+  .main-col{ min-width:0; }
+  .main-col .sechead, .main-col .grid2, .main-col .rail, .main-col .footnote, .main-col .saletag{ padding-left:0; padding-right:0; margin-left:0; margin-right:0; scroll-padding-left:0; }
+  .searchfield input{ font-size:15px; }
+  .main-col .rail{ display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:18px; overflow:visible; }
+  #stallRow{ grid-template-columns:repeat(3,minmax(0,1fr)); }
+  .main-col .rail .pcard, .main-col .rail .scard{ width:auto; }
+  .dealband{ padding:4px 26px 26px; }
+  .dealband .saletag{ margin-left:0; }
+  .grid2{ grid-template-columns:repeat(4,1fr); gap:18px; }
+  .main-col .rail.promos{ display:flex; gap:20px; overflow:visible; }
+  .main-col .rail.promos .promo{ flex:1 1 0; width:auto; max-width:none; }
+  .main-col #promoDots{ display:none; }
+  .promo h3{ font-size:28px; }
+  .promo-yellow .cut{ width:210px; height:210px; right:-40px; bottom:-46px; }
+  .plate .pn{ font-size:26px; }
+  .plate.wide .pn{ font-size:28px; }
+
+  .pcard:hover{ transform:translateY(-3px); box-shadow:0 10px 24px rgba(48,38,20,.13); }
+  .scard:hover{ transform:translateY(-3px); }
+
+  .browsehead{ padding-bottom:22px; }
+  .filterbar{ max-width:1320px; flex-wrap:wrap; }
+  .subbar{ max-width:1320px; padding-top:22px; }
+  .resultline{ padding-left:var(--pad); }
+  #browseGrid{ max-width:1320px; }
+
+  .pdgrid{ display:grid; grid-template-columns:minmax(0,520px) minmax(0,1fr); gap:36px; align-items:start; padding:0 var(--pad); max-width:1320px; }
+  .gallery{ border-radius:var(--r-lg); overflow:hidden; margin-top:24px; }
+  .gslide{ aspect-ratio:1/1; }
+  .sheetcard{ margin-top:24px; border-radius:0; padding-top:0; background:transparent; }
+  .pdtitle, .pricebox, .trustrow{ padding-left:0; padding-right:0; }
+  .pdtitle h1{ font-size:44px; }
+  .pricebox .big{ font-size:52px; }
+  .pdgrid .block{ margin-left:0; margin-right:0; }
+  .stickybuy{ position:static; margin:18px var(--pad) 0; border-radius:var(--r); box-shadow:var(--shadow); max-width:1320px; border:1px solid var(--line); }
+  .pdwide{ padding:0 var(--pad); max-width:1320px; display:grid; grid-template-columns:minmax(0,1.4fr) minmax(0,1fr); gap:0 24px; align-items:start; align-content:start; }
+  .pdwide > .block{ margin-left:0; margin-right:0; align-self:start; }
+  .pdwide .block.cmpblock{ grid-row:span 2; }
+  #s-product .sheet-surface{ margin-top:0; border-radius:0; box-shadow:none; padding-top:0; }
+
+  .sheet{
+    left:50%; bottom:auto; top:50%; transform:translate(-50%,-46%) scale(.98);
+    width:min(620px,92vw); border-radius:var(--r-lg); max-height:86vh; opacity:0;
+    transition:opacity .2s var(--ease), transform .2s var(--ease);
+  }
+  .sheet.on{ transform:translate(-50%,-50%) scale(1); opacity:1; }
+  .sheet .grab{ display:none; }
+  .sheet .sfoot{ border-radius:0 0 var(--r-lg) var(--r-lg); }
+  .toast{ bottom:28px; }
+}
+@media (min-width:1024px){ .mobonly{ display:none !important; } }
+@media (max-width:1023px){ .deskonly{ display:none !important; } }
+
+/* ---------- reduced motion ---------- */
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{
+    animation-duration:.01ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:.01ms !important;
+    scroll-behavior:auto !important;
+  }
+  .rail,.gscroll,.promos{ scroll-behavior:auto !important; }
+  .pcard:active,.scard:active,.cat:active .disc,.watch .cta:active,.stickybuy .go:active{ transform:none !important; }
+  .pcard:hover,.scard:hover{ transform:none !important; }
+}
+</style>
+</head>
+<body>
+
+<!-- one icon set, drawn inline, no second family anywhere -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20.5 20.5 16.6 16.6"/></symbol>
+  <symbol id="i-bell" viewBox="0 0 24 24"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 8.5-3 8.5h18S18 15 18 8"/><path d="M13.7 20.5a2 2 0 0 1-3.4 0"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M20 10c0 6.5-8 12-8 12s-8-5.5-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></symbol>
+  <symbol id="i-right" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></symbol>
+  <symbol id="i-down" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+  <symbol id="i-left" viewBox="0 0 24 24"><path d="M19.5 12H5"/><path d="m11 19-7-7 7-7"/></symbol>
+  <symbol id="i-up" viewBox="0 0 24 24"><path d="M12 20V5"/><path d="m5 12 7-7 7 7"/></symbol>
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="m3 10.2 9-7.2 9 7.2V20a1.8 1.8 0 0 1-1.8 1.8H4.8A1.8 1.8 0 0 1 3 20Z"/><path d="M9.2 21.8V13.4h5.6v8.4"/></symbol>
+  <symbol id="i-cart" viewBox="0 0 24 24"><circle cx="9.5" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M2.2 3.2h2.9l2.6 12.2a1.8 1.8 0 0 0 1.8 1.4h8.2a1.8 1.8 0 0 0 1.8-1.4L21.3 7H6"/></symbol>
+  <symbol id="i-receipt" viewBox="0 0 24 24"><path d="M5.5 2.6h13v18.8l-2.2-1.5-2.2 1.5-2.1-1.5-2.2 1.5-2.1-1.5-2.2 1.5Z"/><path d="M9 8h6M9 12h6"/></symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24"><path d="M21 11.6a8 8 0 0 1-11.7 7.1L4 20.6l1.9-5.2A8 8 0 1 1 21 11.6Z"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4.2 21a7.8 7.8 0 0 1 15.6 0"/></symbol>
+  <symbol id="i-star" viewBox="0 0 24 24"><path d="m12 3.1 2.7 5.6 6.1.9-4.4 4.3 1.1 6.1L12 17.1 6.5 20l1.1-6.1-4.4-4.3 6.1-.9Z" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20.4S4.6 16 4.6 10.7A4.1 4.1 0 0 1 12 8.3a4.1 4.1 0 0 1 7.4 2.4c0 5.3-7.4 9.7-7.4 9.7Z"/></symbol>
+  <symbol id="i-share" viewBox="0 0 24 24"><path d="M12 3v12"/><path d="m8 6.8 4-3.8 4 3.8"/><path d="M5 13.5V19a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5.5"/></symbol>
+  <symbol id="i-scale" viewBox="0 0 24 24"><path d="M12 3.5v17"/><path d="M6 7.2h12"/><path d="m6 7.2-3.4 6.6h6.8Z"/><path d="m18 7.2-3.4 6.6h6.8Z"/><path d="M8.5 20.5h7"/></symbol>
+  <symbol id="i-tdown" viewBox="0 0 24 24"><path d="m21.5 16.8-8.3-8.3-4.8 4.8-6.9-6.9"/><path d="M15.6 16.8h5.9v-5.9"/></symbol>
+  <symbol id="i-tup" viewBox="0 0 24 24"><path d="M21.5 7.2 13.2 15.5 8.4 10.7 1.5 17.6"/><path d="M15.6 7.2h5.9v5.9"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m4.5 12.5 5 5 10-11"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></symbol>
+  <symbol id="i-leaf" viewBox="0 0 24 24"><path d="M4 20.5c0-9.2 6-14.5 16.5-14.5 0 10.2-6.3 14.5-14.5 14.5Z"/><path d="M8.5 16c1.9-3 4.8-5.2 8-6.4"/></symbol>
+  <symbol id="i-meat" viewBox="0 0 24 24"><path d="M14.6 3.3a6 6 0 0 1 5 8.4L11.5 21a4.6 4.6 0 1 1-6.5-6.5l8.5-8.3a6 6 0 0 1 1.1-2.9Z"/><circle cx="8.4" cy="17" r="1.7"/></symbol>
+  <symbol id="i-fish" viewBox="0 0 24 24"><path d="M19.4 12c-2.3 3.1-5.3 4.7-8.4 4.7S5 15.1 3.2 12C5 8.9 7.9 7.3 11 7.3s6.1 1.6 8.4 4.7Z"/><path d="m19.4 12 3.1-3.3v6.6Z"/><path d="M8.2 11.2v.1"/></symbol>
+  <symbol id="i-rice" viewBox="0 0 24 24"><path d="M4 13.5h16a8 8 0 0 1-16 0Z"/><path d="M6.5 10.5c1-2 2.8-3.2 5.5-3.2s4.5 1.2 5.5 3.2"/><path d="M3 17.5h18"/></symbol>
+  <symbol id="i-fruit" viewBox="0 0 24 24"><path d="M12 8.4c-3.4-3-8.3-.6-8.3 4.4 0 4.4 3.7 8.4 8.3 8.4s8.3-4 8.3-8.4c0-5-4.9-7.4-8.3-4.4Z"/><path d="M12 8.4V5.2c0-1.3 1.2-2.4 2.7-2.4"/></symbol>
+  <symbol id="i-egg" viewBox="0 0 24 24"><path d="M12 2.6c3.6 0 6.6 6 6.6 10.4A6.6 6.6 0 0 1 5.4 13C5.4 8.6 8.4 2.6 12 2.6Z"/></symbol>
+  <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="7" height="7" rx="2"/><rect x="13.5" y="3.5" width="7" height="7" rx="2"/><rect x="3.5" y="13.5" width="7" height="7" rx="2"/><rect x="13.5" y="13.5" width="7" height="7" rx="2"/></symbol>
+  <symbol id="i-store" viewBox="0 0 24 24"><path d="M4 9.6h16V20a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 20Z"/><path d="m4 9.6 1.6-5.1h12.8L20 9.6"/><path d="M9.5 21.5v-6h5v6"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 6.8V12l3.2 2.2"/></symbol>
+  <symbol id="i-wallet" viewBox="0 0 24 24"><path d="M3.5 7.5A2 2 0 0 1 5.5 5.5H18a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5.5a2 2 0 0 1-2-2Z"/><path d="M15.5 12.5h2.5"/></symbol>
+  <symbol id="i-sort" viewBox="0 0 24 24"><path d="M4 6.5h14M4 12h9M4 17.5h5"/></symbol>
+  <symbol id="i-filter" viewBox="0 0 24 24"><path d="M3.5 7h9M16.5 7h4M3.5 17h4M11.5 17h9"/><circle cx="14.5" cy="7" r="2.2"/><circle cx="9.5" cy="17" r="2.2"/></symbol>
+  <symbol id="i-box" viewBox="0 0 24 24"><path d="M3.5 7.6 12 3.2l8.5 4.4v8.8L12 20.8l-8.5-4.4Z"/><path d="M3.5 7.6 12 12l8.5-4.4M12 12v8.8"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5.5M12 7.8v.2"/></symbol>
+  <symbol id="i-tag" viewBox="0 0 24 24"><path d="M3.5 11.4V4.4a1 1 0 0 1 1-1h7l9 9-8 8-9-9Z"/><circle cx="8" cy="8" r="1.6"/></symbol>
+</defs></svg>
+
+<div class="app">
+
+  <!-- ===== desktop left rail ===== -->
+  <aside class="sidebar deskonly">
+    <span class="sbrand" role="img" aria-label="PalengkeHub"></span>
+    <nav class="snav" id="sideNav" aria-label="Main"></nav>
+    <div class="sidecard">
+      <b><svg class="ic ic-sm"><use href="#i-clock"/></svg> Bukas ang Palengke</b>
+      Monday to Sunday, 5:00 AM to 7:00 PM.<br>
+      Lipa City Public Market, Batangas 4217.
+    </div>
+    <div class="sidecard">
+      <b><svg class="ic ic-sm"><use href="#i-wallet"/></svg> GCash lang ang bayad</b>
+      Pickup only. Walang delivery fee, sundo mo na lang sa stall ng vendor.
+    </div>
+  </aside>
+
+  <div class="main">
+
+  <!-- =========================== HOME =========================== -->
+  <section class="screen" id="s-home">
+
+    <div class="canvas">
+      <header class="appbar" id="appbarHome">
+        <div class="brandrow">
+          <span class="brand-mark" role="img" aria-label="PalengkeHub"></span>
+          <span class="wordmark">Palengke<span>Hub</span></span>
+          <button class="bell" aria-label="Notifications" data-demo="notifications">
+            <svg class="ic"><use href="#i-bell"/></svg><span class="dot">3</span>
+          </button>
+        </div>
+        <div class="locrow">
+          <svg class="ic ic-sm"><use href="#i-pin"/></svg>
+          <span class="place">Lipa City Public Market</span>
+          <svg class="ic ic-sm" style="color:rgba(255,255,255,.6)"><use href="#i-down"/></svg>
+          <span class="openpill"><svg class="ic ic-xs"><use href="#i-clock"/></svg>Bukas<span class="long">&nbsp;hanggang 7:00 PM</span></span>
+        </div>
+      </header>
+
+      <div class="canvastop pad" style="padding-left:0;padding-right:0">
+        <div class="gcol">
+          <div class="greet">
+            <h1 class="display">Magandang umaga!</h1>
+            <p>Umorder na, i-pickup sa Pamilihang Bayan ng Lipa.</p>
+          </div>
+        </div>
+        <div class="searchwrap">
+          <label class="searchfield">
+            <svg class="ic ic-sm"><use href="#i-search"/></svg>
+            <input type="search" placeholder="Maghanap ng produkto" aria-label="Maghanap ng produkto o puwesto sa palengke">
+            <span class="sgo" aria-hidden="true"><svg class="ic ic-sm"><use href="#i-search"/></svg></span>
+          </label>
+        </div>
+      </div>
+
+      <nav class="rail cats" id="catRow" aria-label="Mamili ayon sa Kategorya"></nav>
+    </div>
+
+    <div class="sheet-surface">
+      <div class="homegrid">
+        <div class="railcol">
+          <!-- the spine: price comparison, first screenful, every screen size -->
+          <section class="watch" aria-labelledby="watchTitle">
+            <div class="top">
+              <svg class="ic ic-sm"><use href="#i-scale"/></svg>
+              <h2 id="watchTitle">Presyo Watch</h2>
+              <span class="live">Ngayong araw</span>
+            </div>
+            <div class="watchlist" id="watchList"></div>
+            <button class="cta" data-compare="kamatis">
+              <svg class="ic ic-sm"><use href="#i-scale"/></svg> Ikumpara ang presyo
+            </button>
+          </section>
+
+          <section class="howto deskonly" aria-labelledby="howtoTitle">
+            <h2 id="howtoTitle">Paano ito gumagana</h2>
+            <ol>
+              <li><b>1</b><span><i>Ikumpara ang presyo</i>Tingnan ang presyo kada kilo sa lahat ng puwesto bago mag-order.</span></li>
+              <li><b>2</b><span><i>Bayad sa GCash</i>GCash lang ang tinatanggap ngayon, walang cash on pickup.</span></li>
+              <li><b>3</b><span><i>Sundo sa stall</i>Pickup only sa Lipa City Public Market. Walang delivery fee.</span></li>
+            </ol>
+          </section>
+        </div>
+
+        <div class="main-col">
+          <div class="rail promos" id="promoRow" aria-label="Promos" style="padding-top:22px">
+            <article class="promo promo-photo">
+              <span class="pshot" aria-hidden="true"></span>
+              <span class="veil" aria-hidden="true"></span>
+              <span class="pcopy">
+                <span class="kick">Sariwa ngayong umaga</span>
+                <h3>Bagong dating na gulay</h3>
+                <p>Mula 5:00 AM hanggang 10:00 AM sa Vegetable Section.</p>
+                <span class="tag">Hanggang 20% off</span>
+              </span>
+            </article>
+            <article class="promo promo-yellow">
+              <span class="cut" aria-hidden="true"></span>
+              <span class="pcopy">
+                <span class="kick">Presyo Watch</span>
+                <h3>Bumaba ang kamatis</h3>
+                <p>Ngayong linggo, sa 6 na stalls.</p>
+                <span class="tag">₱7 pababa kada kilo</span>
+              </span>
+            </article>
+          </div>
+          <div class="dots" id="promoDots" aria-hidden="true"></div>
+
+          <div class="dealband">
+            <div class="sechead">
+              <h2 class="h-sec">Today's Deals<span class="sub">Huwag palampasin ang mga diskwento na ito</span></h2>
+              <button class="seeall" data-go="browse">Tingnan Lahat <svg class="ic ic-xs"><use href="#i-right"/></svg></button>
+            </div>
+            <div class="rail" id="dealRow"></div>
+          </div>
+
+          <div class="sechead">
+            <h2 class="h-sec">Top-Rated Stalls<span class="sub">Pinagkakatiwalaan ng mga mamimili</span></h2>
+            <button class="seeall" data-demo="stall directory">Browse All Stalls <svg class="ic ic-xs"><use href="#i-right"/></svg></button>
+          </div>
+          <div class="rail" id="stallRow"></div>
+
+          <div class="sechead">
+            <h2 class="h-sec">Presyo ngayon sa palengke<span class="sub">Presyo kada kilo, sariwa ngayong araw</span></h2>
+            <button class="seeall" data-go="browse">Tingnan Lahat <svg class="ic ic-xs"><use href="#i-right"/></svg></button>
+          </div>
+          <div class="grid2" id="homeGrid"></div>
+
+          <div class="footnote">
+            <span class="fmark" role="img" aria-label="PalengkeHub"></span>
+            Static design mockup for PalengkeHub. Stall names, prices, ratings and promo copy are plausible
+            placeholders. Product photography is generated. Pickup only, GCash only, walang delivery.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================== BROWSE =========================== -->
+  <section class="screen" id="s-browse" hidden>
+    <div class="browsehead">
+      <header class="subbar" id="appbarBrowse">
+        <button class="iconbtn" data-go="home" aria-label="Back"><svg class="ic"><use href="#i-left"/></svg></button>
+        <h1 id="browseTitle">Gulay</h1>
+        <div class="right">
+          <button class="iconbtn" data-demo="search" aria-label="Search"><svg class="ic"><use href="#i-search"/></svg></button>
+        </div>
+      </header>
+      <p class="lead" id="browseLead">Presyo kada kilo, ranked mura muna.</p>
+      <div class="filterbar" id="filterBar">
+        <button class="fchip" id="sortBtn"><svg class="ic ic-sm"><use href="#i-sort"/></svg><span id="sortLabel">Pinakamura</span></button>
+        <button class="fchip" data-filter="malapit">Malapit</button>
+        <button class="fchip" data-filter="mura" aria-pressed="true">Mura</button>
+        <button class="fchip" data-filter="bukas">Bukas ngayon</button>
+        <button class="fchip" data-filter="rating">4.5 pataas</button>
+        <button class="fchip" data-filter="promo">May promo</button>
+        <button class="fchip" data-demo="filters"><svg class="ic ic-sm"><use href="#i-filter"/></svg>Filters<span class="n">1</span></button>
+      </div>
+    </div>
+
+    <div class="sheet-surface">
+      <p class="resultline"><b id="resultCount">4</b>&nbsp;produkto&nbsp;<span class="sep" style="margin:0 8px"></span> presyo kada kilo, ranked mura muna</p>
+      <div class="grid2" id="browseGrid"></div>
+      <p class="footnote">Presyo ay galing sa mga vendor at ina-update araw araw. Ang stall na sarado ngayon ay hindi kasama sa ranking.</p>
+    </div>
+  </section>
+
+  <!-- =========================== PRODUCT =========================== -->
+  <section class="screen" id="s-product" hidden>
+    <div class="pdgrid">
+      <div class="gallery">
+        <div class="gfloat">
+          <button class="iconbtn" data-back aria-label="Back"><svg class="ic"><use href="#i-left"/></svg></button>
+          <span class="sp">
+            <button class="iconbtn" data-demo="share" aria-label="Share"><svg class="ic"><use href="#i-share"/></svg></button>
+            <button class="iconbtn" data-demo="favorites" aria-label="Save"><svg class="ic"><use href="#i-heart"/></svg></button>
+          </span>
+        </div>
+        <div class="gscroll" id="pdGallery"></div>
+        <div class="dots gdots" id="pdDots" aria-hidden="true"></div>
+      </div>
+
+      <div class="sheetcard">
+        <div class="pdtitle">
+          <h1 id="pdName">Kamatis</h1>
+          <p class="en" id="pdEn">Tomato</p>
+        </div>
+        <div class="pricebox">
+          <span class="big" id="pdPrice"></span>
+          <span class="price strike" id="pdWas"></span>
+          <span class="badge off" id="pdOff"></span>
+          <span class="badge verdict mura" id="pdVerdict"></span>
+        </div>
+        <div class="trustrow">
+          <svg class="ic ic-xs"><use href="#i-star"/></svg><span id="pdRate"></span>
+          <span class="sep"></span><span id="pdSold"></span>
+          <span class="sep"></span><span id="pdStock">In Stock</span>
+        </div>
+
+        <div class="block">
+          <h2>Select Unit</h2>
+          <p class="lead">Bawat unit ay may sariling presyo. Pinapakita rin namin ang katumbas kada kilo.</p>
+          <div class="units" id="pdUnits"></div>
+        </div>
+
+        <div class="block">
+          <div class="stallstrip">
+            <span class="av"><svg class="ic"><use href="#i-store"/></svg></span>
+            <span>
+              <b style="font-weight:700" id="pdStall"></b>
+              <small class="meta" style="display:block" id="pdStallMeta"></small>
+            </span>
+            <button class="go" data-demo="stall page">Bisitahin</button>
+          </div>
+          <div class="factstrip">
+            <span class="fact"><svg class="ic ic-xs"><use href="#i-box"/></svg>Ready for pickup</span>
+            <span class="fact gcash"><svg class="ic ic-xs"><use href="#i-wallet"/></svg>GCash</span>
+            <span class="fact"><svg class="ic ic-xs"><use href="#i-clock"/></svg>Hanggang 7:00 PM</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pdwide">
+      <div class="block spine cmpblock">
+        <h2>Ibang presyo sa ibang stall</h2>
+        <p class="lead" id="pdCmpLead"></p>
+        <div class="cmpref">
+          <span class="tipid" id="pdSave"></span>
+          <span class="avg"><svg class="ic ic-sm"><use href="#i-scale"/></svg>Average sa palengke <b id="pdAvg"></b></span>
+        </div>
+        <div id="pdCmpRows"></div>
+        <button class="textbtn" id="pdCmpAll">
+          <svg class="ic ic-sm"><use href="#i-scale"/></svg> <span id="pdCmpAllLabel">Tingnan lahat</span>
+        </button>
+      </div>
+
+      <div class="block">
+        <h2>Price trend, huling 30 araw</h2>
+        <div class="spark" id="pdSpark"></div>
+        <p class="trendline" id="pdTrend"></p>
+      </div>
+
+      <div class="block">
+        <h2>Product Details</h2>
+        <p class="lead" id="pdDesc" style="font-size:14.5px; color:var(--ink2)"></p>
+      </div>
+    </div>
+
+    <div class="stickybuy">
+      <span>
+        <span class="lbl">Total</span>
+        <span class="price" id="pdTotal"></span>
+      </span>
+      <button class="go" data-demo="cart"><svg class="ic ic-sm"><use href="#i-cart"/></svg> Add to Cart</button>
+    </div>
+  </section>
+
+  </div><!-- /.main -->
+</div><!-- /.app -->
+
+<button class="totop" id="toTop" aria-label="Balik sa itaas"><svg class="ic"><use href="#i-up"/></svg></button>
+
+<!-- ===== bottom tab bar ===== -->
+<nav class="tabbar mobonly" id="tabBar" aria-label="Main"></nav>
+
+<!-- ===== sheets ===== -->
+<div class="scrim" id="scrim"></div>
+
+<section class="sheet" id="cmpSheet" role="dialog" aria-modal="true" aria-labelledby="cmpTitle" hidden>
+  <div class="grab"></div>
+  <div class="shead">
+    <div>
+      <h2 id="cmpTitle">Presyo Comparison</h2>
+      <p id="cmpSub">Kamatis, presyo ngayon sa 6 na stalls</p>
+    </div>
+    <button class="iconbtn" style="margin-left:auto" data-close aria-label="Isara"><svg class="ic"><use href="#i-x"/></svg></button>
+  </div>
+  <div class="sbody">
+    <div class="cmphead" id="cmpHead"></div>
+    <div class="cmpref">
+      <span class="tipid" id="cmpSave"></span>
+      <span class="avg"><svg class="ic ic-sm"><use href="#i-scale"/></svg>Average sa palengke <b id="cmpAvg"></b></span>
+    </div>
+    <div class="sortrow">
+      <svg class="ic ic-sm" style="color:var(--ink3)"><use href="#i-sort"/></svg>
+      Sorted by <b id="cmpSortUnit">presyo kada kilo</b>, mura muna
+    </div>
+    <div id="cmpRows"></div>
+    <div class="notebox">
+      <svg class="ic ic-sm"><use href="#i-info"/></svg>
+      <span id="cmpNote"></span>
+    </div>
+  </div>
+  <div class="sfoot">
+    <button class="go" data-demo="cart"><svg class="ic ic-sm"><use href="#i-cart"/></svg> <span id="cmpCta">Add to Cart</span></button>
+  </div>
+</section>
+
+<section class="sheet" id="sortSheet" role="dialog" aria-modal="true" aria-labelledby="sortTitle" hidden>
+  <div class="grab"></div>
+  <div class="shead">
+    <div><h2 id="sortTitle">Sort By</h2><p>Ano ang gusto mong unahin?</p></div>
+    <button class="iconbtn" style="margin-left:auto" data-close aria-label="Isara"><svg class="ic"><use href="#i-x"/></svg></button>
+  </div>
+  <div class="sbody" id="sortOpts"></div>
+</section>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* ============================================================
+   Data. Real PalengkeHub vocabulary and copy from the audit.
+   Stall names, prices, ratings and promo copy are placeholders.
+   ============================================================ */
+const A = '../assets/generated/';
+
+const STALLS = {
+  boy:   { name:'Kuya Boy Fresh Veg',        sec:'Vegetable Section', no:23, rate:4.6, rev:184, dist:'180m', open:true,  range:[22,130] },
+  nena:  { name:'Aling Nena Gulayan',        sec:'Vegetable Section', no:12, rate:4.8, rev:312, dist:'250m', open:true,  range:[25,145] },
+  baby:  { name:'Tindahan ni Mareng Baby',   sec:'Vegetable Section', no:18, rate:4.9, rev:96,  dist:'400m', open:true,  range:[28,150] },
+  vilma: { name:'Gulayan ni Ate Vilma',      sec:'Vegetable Section', no:27, rate:4.4, rev:74,  dist:'320m', open:true,  range:[26,138] },
+  perla: { name:'Aling Perla Sariwa',        sec:'Vegetable Section', no:33, rate:4.2, rev:51,  dist:'290m', open:true,  range:[30,155] },
+  tino:  { name:'Puwesto ni Mang Tino',      sec:'Vegetable Section', no:41, rate:4.0, rev:38,  dist:'460m', open:true,  range:[32,160] },
+  juan:  { name:"Mang Juan's Meat Shop",     sec:'Meat Section',      no:7,  rate:4.7, rev:241, dist:'120m', open:true,  range:[240,420] },
+  dado:  { name:'Karnehan ni Ka Dado',       sec:'Meat Section',      no:11, rate:4.5, rev:129, dist:'160m', open:true,  range:[250,430] },
+  fe:    { name:'Baboyan ni Aling Fe',       sec:'Meat Section',      no:15, rate:4.3, rev:87,  dist:'210m', open:true,  range:[255,440] },
+  dennis:{ name:'Manukan ni Kuya Dennis',    sec:'Poultry Section',   no:14, rate:4.6, rev:143, dist:'260m', open:true,  range:[105,255] },
+  rosa:  { name:'Manok ni Aling Rosa',       sec:'Poultry Section',   no:9,  rate:4.5, rev:130, dist:'240m', open:false, range:[108,260] },
+  delia: { name:'Manukan ni Aling Delia',    sec:'Poultry Section',   no:20, rate:4.3, rev:64,  dist:'300m', open:true,  range:[110,265] },
+  ising: { name:'Ka Ising Isdaan',           sec:'Fish Section',      no:42, rate:4.6, rev:158, dist:'340m', open:true,  range:[120,380] },
+  ruben: { name:'Isdaan ni Mang Ruben',      sec:'Fish Section',      no:48, rate:4.4, rev:92,  dist:'380m', open:true,  range:[125,390] },
+  mila:  { name:'Isdaan ni Aling Mila',      sec:'Fish Section',      no:50, rate:4.2, rev:47,  dist:'410m', open:true,  range:[130,395] },
+  linda: { name:'Nanay Linda Prutas',        sec:'Fruit Section',     no:31, rate:4.8, rev:203, dist:'200m', open:true,  range:[60,220] },
+  ging:  { name:'Prutas ni Ate Ging',        sec:'Fruit Section',     no:35, rate:4.5, rev:118, dist:'270m', open:true,  range:[62,228] },
+  elmer: { name:'Prutasan ni Mang Elmer',    sec:'Fruit Section',     no:38, rate:4.1, rev:44,  dist:'350m', open:true,  range:[66,236] },
+  ador:  { name:'Bigasan ni Mang Ador',      sec:'Rice Section',      no:4,  rate:4.4, rev:88,  dist:'140m', open:true,  range:[52,78] },
+  cora:  { name:'Bigasan ni Aling Cora',     sec:'Rice Section',      no:6,  rate:4.2, rev:56,  dist:'150m', open:true,  range:[54,82] },
+  nilo:  { name:'Bigasan ni Kuya Nilo',      sec:'Rice Section',      no:9,  rate:4.0, rev:31,  dist:'170m', open:true,  range:[56,86] }
+};
+
+/* per category: which stalls carry it and how their price sits vs the seller shown */
+const POOLS = {
+  gulay:  [['boy',.90],['nena',.96],['baby',1.01],['vilma',1.06],['perla',1.12],['tino',1.19]],
+  karne:  [['juan',.95],['dado',1.01],['fe',1.08]],
+  manok:  [['dennis',.96],['rosa',1.03],['delia',1.11]],
+  prutas: [['linda',.93],['ging',1.02],['elmer',1.10]],
+  bigas:  [['ador',.97],['cora',1.05],['nilo',1.11]],
+  iba:    [['ising',.94],['ruben',1.03],['mila',1.11]]
+};
+
+/* Chips = the 6 real data-model categories plus Isda, which surfaces the
+   Fish Section subset of Other. Isda is a buyer-facing category in the
+   shipped en.json and fil.json, so it is filtered, not invented. */
+const CATS = [
+  { id:'gulay',  label:'Gulay',  en:'Vegetables', icon:'i-leaf',  desc:'Fresh vegetables from Lipa City Public Market' },
+  { id:'karne',  label:'Karne',  en:'Meat',       icon:'i-meat',  desc:'Premium meat cuts from trusted vendors' },
+  { id:'isda',   label:'Isda',   en:'Fish',       icon:'i-fish',  desc:'Sariwang isda mula sa Fish Section', sub:'isda', of:'iba' },
+  { id:'prutas', label:'Prutas', en:'Fruits',     icon:'i-fruit', desc:'Sweet and fresh fruits from the market' },
+  { id:'manok',  label:'Manok',  en:'Poultry',    icon:'i-egg',   desc:'Farm fresh poultry products' },
+  { id:'bigas',  label:'Bigas',  en:'Rice',       icon:'i-rice',  desc:'Daily rice essentials from local suppliers' },
+  { id:'iba',    label:'Iba Pa', en:'Other',      icon:'i-grid',  desc:'More products from Lipa City Public Market' }
+];
+
+const PRODUCTS = [
+  { id:'kamatis',   nm:'Kamatis',              en:'Tomato',           cat:'gulay',  price:62,  was:72,  unit:'kg',    stall:'nena',   sold:320, trend:-7,  desc:'Sariwang kamatis mula sa Tanauan at Malvar, dinadala tuwing madaling araw. Firm at pang-sinigang o pang-salad.' },
+  { id:'talong',    nm:'Talong',               en:'Eggplant',         cat:'gulay',  price:80,  was:null,unit:'kg',    stall:'boy',    sold:142, trend:3,   desc:'Mahabang talong, pang-tortang talong o pang-pinakbet. Bagong pitas kaninang umaga.' },
+  { id:'repolyo',   nm:'Repolyo',              en:'Cabbage',          cat:'gulay',  price:95,  was:null,unit:'kg',    stall:'baby',   sold:98,  trend:-4,  desc:'Repolyo mula Benguet. Matigas ang ulo, hindi malanta agad, pang-chopsuey.' },
+  { id:'sitaw',     nm:'Sitaw',                en:'String beans',     cat:'gulay',  price:25,  was:null,unit:'tali',  stall:'nena',   sold:210, trend:0,   desc:'Isang tali ay may 10 hanggang 12 tangkay. Pang-adobong sitaw o pang-ginataan.' },
+  { id:'liempo',    nm:'Liempo',               en:'Pork belly',       cat:'karne',  price:340, was:375, unit:'kg',    stall:'juan',   sold:186, trend:-12, desc:'Sariwang liempo, hindi frozen. Pwedeng ipa-slice para sa inihaw o pa-cube para sa adobo.' },
+  { id:'manok',     nm:'Manok',                en:'Whole chicken',    cat:'manok',  price:215, was:null,unit:'kg',    stall:'dennis', sold:167, trend:5,   desc:'Buong manok, nalinis na at pwedeng ipa-cut sa stall. Dressed kaninang 4:00 AM.' },
+  { id:'itlog',     nm:'Itlog',                en:'Egg',              cat:'manok',  price:108, was:null,unit:'dozen', stall:'delia',  sold:254, trend:-3,  desc:'Medium size na itlog ng manok, galing sa poultry farm sa Padre Garcia. Tinatakan ang petsa ng dating.' },
+  { id:'saging',    nm:'Saging na Latundan',   en:'Latundan banana',  cat:'prutas', price:70,  was:80,  unit:'kg',    stall:'linda',  sold:132, trend:-6,  desc:'Hinog na latundan, matamis at hindi maasim. Mabuti sa baon at pang-merienda.' },
+  { id:'mangga',    nm:'Mangga',               en:'Carabao mango',    cat:'prutas', price:145, was:165, unit:'kg',    stall:'linda',  sold:121, trend:-14, desc:'Carabao mango mula Batangas at Zambales. Hinog sa puno, matamis at makatas.' },
+  { id:'calamansi', nm:'Kalamansi',            en:'Calamansi',        cat:'prutas', price:90,  was:null,unit:'kg',    stall:'ging',   sold:145, trend:8,   desc:'Bilog at makatas na kalamansi. Pang-sawsawan, pang-juice at panlinis ng isda.' },
+  { id:'bigas',     nm:'Bigas (Sinandomeng)',  en:'Sinandomeng rice', cat:'bigas',  price:58,  was:null,unit:'kg',    stall:'ador',   sold:402, trend:-2,  desc:'Sinandomeng, bagong giling. Mabango at malambot kapag saing. Pwede rin per sako.' },
+  { id:'bangus',    nm:'Bangus',               en:'Milkfish',         cat:'iba', sub:'isda', price:195, was:null,unit:'kg', stall:'ising',  sold:174, trend:4,   desc:'Bangus mula Dagupan, may yelo mula pagdating. Pwedeng ipa-bone-out sa stall, libre.' },
+  { id:'tilapia',   nm:'Tilapia',              en:'Tilapia',          cat:'iba', sub:'isda', price:160, was:180, unit:'kg', stall:'ruben',  sold:138, trend:-9,  desc:'Buhay pa kaninang umaga, mula sa Taal Lake. Pwedeng ipa-linis at ipa-hiwa sa puwesto.' },
+  { id:'galunggong',nm:'Galunggong',           en:'Round scad',       cat:'iba', sub:'isda', price:180, was:null,unit:'kg', stall:'mila',   sold:96,  trend:6,   desc:'Sariwang galunggong na nakayelo mula sa Batangas port. Pang-prito o pang-paksiw.' }
+];
+
+const UNIT_LABEL = { kg:'Per Kilo', '500g':'Per 500g', '250g':'Per 250g', piece:'Per Piece', tali:'Per Tali', dozen:'Per Dozen', pack:'Per Pack' };
+const UNIT_MULT  = { kg:1, '500g':.5, '250g':.25, piece:.25, tali:1, dozen:1, pack:.8 };
+const ALT_UNIT   = { kg:{ u:'500g', f:.5 }, dozen:{ u:'piece', f:1/12 } };
+
+/* ============================================================
+   Helpers
+   ============================================================ */
+const $  = (s, r) => (r||document).querySelector(s);
+const $$ = (s, r) => Array.from((r||document).querySelectorAll(s));
+const peso = n => '₱' + Math.round(n).toLocaleString('en-PH');
+const prod = id => PRODUCTS.find(p => p.id === id);
+const catLabel = p => (CATS.find(c => (p.sub ? c.sub === p.sub : c.id === p.cat)) || {}).label || '';
+
+/* ============================================================
+   Media system.
+   Seven real photographs exist. Everything else gets a colour
+   plate: a flat block from the PalengkeHub logo palette with the
+   product name set at display scale. Colour encodes the section
+   of the market, so the grid reads as a system, never as a
+   failed image load. No ghost tiles anywhere in this file.
+   ============================================================ */
+const PHOTOS = ['kamatis','talong','repolyo','sitaw','saging','mangga','calamansi'];
+const hasPhoto = id => PHOTOS.indexOf(id) > -1;
+const shot = p => A + 'products/product-' + p.id + '.png';
+const toneOf = p => (p.sub === 'isda' ? 'isda' : p.cat);
+
+/* the watermark on a plate is the peso figure: a different numeral shape on
+   every tile, and it keeps price the loudest thing in this app */
+const ghostOf = p => String(p.price);
+/* on a plate the name is set at display scale, so the parenthetical variety
+   moves out of the headline and into the small caps line above it */
+const plateName = p => p.nm.replace(/\s*\([^)]*\)\s*/g, '').trim();
+const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+
+function plate(tone, cls, small, big, ghost){
+  return '<span class="plate ' + (cls||'') + '" data-tone="' + tone + '" aria-hidden="true">'
+    + (ghost ? '<span class="ghost">' + esc(ghost) + '</span>' : '')
+    + (small ? '<span class="pe">' + esc(small) + '</span>' : '')
+    + '<span class="pn">' + esc(big) + '</span></span>';
+}
+/* a photo, or the plate that stands in for it, always inside .media */
+function media(p, cls){
+  if (hasPhoto(p.id)){
+    return '<span class="media">'
+      + '<img src="' + shot(p) + '" alt="' + esc(p.nm + ', ' + p.en) + '" loading="lazy"'
+      + ' onerror="plateSwap(this,\'' + toneOf(p) + '\',\'' + esc(p.en) + '\',\'' + esc(plateName(p)) + '\',\'' + ghostOf(p) + '\',\'' + (cls||'') + '\')">'
+      + '</span>';
+  }
+  return '<span class="media">' + plate(toneOf(p), cls, p.en, plateName(p), ghostOf(p)) + '</span>';
+}
+/* if a photograph ever fails to load, it becomes a plate, not a broken frame */
+function plateSwap(img, tone, small, big, ghost, cls){
+  img.onerror = null;
+  img.parentNode.innerHTML = plate(tone, cls, small, big, ghost);
+}
+const MONO = { kamatis:'KA', talong:'TA', repolyo:'RE', sitaw:'SI', liempo:'LI', manok:'MA', itlog:'IT',
+  saging:'SA', mangga:'MG', calamansi:'KL', bigas:'BI', bangus:'BA', tilapia:'TI', galunggong:'GA' };
+function mediaTiny(p){
+  if (hasPhoto(p.id)){
+    return '<span class="media"><img src="' + shot(p) + '" alt="" loading="lazy"'
+      + ' onerror="tinySwap(this,\'' + toneOf(p) + '\',\'' + MONO[p.id] + '\')"></span>';
+  }
+  return '<span class="media"><span class="plate tiny" data-tone="' + toneOf(p) + '" aria-hidden="true">'
+    + '<span class="mono">' + MONO[p.id] + '</span></span></span>';
+}
+function tinySwap(img, tone, mono){
+  img.onerror = null;
+  img.parentNode.innerHTML = '<span class="plate tiny" data-tone="' + tone + '" aria-hidden="true"><span class="mono">' + mono + '</span></span>';
+}
+
+/* ---- the price engine: one product across every stall that sells it ---- */
+function compare(p){
+  const pool = POOLS[p.cat];
+  const base = p.price / (pool.find(x => x[0] === p.stall) || [null,1])[1];
+  const alt  = ALT_UNIT[p.unit];
+  const rows = pool.map(function(entry, i){
+    const key = entry[0], mult = entry[1];
+    const st  = STALLS[key];
+    const norm = Math.round(base * mult);            /* always price per base unit */
+    /* one stall in each set genuinely sells a smaller pack, priced a bit higher per kilo */
+    const useAlt = !!alt && i === pool.length - 2;
+    const shown  = useAlt ? { price: Math.round(norm * alt.f), unit: alt.u } : { price: norm, unit: p.unit };
+    return { key:key, stall:st, norm:norm, shown:shown, alt:useAlt, self:key === p.stall };
+  }).sort(function(a,b){ return a.norm - b.norm; });
+
+  const avg = rows.reduce(function(s,r){ return s + r.norm; }, 0) / rows.length;
+  rows.forEach(function(r){
+    const d = (r.norm - avg) / avg;
+    r.verdict = d < -.05 ? 'mura' : (d > .05 ? 'mahal' : 'katamtaman');
+  });
+  return { rows:rows, avg:avg, unit:p.unit, altUsed:rows.some(function(r){ return r.alt; }) };
+}
+const VERDICT_TEXT = { mura:'Mura', mahal:'Mahal', katamtaman:'Katamtaman' };
+
+/* how much the cheapest stall saves you against the market average */
+function saveText(c, unit){
+  const d = Math.round(c.avg) - c.rows[0].norm;
+  return d > 0
+    ? 'Tipid ka ng <b>' + peso(d) + ' / ' + unit + '</b> kay ' + c.rows[0].stall.name
+    : 'Pinakamura ngayon kay ' + c.rows[0].stall.name;
+}
+
+function verdictFor(p){
+  const c = compare(p);
+  const me = c.rows.find(function(r){ return r.self; });
+  return { v:(me ? me.verdict : 'katamtaman'), avg:c.avg, n:c.rows.length, rank:c.rows.indexOf(me) + 1 };
+}
+
+/* ============================================================
+   Card renderers
+   ============================================================ */
+function productCard(p){
+  const st = STALLS[p.stall], vd = verdictFor(p);
+  const off = p.was ? Math.round((1 - p.price / p.was) * 100) : 0;
+  return '<article class="pcard">'
+    + '<button class="shot" data-open="' + p.id + '" aria-label="' + esc(p.nm) + '">'
+    +   media(p)
+    +   (off ? '<span class="flag">-' + off + '%</span>' : '')
+    +   '<span class="fav" aria-hidden="true"><svg class="ic"><use href="#i-heart"/></svg></span>'
+    + '</button>'
+    + '<div class="body">'
+    +   '<button data-open="' + p.id + '" style="text-align:left">'
+    +     '<div class="nm">' + p.nm + '</div><div class="en">' + p.en + '</div>'
+    +     '<div class="prow"><span class="price">' + peso(p.price) + '<span class="unit"> / ' + p.unit + '</span></span>'
+    +       (p.was ? '<span class="price strike">' + peso(p.was) + '</span>' : '')
+    +     '</div>'
+    +     '<div class="prow" style="margin-top:6px"><span class="badge verdict ' + vd.v + '">' + VERDICT_TEXT[vd.v] + '</span>'
+    +       '<span class="meta">avg ' + peso(vd.avg) + ' / ' + p.unit + '</span></div>'
+    +     '<div class="stall"><svg class="ic ic-xs"><use href="#i-store"/></svg>' + st.name + '</div>'
+    +     '<div class="rate"><svg class="ic ic-xs"><use href="#i-star"/></svg>' + st.rate.toFixed(1)
+    +       ' <span class="meta">(' + st.rev + ')</span> <span class="sep"></span> <span class="meta">' + st.dist + '</span></div>'
+    +   '</button>'
+    +   '<button class="cmp" data-compare="' + p.id + '"><svg class="ic ic-xs"><use href="#i-scale"/></svg> Ikumpara sa ' + vd.n + '</button>'
+    + '</div></article>';
+}
+
+const STALL_PHOTO = { nena:'kamatis', boy:'talong', baby:'repolyo', juan:'liempo', dado:'liempo',
+  dennis:'manok', rosa:'manok', delia:'itlog', ising:'bangus', ruben:'tilapia',
+  linda:'mangga', ging:'calamansi', ador:'bigas', cora:'bigas' };
+const SEC_TONE = { 'Vegetable Section':'gulay', 'Meat Section':'karne', 'Poultry Section':'manok',
+  'Fish Section':'isda', 'Fruit Section':'prutas', 'Rice Section':'bigas' };
+const SEC_FIL = { 'Vegetable Section':'Gulayan', 'Meat Section':'Karnehan', 'Poultry Section':'Manukan',
+  'Fish Section':'Isdaan', 'Fruit Section':'Prutasan', 'Rice Section':'Bigasan' };
+
+function stallMedia(key){
+  const s = STALLS[key], pid = STALL_PHOTO[key];
+  if (pid && hasPhoto(pid)){
+    return '<span class="media"><img src="' + A + 'products/product-' + pid + '.png" alt="' + esc(s.name) + '" loading="lazy"></span>';
+  }
+  return '<span class="media">'
+    + '<span class="plate wide" data-tone="' + (SEC_TONE[s.sec] || 'gulay') + '" aria-hidden="true">'
+    + '<span class="ghost">#' + s.no + '</span>'
+    + '<span class="pe">' + esc(s.sec.replace(' Section','')) + ' Section</span>'
+    + '<span class="pn">' + esc(SEC_FIL[s.sec] || 'Puwesto') + '</span></span></span>';
+}
+
+function stallCard(key){
+  const s = STALLS[key];
+  return '<article class="scard"><button data-demo="stall page">'
+    + '<span class="shot">' + stallMedia(key)
+    +   '<span class="badge state' + (s.open ? '' : ' shut') + '">' + (s.open ? 'Bukas' : 'Sarado') + '</span></span>'
+    + '<span class="body">'
+    +   '<span class="nm" style="display:block">' + s.name + '</span>'
+    +   '<span class="meta2"><svg class="ic ic-xs"><use href="#i-star"/></svg>' + s.rate.toFixed(1)
+    +     '<span class="meta">(' + s.rev + ') &nbsp;&bull;&nbsp; ' + s.sec + ' &bull; #' + s.no + '</span></span>'
+    +   '<span class="range"><span class="price">' + peso(s.range[0]) + ' - ' + peso(s.range[1]) + '<span class="unit"> / kg</span></span></span>'
+    + '</span></button></article>';
+}
+
+function compareRow(r, unit, best){
+  return '<button class="crow' + (best ? ' best' : '') + '" data-demo="stall page">'
+    + '<span class="rank">' + (best ? '1' : r.rank) + '</span>'
+    + '<span class="who"><b>' + r.stall.name + (r.self ? ' <span class="badge verdict katamtaman" style="font-size:10px">Ito</span>' : '') + '</b>'
+    +   '<small><svg class="ic ic-xs"><use href="#i-star"/></svg>' + r.stall.rate.toFixed(1)
+    +   '<span class="sep"></span>' + r.stall.sec.replace(' Section','') + ' #' + r.stall.no
+    +   '<span class="sep"></span>' + r.stall.dist + '</small></span>'
+    + '<span class="amt"><span class="price">' + peso(r.shown.price) + '<span class="unit"> / ' + r.shown.unit + '</span></span>'
+    +   (r.alt ? '<span class="norm">= ' + peso(r.norm) + ' / ' + unit + ' katumbas</span>' : '')
+    +   '<span class="badge verdict ' + r.verdict + '" style="margin-top:3px;display:inline-block">'
+    +     VERDICT_TEXT[r.verdict] + '</span>'
+    + '</span></button>';
+}
+
+/* ============================================================
+   Screens
+   ============================================================ */
+const TABS = [
+  { id:'home',   label:'Home',       icon:'i-home' },
+  { id:'cart',   label:'PalengKart', icon:'i-cart',    cnt:3 },
+  { id:'orders', label:'Orders',     icon:'i-receipt' },
+  { id:'chats',  label:'Chats',      icon:'i-chat',    cnt:2 },
+  { id:'me',     label:'Profile',    icon:'i-user' }
+];
+
+function buildTabs(){
+  $('#tabBar').innerHTML = TABS.map(function(t){
+    return '<button class="tab" data-tab="' + t.id + '"' + (t.id === 'home' ? ' aria-current="page"' : '') + '>'
+      + '<span class="ib"><svg class="ic"><use href="#' + t.icon + '"/></svg>'
+      + (t.cnt ? '<span class="cnt">' + t.cnt + '</span>' : '') + '</span>'
+      + '<span class="lb">' + t.label + '</span></button>';
+  }).join('');
+  $('#sideNav').innerHTML = TABS.map(function(t){
+    return '<button data-tab="' + t.id + '"' + (t.id === 'home' ? ' aria-current="page"' : '') + '>'
+      + '<svg class="ic"><use href="#' + t.icon + '"/></svg>' + t.label
+      + (t.cnt ? '<span class="cnt">' + t.cnt + '</span>' : '') + '</button>';
+  }).join('');
+}
+
+function buildHome(){
+  $('#catRow').innerHTML = CATS.map(function(c){
+    return '<button class="cat" data-cat="' + c.id + '" aria-pressed="false">'
+      + '<span class="disc"><svg class="ic"><use href="#' + c.icon + '"/></svg></span><span>' + c.label + '</span></button>';
+  }).join('');
+
+  $('#promoDots').innerHTML = '<i class="on"></i><i></i>';
+
+  /* 4 deals: fills the desktop 4 column rail exactly, scrolls on mobile */
+  $('#dealRow').innerHTML = PRODUCTS.filter(function(p){ return p.was; }).slice(0,4).map(productCard).join('');
+  $('#stallRow').innerHTML = ['nena','juan','linda','ising','rosa','ador'].map(stallCard).join('');
+  $('#homeGrid').innerHTML = PRODUCTS.map(productCard).join('');
+
+  $('#watchList').innerHTML = ['kamatis','liempo','bigas','bangus'].map(function(id){
+    const p = prod(id), c = compare(p), best = c.rows[0];
+    const tip = Math.round(c.avg) - best.norm;
+    return '<button class="watchrow" data-compare="' + id + '">'
+      + mediaTiny(p)
+      + '<span class="nm">' + p.nm + '</span>'
+      + '<span class="rt"><span class="price">' + peso(best.norm) + '<span class="unit"> / ' + p.unit + '</span></span></span>'
+      + '<span class="sub"><span>' + best.stall.name + ', sa ' + c.rows.length + ' na stalls</span>'
+      + (tip > 0
+          ? '<span class="tipchip">tipid ' + peso(tip) + '</span>'
+          : '<span class="tipchip flat">pinakamura</span>')
+      + '</span></button>';
+  }).join('');
+}
+
+/* ---- browse ---- */
+let browseCat = 'gulay';
+let sortMode  = 'mura';
+const SORTS = [
+  { id:'mura',   label:'Pinakamura' },
+  { id:'unit',   label:'Presyo kada kilo' },
+  { id:'near',   label:'Pinakamalapit' },
+  { id:'rating', label:'Pinakamataas na rating' },
+  { id:'new',    label:'Pinakabago' }
+];
+
+function buildBrowse(cat){
+  browseCat = cat || browseCat;
+  const c = CATS.find(function(x){ return x.id === browseCat; });
+  $('#browseTitle').textContent = c.label;
+  $('#browseLead').textContent = c.desc;
+  /* Isda is the Fish Section subset of the real Other category */
+  let list = PRODUCTS.filter(function(p){ return c.sub ? p.sub === c.sub : p.cat === browseCat; });
+  if (sortMode === 'rating')     list = list.slice().sort(function(a,b){ return STALLS[b.stall].rate - STALLS[a.stall].rate; });
+  else if (sortMode === 'near')  list = list.slice().sort(function(a,b){ return parseInt(STALLS[a.stall].dist) - parseInt(STALLS[b.stall].dist); });
+  else if (sortMode !== 'new')   list = list.slice().sort(function(a,b){ return a.price / UNIT_MULT[a.unit] - b.price / UNIT_MULT[b.unit]; });
+  $('#resultCount').textContent = list.length;
+  $('#browseGrid').innerHTML = list.map(productCard).join('');
+  $('#sortLabel').textContent = (SORTS.find(function(s){ return s.id === sortMode; }) || SORTS[0]).label;
+}
+
+/* ---- product detail ---- */
+let pdId = 'kamatis', pdUnit = 'kg';
+
+function buildProduct(id){
+  pdId = id || pdId;
+  const p = prod(pdId), st = STALLS[p.stall], c = compare(p), me = c.rows.find(function(r){ return r.self; });
+  pdUnit = p.unit;
+
+  $('#pdGallery').innerHTML =
+      '<div class="gslide">' + (hasPhoto(p.id)
+        ? '<img src="' + shot(p) + '" alt="' + esc(p.nm + ', ' + p.en) + '">'
+        : plate(toneOf(p), 'hero', p.en, p.nm, ghostOf(p))) + '</div>'
+    + '<div class="gslide"><img src="../02-audit/logo/Lipapublicmarket.jpg" alt="Lipa City Public Market"></div>';
+  $('#pdDots').innerHTML = '<i class="on"></i><i></i>';
+
+  $('#pdName').textContent = p.nm;
+  $('#pdEn').textContent   = p.en;
+  $('#pdPrice').innerHTML  = peso(p.price) + '<span class="unit"> / ' + p.unit + '</span>';
+  $('#pdWas').textContent  = p.was ? peso(p.was) : '';
+  $('#pdWas').style.display = p.was ? '' : 'none';
+  const off = p.was ? Math.round((1 - p.price / p.was) * 100) : 0;
+  $('#pdOff').textContent  = off ? '-' + off + '%' : '';
+  $('#pdOff').style.display = off ? '' : 'none';
+  $('#pdVerdict').textContent = VERDICT_TEXT[me.verdict];
+  $('#pdVerdict').className = 'badge verdict ' + me.verdict;
+  $('#pdRate').innerHTML  = '<b style="font-weight:700">' + st.rate.toFixed(1) + '</b> (' + st.rev + ' reviews)';
+  $('#pdSold').textContent = p.sold + ' benta';
+  $('#pdStall').textContent = st.name;
+  $('#pdStallMeta').textContent = st.sec + ' • #' + st.no + ' • ' + st.dist;
+  $('#pdDesc').textContent = p.desc;
+
+  const units = p.unit === 'kg' ? ['250g','500g','kg'] : (p.unit === 'dozen' ? ['piece','dozen'] : [p.unit]);
+  $('#pdUnits').innerHTML = units.map(function(u){
+    const val = Math.round(p.price * (UNIT_MULT[u] / UNIT_MULT[p.unit]));
+    const px  = (u === 'piece' && p.unit === 'dozen') ? Math.round(p.price / 12 * 1.08) : val;
+    return '<button class="unit-sw" data-unit="' + u + '" aria-pressed="' + (u === p.unit) + '">'
+      + '<b>' + (UNIT_LABEL[u] || u) + '</b><i>' + peso(px) + '</i></button>';
+  }).join('');
+
+  $('#pdCmpLead').textContent = p.nm + ', presyo ngayon sa ' + c.rows.length + ' na stalls sa Lipa City Public Market.';
+  $('#pdSave').innerHTML = saveText(c, p.unit);
+  $('#pdCmpRows').innerHTML = c.rows.slice(0,3).map(function(r,i){ r.rank = i + 1; return compareRow(r, p.unit, i === 0); }).join('');
+  $('#pdAvg').textContent = peso(c.avg) + ' / ' + p.unit;
+  $('#pdCmpAllLabel').textContent = 'Tingnan lahat ng ' + c.rows.length + ' na stalls';
+  $('#pdCmpAll').dataset.compare = p.id;
+
+  /* 30 day trend, deterministic per product */
+  const pts = [];
+  for (let i = 0; i < 30; i++){
+    const t = i / 29;
+    const wob = Math.sin(i * 0.9 + p.nm.length) * (p.price * 0.02);
+    pts.push(p.price - p.trend * (1 - t) + wob);
+  }
+  const min = Math.min.apply(null, pts), max = Math.max.apply(null, pts), span = (max - min) || 1;
+  const d = pts.map(function(v,i){ return (i ? 'L' : 'M') + (i / 29 * 300).toFixed(1) + ' ' + (58 - (v - min) / span * 48).toFixed(1); }).join(' ');
+  $('#pdSpark').innerHTML = '<svg viewBox="0 0 300 64" preserveAspectRatio="none" aria-hidden="true">'
+    + '<path d="' + d + ' L300 64 L0 64 Z" fill="#E3F0E1"/>'
+    + '<path d="' + d + '" fill="none" stroke="#1F7A3A" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/></svg>';
+  $('#pdTrend').innerHTML = p.trend < 0
+    ? '<svg class="ic ic-sm"><use href="#i-tdown"/></svg> Bumaba ang presyo ' + peso(-p.trend) + ' ngayong linggo'
+    : (p.trend > 0
+        ? '<svg class="ic ic-sm" style="color:var(--mahal)"><use href="#i-tup"/></svg> <span style="color:var(--mahal)">Tumaas ng ' + peso(p.trend) + ' ngayong linggo</span>'
+        : '<svg class="ic ic-sm" style="color:var(--ink3)"><use href="#i-scale"/></svg> <span style="color:var(--ink2)">Walang pagbabago ngayong linggo</span>');
+
+  $('#pdTotal').innerHTML = peso(p.price) + '<span class="unit"> / ' + p.unit + '</span>';
+}
+
+/* ---- compare sheet ---- */
+function openCompare(id){
+  const p = prod(id), c = compare(p);
+  $('#cmpSub').textContent = p.nm + ', presyo ngayon sa ' + c.rows.length + ' na stalls';
+  $('#cmpHead').innerHTML = media(p)
+    + '<span><b>' + p.nm + '</b><small>' + p.en + ' • ' + catLabel(p) + '</small></span>'
+    + '<span style="margin-left:auto;text-align:right"><span class="price">' + peso(c.rows[0].norm)
+    + '<span class="unit"> / ' + p.unit + '</span></span><span class="meta" style="display:block">pinakamura</span></span>';
+  $('#cmpSortUnit').textContent = 'presyo kada ' + (p.unit === 'kg' ? 'kilo' : p.unit);
+  $('#cmpSave').innerHTML = saveText(c, p.unit);
+  $('#cmpRows').innerHTML = c.rows.map(function(r,i){ r.rank = i + 1; return compareRow(r, p.unit, i === 0); }).join('');
+  $('#cmpAvg').textContent = peso(c.avg) + ' / ' + p.unit;
+  $('#cmpNote').textContent = c.altUsed
+    ? 'May stall na nagbebenta ng mas maliit na timbang. Ginawa naming presyo kada ' + p.unit + ' ang lahat para patas ang paghahambing.'
+    : 'Lahat ng presyo ay per ' + p.unit + ' na, kaya patas ang paghahambing. Ang sarado na stall ay hindi kasama.';
+  $('#cmpCta').textContent = 'Add to Cart, ' + c.rows[0].stall.name;
+  showSheet('#cmpSheet');
+}
+
+function buildSort(){
+  $('#sortOpts').innerHTML = SORTS.map(function(s){
+    return '<button class="optrow" data-sort="' + s.id + '" role="checkbox" aria-checked="' + (s.id === sortMode) + '">'
+      + s.label + '<svg class="ic ic-sm"><use href="#i-check"/></svg></button>';
+  }).join('');
+}
+
+/* ---- sheet plumbing ---- */
+let openSheet = null;
+function showSheet(sel){
+  const el = $(sel);
+  el.hidden = false;
+  requestAnimationFrame(function(){ el.classList.add('on'); $('#scrim').classList.add('on'); });
+  openSheet = el;
+}
+function hideSheet(){
+  if (!openSheet) return;
+  const el = openSheet; openSheet = null;
+  el.classList.remove('on'); $('#scrim').classList.remove('on');
+  setTimeout(function(){ el.hidden = true; }, 280);
+}
+
+/* ---- toast ---- */
+let toastT;
+function toast(msg){
+  const t = $('#toast');
+  t.textContent = msg; t.classList.add('on');
+  clearTimeout(toastT); toastT = setTimeout(function(){ t.classList.remove('on'); }, 2400);
+}
+
+/* ---- router ---- */
+let prevScreen = 'home';
+function go(screen){
+  const cur = $$('.screen').find(function(s){ return !s.hidden; });
+  if (cur) prevScreen = cur.id.replace('s-','');
+  $$('.screen').forEach(function(s){ s.hidden = true; });
+  $('#s-' + screen).hidden = false;
+  window.scrollTo({ top:0, behavior:'auto' });
+  const isHome = screen === 'home';
+  $$('[data-tab]').forEach(function(b){
+    if (b.dataset.tab === 'home' && isHome) b.setAttribute('aria-current','page');
+    else if (b.dataset.tab === 'home') b.removeAttribute('aria-current');
+  });
+}
+
+/* ============================================================
+   Wiring
+   ============================================================ */
+buildTabs(); buildHome(); buildBrowse('gulay'); buildProduct('kamatis'); buildSort();
+
+document.addEventListener('click', function(e){
+  const t = e.target.closest('[data-open],[data-compare],[data-go],[data-cat],[data-tab],[data-demo],[data-close],[data-back],[data-unit],[data-sort],[data-filter]');
+  if (!t) return;
+
+  if (t.dataset.close !== undefined || t.id === 'scrim'){ hideSheet(); return; }
+  if (t.dataset.back !== undefined){ go(prevScreen === 'product' ? 'home' : prevScreen); return; }
+  if (t.dataset.open){ buildProduct(t.dataset.open); go('product'); return; }
+  if (t.dataset.compare){ openCompare(t.dataset.compare); return; }
+  if (t.dataset.go){ go(t.dataset.go); return; }
+
+  if (t.dataset.cat){
+    $$('.cat').forEach(function(c){ c.setAttribute('aria-pressed', String(c === t)); });
+    buildBrowse(t.dataset.cat); go('browse'); return;
+  }
+  if (t.dataset.unit){
+    $$('.unit-sw').forEach(function(u){ u.setAttribute('aria-pressed', String(u === t)); });
+    pdUnit = t.dataset.unit;
+    $('#pdTotal').innerHTML = $('i', t).textContent + '<span class="unit"> / ' + pdUnit + '</span>';
+    return;
+  }
+  if (t.dataset.sort){ sortMode = t.dataset.sort; buildSort(); buildBrowse(); hideSheet(); return; }
+  if (t.dataset.filter){
+    const on = t.getAttribute('aria-pressed') === 'true';
+    t.setAttribute('aria-pressed', String(!on));
+    return;
+  }
+  if (t.dataset.tab){
+    if (t.dataset.tab === 'home'){ go('home'); return; }
+    toast('Static mockup. Home, listing, product at presyo lang ang gumagana.');
+    return;
+  }
+  if (t.dataset.demo){ toast('Static mockup: ' + t.dataset.demo + ' is not wired up.'); return; }
+});
+
+$('#scrim').addEventListener('click', hideSheet);
+$('#sortBtn').addEventListener('click', function(){ showSheet('#sortSheet'); });
+document.addEventListener('keydown', function(e){ if (e.key === 'Escape') hideSheet(); });
+
+/* sticky header state and back to top button. Motion = state, nothing idle. */
+let ticking = false;
+window.addEventListener('scroll', function(){
+  if (ticking) return;
+  ticking = true;
+  requestAnimationFrame(function(){
+    const y = window.scrollY;
+    $('#appbarHome').classList.toggle('is-stuck', y > 40);
+    $('#appbarBrowse').classList.toggle('is-stuck', y > 40);
+    $('#toTop').classList.toggle('on', y > 700 && !$('#s-browse').hidden);
+    ticking = false;
+  });
+}, { passive:true });
+
+$('#toTop').addEventListener('click', function(){
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  window.scrollTo({ top:0, behavior: reduce ? 'auto' : 'smooth' });
+});
+
+/* carousel dot state, no auto advance */
+function wireDots(scroller, dots){
+  scroller.addEventListener('scroll', function(){
+    const kids = Array.from(scroller.children);
+    let idx = 0, best = Infinity;
+    kids.forEach(function(k,i){
+      const d = Math.abs(k.getBoundingClientRect().left - scroller.getBoundingClientRect().left);
+      if (d < best){ best = d; idx = i; }
+    });
+    Array.from(dots.children).forEach(function(d,i){ d.classList.toggle('on', i === idx); });
+  }, { passive:true });
+}
+wireDots($('#promoRow'), $('#promoDots'));
+wireDots($('#pdGallery'), $('#pdDots'));
+</script>
+</body>
+</html>

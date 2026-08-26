@@ -1,0 +1,1807 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>PalengkeHub - Lipa City Public Market</title>
+<meta name="description" content="Bili online, sundo sa Lipa. Compare prices across stalls at the Lipa City Public Market, then pick up your order.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Semi+Condensed:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+/* =========================================================================
+   PalengkeHub - Variant 2 "Marketplace Dense"
+   Shopee / Lazada energy, unified around the real logo orange #E8833A.
+   Single file. No build. One icon set (inline sprite, Lucide geometry).
+   Type: Barlow Semi Condensed (display, prices, badges) + Barlow (UI).
+   ========================================================================= */
+
+:root{
+  /* --- the one place the logo file is referenced --- */
+  --logo-url: url("../02-audit/logo/app-icon.png");
+
+  /* brand: sampled from the PalengkeHub logo */
+  --brand:      #E8833A;   /* logo ring / HUB wordmark */
+  --brand-mid:  #D2701F;   /* header gradient end */
+  --brand-deep: #B8500F;   /* CTA fill + price ink, 5.0:1 on white */
+  --brand-tint: #FCEEE2;
+  --brand-tint2:#F7DFC9;
+
+  /* warm neutral ramp (deliberately not Tailwind grey) */
+  --ink:   #261006;        /* logo outline brown */
+  --ink-2: #5B4A40;
+  --muted: #7A685C;
+  --line:  #E7DCD0;
+  --line-2:#F0E7DC;
+  --bg:    #F6F1EA;        /* never pure white as the page */
+  --card:  #FFFFFF;
+  --canvas:#F8F8F8;        /* matches the logo PNG backdrop */
+
+  /* semantic */
+  --mura:    #3B6E23;  --mura-bg:  #E6EDDB;
+  --mahal:   #B02A1C;  --mahal-bg: #FBE2DF;
+  --gold:    #E8A020;
+  --gcash:   #007DFE;
+
+  /* type: ONE scale, seven steps, no half pixels */
+  --f-display:"Barlow Semi Condensed","Barlow",system-ui,sans-serif;
+  --f-ui:"Barlow",system-ui,sans-serif;
+  --fs-1: 11px;   /* badges, flags, units, tab labels */
+  --fs-2: 13px;   /* metadata, captions, card titles */
+  --fs-3: 15px;   /* body, buttons, list rows */
+  --fs-4: 17px;   /* card price, section heading */
+  --fs-5: 20px;   /* screen title, greeting, bar price */
+  --fs-6: 24px;   /* promo headline */
+  --fs-7: 30px;   /* detail price */
+
+  /* shape: three radii only */
+  --r-flag: 4px;
+  --r:      8px;
+  --r-pill: 999px;
+
+  /* elevation: two levels only */
+  --e1: 0 1px 2px rgba(38,16,6,.07);
+  --e2: 0 -2px 14px rgba(38,16,6,.12);
+
+  /* motion: snappy, dense-marketplace tempo */
+  --t-micro: 100ms;
+  --t-std:   150ms;
+  --ease: cubic-bezier(.2,0,0,1);
+
+  /* touch: nothing tappable below this */
+  --tap: 40px;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:var(--f-ui);
+  font-size:var(--fs-3);
+  line-height:1.4;
+  -webkit-font-smoothing:antialiased;
+  padding-bottom:calc(60px + env(safe-area-inset-bottom));
+}
+img{display:block;max-width:100%}
+button{font:inherit;color:inherit;border:0;background:none;padding:0;cursor:pointer}
+a{color:inherit;text-decoration:none}
+h1,h2,h3,h4{margin:0;font-family:var(--f-display);font-weight:700;letter-spacing:0}
+ul{margin:0;padding:0;list-style:none}
+s{color:var(--muted)}
+:focus-visible{outline:3px solid var(--brand-deep);outline-offset:2px;border-radius:var(--r-flag)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* numerals: tabular everywhere a price can appear */
+.num,.price,.price-sm,.price-lg,.countdown,.rank{
+  font-family:var(--f-display);
+  font-variant-numeric:tabular-nums;
+  font-feature-settings:"tnum" 1;
+  letter-spacing:0;
+}
+
+/* ---------- icon sprite ---------- */
+.ic{width:20px;height:20px;flex:none;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.ic--sm{width:14px;height:14px;stroke-width:2.2}
+.ic--lg{width:24px;height:24px}
+.ic--fill{fill:currentColor;stroke:none}
+
+/* =====================  SHELL  ===================== */
+.shell{max-width:100%}
+.main{min-height:100vh}
+
+/* ---------- desktop rail (hidden on mobile) ---------- */
+.rail{display:none}
+
+/* ---------- header ---------- */
+.hdr{
+  position:sticky;top:0;z-index:40;
+  background:linear-gradient(180deg,var(--brand) 0%,var(--brand-mid) 100%);
+  color:#fff;
+  padding:10px 12px;
+  box-shadow:0 1px 0 rgba(38,16,6,.10);
+}
+.hdr[hidden]{display:none}
+.hdr__brandrow{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.mark{
+  width:34px;height:34px;flex:none;border-radius:var(--r-pill);
+  background:var(--canvas) var(--logo-url) center/126% no-repeat;
+  display:grid;place-items:center;overflow:hidden;
+  font-family:var(--f-display);font-weight:800;font-size:var(--fs-2);color:var(--brand-deep);
+}
+.mark span{position:relative;z-index:-1}
+.wordmark{font-family:var(--f-display);font-weight:800;font-size:var(--fs-4);letter-spacing:0;line-height:1}
+.wordmark b{font-weight:800}
+.wordmark small{display:block;font-family:var(--f-ui);font-weight:500;font-size:var(--fs-1);opacity:.92;margin-top:2px}
+.hdr__acts{margin-left:auto;display:flex;gap:2px}
+.iconbtn{
+  width:var(--tap);height:var(--tap);border-radius:var(--r-pill);display:grid;place-items:center;position:relative;
+  transition:background var(--t-micro) var(--ease);
+}
+.iconbtn:hover{background:rgba(255,255,255,.16)}
+.iconbtn:active{transform:scale(.94)}
+.dot{
+  position:absolute;top:5px;right:2px;min-width:17px;height:17px;padding:0 4px;
+  border-radius:var(--r-pill);background:#fff;color:var(--brand-deep);
+  font-family:var(--f-display);font-size:var(--fs-1);font-weight:800;line-height:17px;text-align:center;
+  box-shadow:0 0 0 1.5px var(--brand-mid);
+}
+.hdr__loc{
+  display:flex;align-items:center;gap:5px;margin-bottom:4px;min-height:var(--tap);
+  font-size:var(--fs-2);font-weight:600;width:100%;text-align:left;
+}
+.hdr__loc .ic{width:16px;height:16px}
+.hdr__loc .chev{width:15px;height:15px;opacity:.9}
+.openpill{
+  margin-left:auto;display:inline-flex;align-items:center;gap:4px;
+  background:rgba(255,255,255,.2);border-radius:var(--r-pill);
+  padding:3px 8px;font-size:var(--fs-1);font-weight:700;letter-spacing:.01em;
+}
+.openpill i{width:6px;height:6px;border-radius:50%;background:#BFF0A8;display:block}
+
+.searchbar{
+  display:flex;align-items:center;gap:8px;
+  background:var(--card);border-radius:var(--r);
+  padding:0 10px;height:44px;color:var(--muted);
+}
+.searchbar input{
+  border:0;outline:0;background:none;flex:1;min-width:0;height:100%;
+  font:500 var(--fs-3)/1 var(--f-ui);color:var(--ink);
+}
+.searchbar input::placeholder{color:var(--muted);opacity:1}
+.searchbar .divider{width:1px;height:20px;background:var(--line)}
+
+/* collapsed state: location row folds away, search stays. motion = state. */
+.hdr__loc,.hdr__brandrow{transition:opacity var(--t-std) var(--ease),max-height var(--t-std) var(--ease),margin var(--t-std) var(--ease)}
+.hdr.is-collapsed .hdr__loc{opacity:0;max-height:0;min-height:0;margin:0;overflow:hidden;pointer-events:none}
+.hdr.is-collapsed{padding-top:8px;padding-bottom:8px}
+
+/* sub header (listing / detail / non-home tabs) */
+.hdr--sub .hdr__brandrow{margin-bottom:8px}
+.hdr--sub .title{font-family:var(--f-display);font-weight:700;font-size:var(--fs-5)}
+
+/* ---------- screens ---------- */
+.screen{display:none}
+.screen.is-active{display:block}
+.pad{padding-left:12px;padding-right:12px}
+
+/* ---------- section head ---------- */
+.sec{margin-top:18px}
+.sec__head{display:flex;align-items:center;gap:8px;padding:0 12px 8px}
+.sec__head h2{font-size:var(--fs-4)}
+.sec__head p{margin:1px 0 0;font-size:var(--fs-1);color:var(--muted)}
+.seeall{
+  margin-left:auto;display:inline-flex;align-items:center;justify-content:flex-end;gap:2px;
+  min-height:44px;padding-left:8px;color:var(--brand-deep);font-size:var(--fs-2);font-weight:700;
+}
+.seeall .ic{width:14px;height:14px}
+
+/* ---------- greeting ---------- */
+.greet{padding:12px 12px 2px}
+.greet h1{font-size:var(--fs-5)}
+.greet p{margin:2px 0 0;font-size:var(--fs-2);color:var(--ink-2)}
+
+/* ---------- category chips ---------- */
+.cats{display:flex;gap:8px;overflow-x:auto;padding:12px 12px 4px;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch}
+.cats::-webkit-scrollbar{display:none}
+.cat{flex:none;width:62px;min-height:88px;text-align:center;scroll-snap-align:start}
+.cat__img{
+  width:62px;height:62px;border-radius:var(--r-pill);overflow:hidden;position:relative;
+  background:var(--brand-tint);border:1.5px solid var(--line);
+  transition:border-color var(--t-micro) var(--ease),transform var(--t-micro) var(--ease);
+}
+.cat:hover .cat__img{border-color:var(--brand)}
+.cat:active .cat__img{transform:scale(.95)}
+.cat.is-on .cat__img{border-color:var(--brand-deep);border-width:2.5px}
+.cat span{display:block;margin-top:5px;font-size:var(--fs-1);font-weight:600;color:var(--ink-2);line-height:1.15}
+.cat.is-on span{color:var(--brand-deep);font-weight:700}
+
+/* ---------- image placeholder (works with zero generated assets) ---------- */
+.thumb{position:relative;overflow:hidden;background:var(--brand-tint)}
+.thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.ph{
+  position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
+  color:var(--brand-deep);background:var(--brand-tint);
+}
+.ph .ic{width:26px;height:26px;opacity:.6}
+.ph b{font-family:var(--f-display);font-size:var(--fs-1);font-weight:700;letter-spacing:.04em;text-transform:uppercase;opacity:.75;padding:0 4px;text-align:center}
+.cat .ph .ic{width:26px;height:26px;opacity:.75}
+.cat .ph b{display:none}
+
+/* ---------- promo carousel ---------- */
+.promos{display:flex;gap:8px;overflow-x:auto;scroll-snap-type:x mandatory;padding:10px 12px 0}
+.promos::-webkit-scrollbar{display:none}
+.promo{
+  flex:none;width:calc(100% - 22px);aspect-ratio:16/9;border-radius:var(--r);
+  scroll-snap-align:center;position:relative;
+}
+.promo__scrim{position:absolute;inset:0;background:rgba(38,16,6,.46)}
+/* designed fallback panel: a flat marketplace flag, never an empty void */
+.promo .ph{background:var(--brand-deep);color:#fff;flex-direction:row;align-items:center;justify-content:flex-end;padding:0 14px}
+.promo--b .ph{background:var(--brand)}
+.promo.no-img .promo__scrim{background:rgba(38,16,6,.26)}
+.ph__big{
+  font-family:var(--f-display);font-weight:800;font-size:var(--fs-7);line-height:.9;
+  opacity:.55;text-align:right;
+}
+.ph__big small{display:block;font-size:var(--fs-1);letter-spacing:.14em;font-weight:700}
+.promo__txt{position:absolute;inset:0;padding:14px;display:flex;flex-direction:column;justify-content:flex-end;color:#fff}
+.promo__kick{font-size:var(--fs-1);font-weight:700;letter-spacing:.08em;text-transform:uppercase;background:var(--brand);align-self:flex-start;padding:2px 6px;border-radius:var(--r-flag);font-family:var(--f-display)}
+.promo__txt h3{font-size:var(--fs-5);margin-top:6px;text-shadow:0 1px 2px rgba(38,16,6,.45);max-width:74%}
+.promo__txt p{margin:2px 0 0;font-size:var(--fs-2);font-weight:500;opacity:.95;max-width:74%;text-shadow:0 1px 2px rgba(38,16,6,.35)}
+.dots{display:flex;gap:5px;justify-content:center;padding:8px 0 0}
+.dots i{width:6px;height:6px;border-radius:50%;background:var(--line);display:block;transition:width var(--t-micro) var(--ease)}
+.dots i.on{width:16px;border-radius:var(--r-pill);background:var(--brand-deep)}
+
+/* ---------- flash strip ---------- */
+.flash{margin-top:10px;background:var(--brand-deep);color:#fff;padding:10px 0 14px}
+.flash__head{display:flex;align-items:center;gap:8px;padding:0 12px 2px}
+.flash__head h2{font-size:var(--fs-4)}
+.flash__cd{padding:0 12px 8px}
+.countdown{
+  display:inline-flex;align-items:center;gap:3px;font-size:var(--fs-2);font-weight:700;
+}
+.countdown b{background:rgba(255,255,255,.18);border-radius:var(--r-flag);padding:2px 5px;min-width:24px;text-align:center;font-weight:800}
+.flash .seeall{color:#fff}
+.frow{display:flex;gap:8px;overflow-x:auto;padding:0 12px;scroll-snap-type:x proximity}
+.frow::-webkit-scrollbar{display:none}
+.ftile{flex:none;width:112px;scroll-snap-align:start;background:var(--card);border-radius:var(--r);overflow:hidden;color:var(--ink);text-align:left;transition:transform var(--t-micro) var(--ease)}
+.ftile:active{transform:scale(.97)}
+.ftile .thumb{aspect-ratio:1/1}
+.ftile__b{padding:6px 7px 8px}
+.ftile__n{font-size:var(--fs-2);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.price-sm{font-size:var(--fs-3);font-weight:800;color:var(--brand-deep)}
+.ftile s{font-size:var(--fs-1);margin-left:3px}
+.ftile__u{font-size:var(--fs-1);color:var(--muted);font-weight:600}
+.bar{height:5px;border-radius:var(--r-pill);background:var(--brand-tint2);margin-top:5px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--brand-deep)}
+.ftile__left{font-size:var(--fs-1);font-weight:700;color:var(--brand-deep);margin-top:3px;letter-spacing:.02em}
+
+/* ---------- flags / chips ---------- */
+.flag{
+  position:absolute;top:0;left:0;z-index:2;
+  background:var(--brand-deep);color:#fff;
+  font-family:var(--f-display);font-size:var(--fs-1);font-weight:800;letter-spacing:.02em;
+  padding:2px 6px;border-radius:0 0 var(--r-flag) 0;
+}
+.flag--best{background:var(--mura)}
+.fav{
+  position:absolute;top:2px;right:2px;z-index:2;width:var(--tap);height:var(--tap);
+  display:grid;place-items:center;color:var(--muted);
+  transition:color var(--t-micro) var(--ease),transform var(--t-micro) var(--ease);
+}
+.fav::before{
+  content:"";position:absolute;width:28px;height:28px;border-radius:var(--r-pill);
+  background:rgba(255,255,255,.92);
+}
+.fav .ic{position:relative;width:16px;height:16px}
+.fav.is-on{color:var(--mahal)}
+.fav.is-on .ic{fill:currentColor}
+.fav:active{transform:scale(.9)}
+.verdict{
+  display:inline-flex;align-items:center;gap:3px;border-radius:var(--r-flag);
+  font-family:var(--f-display);font-size:var(--fs-1);font-weight:800;letter-spacing:.05em;
+  padding:2px 5px;
+}
+.verdict--mura{background:var(--mura-bg);color:var(--mura)}
+.verdict--mahal{background:var(--mahal-bg);color:var(--mahal)}
+.verdict--avg{background:var(--line-2);color:var(--ink-2)}
+.off{
+  display:inline-block;background:var(--brand-tint);color:var(--brand-deep);
+  font-family:var(--f-display);font-size:var(--fs-1);font-weight:800;padding:2px 4px;border-radius:var(--r-flag);
+}
+
+/* ---------- product card (2-col dense) ---------- */
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 12px}
+.pcard{
+  background:var(--card);border-radius:var(--r);overflow:hidden;text-align:left;
+  display:flex;flex-direction:column;box-shadow:var(--e1);
+  transition:transform var(--t-micro) var(--ease),box-shadow var(--t-micro) var(--ease);
+}
+.pcard:hover{box-shadow:0 2px 8px rgba(38,16,6,.13)}
+.pcard:active{transform:scale(.98)}
+.pcard .thumb{aspect-ratio:1/1}
+.pcard__b{padding:7px 8px 8px;display:flex;flex-direction:column;gap:3px;flex:1}
+.pcard__t{font-size:var(--fs-2);font-weight:600;line-height:1.25;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
+.pcard__t em{font-style:normal;color:var(--muted);font-weight:500;font-size:var(--fs-1)}
+.priceline{display:flex;align-items:baseline;gap:3px;flex-wrap:wrap}
+.price{font-size:var(--fs-4);font-weight:800;color:var(--brand-deep);line-height:1.1}
+.unit{font-size:var(--fs-1);font-weight:600;color:var(--muted)}
+.anchorline{display:flex;align-items:center;gap:5px;flex-wrap:wrap;min-height:18px}
+.anchorline s{font-size:var(--fs-1)}
+.meta{display:flex;align-items:center;gap:4px;font-size:var(--fs-1);color:var(--muted);font-weight:500;line-height:1.25}
+.meta .ic{width:12px;height:12px;stroke-width:2.4}
+.star{color:var(--gold);fill:currentColor;stroke:none;vertical-align:-2px}
+.meta b{color:var(--ink-2);font-weight:700}
+.meta--stall{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex}
+.meta--stall span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pcard .bar{margin-top:4px}
+.pcard__sold{font-size:var(--fs-1);font-weight:700;color:var(--brand-deep);letter-spacing:.02em}
+.pcard__foot{display:flex;align-items:center;gap:6px;margin-top:auto;padding-top:4px;border-top:1px solid var(--line-2)}
+.cmpbtn{
+  flex:1;display:flex;align-items:center;gap:3px;justify-content:flex-start;min-height:var(--tap);
+  font-size:var(--fs-1);font-weight:700;color:var(--brand-deep);line-height:1.2;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;
+}
+.cmpbtn .ic{width:12px;height:12px}
+.cmp-w{display:none}
+.addbtn{
+  width:var(--tap);height:var(--tap);border-radius:var(--r);background:var(--brand-deep);color:#fff;
+  display:grid;place-items:center;flex:none;
+  transition:transform var(--t-micro) var(--ease),background var(--t-micro) var(--ease);
+}
+.addbtn:hover{background:#9E440C}
+.addbtn:active{transform:scale(.9)}
+.addbtn .ic{width:18px;height:18px;stroke-width:2.6}
+
+/* ---------- price radar (home compare block) ---------- */
+.radar{margin:16px 12px 0;background:var(--card);border-radius:var(--r);overflow:hidden;box-shadow:var(--e1)}
+.radar__h{display:flex;align-items:center;gap:8px;padding:11px 12px;background:var(--brand-tint)}
+.radar__h h2{font-size:var(--fs-4)}
+.radar__h p{margin:1px 0 0;font-size:var(--fs-1);color:var(--ink-2)}
+.radar__h .ic{color:var(--brand-deep)}
+.rrow{display:flex;align-items:center;gap:9px;padding:9px 12px;width:100%;min-height:56px;text-align:left;border-top:1px solid var(--line-2)}
+.rrow:hover{background:var(--bg)}
+.rrow .thumb{width:38px;height:38px;border-radius:var(--r-flag);flex:none}
+.rrow .ph .ic{width:16px;height:16px}
+.rrow__n{display:block;font-size:var(--fs-3);font-weight:600;line-height:1.2}
+.rrow__m{display:block;font-size:var(--fs-1);color:var(--muted);margin-top:1px}
+.rrow__p{margin-left:auto;text-align:right;flex:none;white-space:nowrap}
+.rrow__p .price-sm{font-size:var(--fs-4)}
+.rrow__p .unit{margin-left:3px}
+.radar__f{padding:9px 12px;border-top:1px solid var(--line-2);display:flex;align-items:center;gap:6px;font-size:var(--fs-1);color:var(--muted)}
+.radar__f b{color:var(--ink);font-family:var(--f-display);font-variant-numeric:tabular-nums}
+
+/* ---------- stall card rail ---------- */
+.srow{display:flex;gap:10px;overflow-x:auto;padding:0 12px;scroll-snap-type:x proximity}
+.srow::-webkit-scrollbar{display:none}
+.scard{
+  flex:none;width:232px;scroll-snap-align:start;background:var(--card);border-radius:var(--r);
+  overflow:hidden;text-align:left;box-shadow:var(--e1);transition:transform var(--t-micro) var(--ease);
+}
+.scard:active{transform:scale(.98)}
+.scard .thumb{aspect-ratio:16/9}
+.scard__b{padding:8px 10px 10px}
+.scard__n{font-size:var(--fs-4);font-weight:700;font-family:var(--f-display)}
+.scard__r{display:flex;align-items:center;gap:5px;font-size:var(--fs-1);color:var(--muted);margin-top:2px}
+.range{margin-top:5px;display:flex;align-items:baseline;gap:4px;background:var(--brand-tint);border-radius:var(--r-flag);padding:3px 6px}
+.range .price-sm{font-size:var(--fs-3)}
+.range small{font-size:var(--fs-1);color:var(--ink-2);font-weight:600}
+.badge-open{
+  position:absolute;top:6px;left:6px;z-index:2;background:rgba(255,255,255,.94);color:var(--mura);
+  font-family:var(--f-display);font-size:var(--fs-1);font-weight:800;letter-spacing:.04em;padding:2px 6px;border-radius:var(--r-flag);
+}
+.badge-open.is-closed{color:var(--mahal)}
+
+/* ---------- filter bar ---------- */
+.filterbar{
+  position:sticky;top:60px;z-index:30;background:var(--bg);
+  display:flex;gap:6px;overflow-x:auto;padding:8px 12px;border-bottom:1px solid var(--line);
+}
+.filterbar::-webkit-scrollbar{display:none}
+.fchip{
+  flex:none;display:inline-flex;align-items:center;gap:4px;height:var(--tap);padding:0 12px;
+  border-radius:var(--r-pill);background:var(--card);border:1px solid var(--line);
+  font-size:var(--fs-2);font-weight:600;color:var(--ink-2);
+  transition:background var(--t-micro) var(--ease),color var(--t-micro) var(--ease),border-color var(--t-micro) var(--ease);
+}
+.fchip .ic{width:14px;height:14px}
+.fchip:active{transform:scale(.96)}
+.fchip.is-on{background:var(--brand-deep);border-color:var(--brand-deep);color:#fff}
+.fchip .cnt{background:#fff;color:var(--brand-deep);border-radius:var(--r-pill);font-size:var(--fs-1);font-weight:800;padding:0 5px;font-family:var(--f-display)}
+.fchip .cnt[hidden]{display:none}
+.resultline{display:flex;align-items:center;padding:10px 12px 8px;font-size:var(--fs-2);color:var(--muted)}
+.resultline b{color:var(--ink);font-weight:700}
+.emptyline{padding:24px 12px;text-align:center;font-size:var(--fs-2);color:var(--muted)}
+
+/* ---------- product detail ---------- */
+.gallery{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;background:var(--card)}
+.gallery::-webkit-scrollbar{display:none}
+.gslide{flex:none;width:100%;aspect-ratio:1/1;scroll-snap-align:center;position:relative}
+.gcount{position:absolute;right:10px;bottom:10px;background:rgba(38,16,6,.62);color:#fff;font-size:var(--fs-1);font-weight:700;padding:3px 8px;border-radius:var(--r-pill);font-family:var(--f-display)}
+.pdblock{background:var(--card);padding:12px;margin-bottom:8px}
+.pd__price{display:flex;align-items:flex-end;gap:6px;flex-wrap:wrap}
+.price-lg{font-size:var(--fs-7);font-weight:800;color:var(--brand-deep);line-height:1}
+.pd__price .unit{font-size:var(--fs-3);font-weight:700;color:var(--ink-2);padding-bottom:2px}
+.pd__anchor{display:flex;align-items:center;gap:7px;margin-top:6px;flex-wrap:wrap}
+.pd__anchor s{font-size:var(--fs-2)}
+.trendpill{
+  display:inline-flex;align-items:center;gap:4px;background:var(--mura-bg);color:var(--mura);
+  border-radius:var(--r-flag);padding:3px 7px;font-size:var(--fs-1);font-weight:700;
+}
+.pd h1{font-size:var(--fs-5);margin-top:8px}
+.pd h1 em{font-style:normal;font-weight:500;color:var(--muted);font-size:var(--fs-3);font-family:var(--f-ui)}
+.trustrow{display:flex;align-items:center;gap:10px;margin-top:7px;font-size:var(--fs-2);color:var(--muted);flex-wrap:wrap}
+.trustrow b{color:var(--ink);font-weight:700}
+.spread{
+  margin-top:10px;background:var(--brand-tint);border-radius:var(--r);padding:9px 10px;
+  display:flex;align-items:center;gap:8px;font-size:var(--fs-2);color:var(--ink-2);
+}
+.spread b{font-family:var(--f-display);color:var(--brand-deep);font-weight:800;font-variant-numeric:tabular-nums}
+.blocktitle{font-size:var(--fs-4);margin-bottom:8px}
+.swatches{display:flex;gap:7px;flex-wrap:wrap}
+.sw{
+  border:1.5px solid var(--line);border-radius:var(--r);padding:6px 10px;background:var(--bg);
+  text-align:left;min-width:84px;min-height:48px;transition:border-color var(--t-micro) var(--ease),background var(--t-micro) var(--ease);
+}
+.sw span{display:block;font-size:var(--fs-1);font-weight:600;color:var(--ink-2)}
+.sw b{display:block;font-family:var(--f-display);font-size:var(--fs-4);font-weight:800;color:var(--ink);font-variant-numeric:tabular-nums}
+.sw.is-on{border-color:var(--brand-deep);background:var(--brand-tint)}
+.sw.is-on b{color:var(--brand-deep)}
+.stallstrip{display:flex;align-items:center;gap:10px}
+.stallstrip .thumb{width:44px;height:44px;border-radius:var(--r-pill);flex:none}
+.stallstrip .ph .ic{width:18px;height:18px}
+.stallname{font-family:var(--f-display);font-size:var(--fs-4);font-weight:700}
+.ghostbtn{
+  margin-left:auto;border:1.5px solid var(--brand-deep);color:var(--brand-deep);
+  border-radius:var(--r);padding:0 14px;min-height:var(--tap);font-size:var(--fs-2);font-weight:700;flex:none;
+  display:inline-flex;align-items:center;
+  transition:background var(--t-micro) var(--ease);
+}
+.ghostbtn:hover{background:var(--brand-tint)}
+.spark{display:flex;align-items:center;gap:10px;margin-top:8px}
+.spark svg{flex:1;height:44px}
+.desc{font-size:var(--fs-2);color:var(--ink-2);line-height:1.5}
+.kv{display:flex;gap:8px;font-size:var(--fs-2);padding:6px 0;border-bottom:1px solid var(--line-2)}
+.kv:last-child{border:0}
+.kv dt{color:var(--muted);width:104px;flex:none}
+.kv dd{margin:0;font-weight:600}
+.gcashrow{display:flex;align-items:center;gap:7px;font-size:var(--fs-2);color:var(--ink-2);margin-top:9px}
+.gcashrow i{width:8px;height:8px;border-radius:2px;background:var(--gcash);display:block}
+
+/* compare block on detail */
+.cmpblock{background:var(--card);padding:12px;margin-bottom:8px}
+.cmprow{display:flex;align-items:center;gap:9px;padding:8px 0;min-height:52px;border-top:1px solid var(--line-2);width:100%;text-align:left}
+.cmprow:first-of-type{border-top:0}
+.rank{
+  width:22px;height:22px;border-radius:var(--r-flag);background:var(--line-2);color:var(--ink-2);
+  font-size:var(--fs-1);font-weight:800;display:grid;place-items:center;flex:none;
+}
+.cmprow.is-best .rank{background:var(--mura);color:#fff}
+.cmprow.is-best{background:var(--mura-bg);margin:0 -12px;padding:8px 12px;border-radius:var(--r-flag)}
+.cmprow__n{display:block;font-size:var(--fs-3);font-weight:600;line-height:1.2}
+.cmprow__m{display:block;font-size:var(--fs-1);color:var(--muted);margin-top:3px;line-height:1.5}
+.cmprow__m .verdict{margin-left:4px}
+.cmprow__p{margin-left:auto;text-align:right;flex:none}
+.cmprow__p .price-sm{display:block;font-size:var(--fs-4)}
+.cmprow__p .unit{margin-left:3px}
+.eq{font-size:var(--fs-1);color:var(--muted);display:block;font-weight:600}
+.avgline{
+  display:block;margin-top:10px;padding-top:9px;border-top:1.5px dashed var(--line);
+  font-size:var(--fs-2);color:var(--muted);line-height:1.5;
+}
+.avgline .ic{vertical-align:-3px;margin-right:5px}
+.avgline b{color:var(--ink);font-family:var(--f-display);font-weight:800;font-variant-numeric:tabular-nums;white-space:nowrap}
+.linkbtn{
+  display:flex;align-items:center;justify-content:center;gap:4px;width:100%;margin-top:10px;
+  height:44px;border-radius:var(--r);background:var(--brand-tint);color:var(--brand-deep);
+  font-size:var(--fs-2);font-weight:700;
+}
+
+/* ---------- sticky action bar ---------- */
+.actionbar{
+  position:fixed;left:0;right:0;bottom:calc(60px + env(safe-area-inset-bottom));z-index:35;
+  background:var(--card);box-shadow:var(--e2);border-top:1px solid var(--line);
+  display:none;align-items:center;gap:10px;padding:8px 12px;
+}
+.actionbar.is-on{display:flex}
+.actionbar__p{line-height:1.1}
+.actionbar__p span{display:block;font-size:var(--fs-1);color:var(--muted);font-weight:600}
+.actionbar__p span.price{font-size:var(--fs-5);color:var(--brand-deep);font-weight:800;margin-top:2px}
+.cta{
+  margin-left:auto;background:var(--brand-deep);color:#fff;border-radius:var(--r);
+  height:46px;padding:0 18px;font-size:var(--fs-3);font-weight:700;display:inline-flex;align-items:center;gap:6px;
+  white-space:nowrap;
+  transition:background var(--t-micro) var(--ease),transform var(--t-micro) var(--ease);
+}
+.cta:hover{background:#9E440C}
+.cta:active{transform:scale(.97)}
+.cta--full{margin-left:0;width:100%;justify-content:center}
+
+/* ---------- cart ---------- */
+.cartgrp{background:var(--card);margin-bottom:8px}
+.cartgrp__h{display:flex;align-items:center;gap:8px;padding:10px 12px;border-bottom:1px solid var(--line-2)}
+.cartgrp__h .vend{font-size:var(--fs-1);font-weight:800;color:var(--brand-deep);background:var(--brand-tint);padding:2px 6px;border-radius:var(--r-flag);font-family:var(--f-display)}
+.cartgrp__h h3{font-size:var(--fs-4)}
+.cartgrp__h p{margin:1px 0 0;font-size:var(--fs-1);color:var(--muted)}
+.citem{display:flex;gap:10px;padding:10px 12px;border-bottom:1px solid var(--line-2)}
+.citem .thumb{width:56px;height:56px;border-radius:var(--r-flag);flex:none}
+.citem .ph .ic{width:20px;height:20px}
+.citem__n{font-size:var(--fs-3);font-weight:600}
+.stepper{display:flex;align-items:center;gap:0;margin-left:auto;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;align-self:flex-end}
+.stepper button{width:var(--tap);height:36px;display:grid;place-items:center;color:var(--brand-deep)}
+.stepper button:active{background:var(--brand-tint)}
+.stepper span{width:34px;text-align:center;font-family:var(--f-display);font-weight:700;font-size:var(--fs-2);border-left:1px solid var(--line);border-right:1px solid var(--line)}
+.cartgrp__f{display:flex;align-items:center;padding:9px 12px;font-size:var(--fs-2)}
+.cartgrp__f b{margin-left:auto;font-family:var(--f-display);font-size:var(--fs-4);font-weight:800;font-variant-numeric:tabular-nums}
+.savepanel{
+  margin:0 12px 8px;background:var(--mura-bg);border-radius:var(--r);padding:11px 12px;
+  display:flex;align-items:center;gap:9px;color:var(--mura);
+}
+.savepanel b{font-family:var(--f-display);font-weight:800;font-size:var(--fs-4)}
+.savepanel p{margin:1px 0 0;font-size:var(--fs-1);color:var(--ink-2)}
+
+/* ---------- orders / chats / profile ---------- */
+.ocard{background:var(--card);border-radius:var(--r);margin:0 12px 8px;overflow:hidden;box-shadow:var(--e1)}
+.ocard__h{display:flex;align-items:center;gap:8px;padding:10px 12px;border-bottom:1px solid var(--line-2)}
+.ocard__h .num{font-size:var(--fs-2);font-weight:700}
+.status{
+  margin-left:auto;font-size:var(--fs-1);font-weight:800;letter-spacing:.05em;padding:3px 7px;border-radius:var(--r-flag);
+  font-family:var(--f-display);
+}
+.status--ready{background:var(--mura-bg);color:var(--mura)}
+.status--pending{background:#FDF0DA;color:#8A5A05}
+.status--done{background:var(--line-2);color:var(--muted)}
+.ocard__b{padding:10px 12px;font-size:var(--fs-2);color:var(--ink-2)}
+.ocard__b li{display:flex;gap:6px;padding:2px 0}
+.ocard__b li b{margin-left:auto;font-family:var(--f-display);font-variant-numeric:tabular-nums;color:var(--ink)}
+.ocard__f{display:flex;align-items:center;gap:8px;padding:9px 12px;border-top:1px solid var(--line-2);font-size:var(--fs-1);color:var(--muted)}
+.ocard__f .price-sm{margin-left:auto;font-size:var(--fs-4)}
+.tabsrow{display:flex;gap:0;background:var(--card);border-bottom:1px solid var(--line);position:sticky;top:60px;z-index:30}
+.tabsrow button{flex:1;min-height:46px;font-size:var(--fs-3);font-weight:600;color:var(--muted);border-bottom:2.5px solid transparent}
+.tabsrow button.is-on{color:var(--brand-deep);border-color:var(--brand-deep);font-weight:700}
+.chatrow{display:flex;gap:10px;align-items:center;padding:11px 12px;background:var(--card);border-bottom:1px solid var(--line-2);width:100%;text-align:left}
+.chatrow .thumb{width:44px;height:44px;border-radius:var(--r-pill);flex:none}
+.chatrow .ph .ic{width:18px;height:18px}
+.chatrow__n{font-size:var(--fs-3);font-weight:600}
+.chatrow__p{font-size:var(--fs-2);color:var(--muted);margin-top:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:56vw}
+.chatrow__t{margin-left:auto;text-align:right;flex:none;font-size:var(--fs-1);color:var(--muted)}
+.chatrow__t .dot2{display:inline-grid;place-items:center;min-width:18px;height:18px;border-radius:var(--r-pill);background:var(--brand-deep);color:#fff;font-size:var(--fs-1);font-weight:800;margin-top:4px;font-family:var(--f-display)}
+.prof{background:var(--card);padding:14px 12px;display:flex;align-items:center;gap:12px}
+.prof .avatar{width:52px;height:52px;border-radius:var(--r-pill);background:var(--brand-tint);display:grid;place-items:center;color:var(--brand-deep)}
+.prof h2{font-size:var(--fs-5)}
+.prof p{margin:1px 0 0;font-size:var(--fs-2);color:var(--muted)}
+.unlock{background:var(--card);margin-top:8px;padding:12px}
+.unlock li{display:flex;align-items:center;gap:8px;min-height:var(--tap);font-size:var(--fs-3);color:var(--ink-2);border-bottom:1px solid var(--line-2)}
+.unlock li:last-child{border:0}
+.unlock li .ic{color:var(--brand-deep)}
+
+/* ---------- bottom sheet ---------- */
+.sheet{position:fixed;inset:0;z-index:60;display:none}
+.sheet.is-open{display:block}
+.sheet__bd{position:absolute;inset:0;background:rgba(38,16,6,.5)}
+.sheet__p{
+  position:absolute;left:0;right:0;bottom:0;background:var(--bg);
+  border-radius:14px 14px 0 0;max-height:88vh;display:flex;flex-direction:column;
+  transform:translateY(100%);transition:transform var(--t-std) var(--ease);
+}
+.sheet.is-open .sheet__p{transform:none}
+.sheet__grab{width:36px;height:4px;border-radius:var(--r-pill);background:var(--line);margin:8px auto 0}
+.sheet__h{padding:10px 14px 10px;border-bottom:1px solid var(--line)}
+.sheet__h h2{font-size:var(--fs-5)}
+.sheet__h p{margin:2px 0 0;font-size:var(--fs-2);color:var(--muted);padding-right:44px}
+.sheet__save{
+  margin:8px 0 0;display:flex;align-items:center;gap:7px;background:var(--mura-bg);color:var(--mura);
+  border-radius:var(--r-flag);padding:6px 8px;font-size:var(--fs-2);font-weight:600;
+}
+.sheet__save b{font-family:var(--f-display);font-weight:800;font-variant-numeric:tabular-nums}
+.sheet__x{position:absolute;top:8px;right:8px;width:44px;height:44px;border-radius:var(--r-pill);display:grid;place-items:center;color:var(--muted)}
+.sheet__body{overflow-y:auto;padding:10px 14px 18px}
+.sortrow{display:flex;flex-direction:column;gap:2px}
+.sortrow button{display:flex;align-items:center;gap:8px;min-height:48px;padding:0 4px;font-size:var(--fs-3);font-weight:500;border-bottom:1px solid var(--line-2);text-align:left}
+.sortrow button .ic{margin-left:auto;color:var(--brand-deep);opacity:0}
+.sortrow button.is-on{font-weight:700;color:var(--brand-deep)}
+.sortrow button.is-on .ic{opacity:1}
+.cmpchips{display:flex;gap:6px;overflow-x:auto;padding-bottom:10px}
+.cmpchips::-webkit-scrollbar{display:none}
+.sheetcard{background:var(--card);border-radius:var(--r);padding:4px 12px 12px}
+
+/* ---------- scroll to top ---------- */
+.totop{
+  position:fixed;right:12px;bottom:calc(72px + env(safe-area-inset-bottom));z-index:34;
+  width:44px;height:44px;border-radius:var(--r-pill);background:var(--card);color:var(--brand-deep);
+  box-shadow:0 2px 10px rgba(38,16,6,.18);display:none;place-items:center;
+}
+.totop.is-on{display:grid}
+
+/* ---------- bottom tab bar ---------- */
+.tabbar{
+  position:fixed;left:0;right:0;bottom:0;z-index:50;
+  background:var(--card);border-top:1px solid var(--line);
+  display:grid;grid-template-columns:repeat(5,1fr);
+  padding-bottom:env(safe-area-inset-bottom);
+  box-shadow:var(--e2);
+}
+.tab{
+  height:60px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+  color:var(--muted);position:relative;
+  transition:color var(--t-micro) var(--ease);
+}
+.tab span{font-size:var(--fs-1);font-weight:600}
+.tab .ic{width:23px;height:23px}
+.tab.is-on{color:var(--brand-deep)}
+.tab.is-on span{font-weight:700}
+.tab.is-on .ic{fill:var(--brand-tint2);stroke:var(--brand-deep)}
+.tab .dot{top:6px;right:calc(50% - 22px);background:var(--brand-deep);color:#fff;box-shadow:0 0 0 2px var(--card)}
+
+/* =====================  DESKTOP: the same app, widened  ===================== */
+@media (min-width:1024px){
+  body{padding-bottom:0;background:var(--bg)}
+  .shell{display:grid;grid-template-columns:236px minmax(0,1fr);max-width:1600px;margin:0 auto}
+  .rail{
+    display:flex;flex-direction:column;gap:2px;position:sticky;top:0;align-self:start;
+    height:100vh;background:var(--card);border-right:1px solid var(--line);padding:14px 12px;
+  }
+  .rail__brand{display:flex;align-items:center;gap:10px;padding:2px 6px 14px}
+  .rail__brand .wordmark{color:var(--ink)}
+  .rail__brand .wordmark small{color:var(--muted)}
+  .rail a,.rail button.tab{
+    display:flex;flex-direction:row;align-items:center;gap:11px;height:46px;padding:0 12px;
+    border-radius:var(--r);color:var(--ink-2);justify-content:flex-start;
+  }
+  .rail .tab span{font-size:var(--fs-3);font-weight:600}
+  .rail .tab:hover{background:var(--bg)}
+  .rail .tab.is-on{background:var(--brand-tint);color:var(--brand-deep)}
+  .rail .tab .dot{position:static;margin-left:auto;box-shadow:none}
+  .rail__foot{margin-top:auto;background:var(--bg);border-radius:var(--r);padding:11px}
+  .rail__foot h4{font-size:var(--fs-2)}
+  .rail__foot p{margin:3px 0 0;font-size:var(--fs-1);color:var(--muted);line-height:1.4}
+  .tabbar{display:none}
+  .totop{bottom:20px;right:20px}
+
+  .hdr{padding:12px 24px}
+  .hdr__brandrow .mark,.hdr__brandrow .wordmark{display:none}
+  .hdr__inner{max-width:1280px;margin:0 auto;width:100%}
+  .hdr__inner>div{display:flex;align-items:center;gap:18px;width:100%}
+  .hdr__brandrow{margin-bottom:0;order:3;flex:none}
+  .hdr__loc{order:1;margin-bottom:0;width:auto;flex:none;max-width:380px}
+  .hdr__loc .openpill{margin-left:8px}
+  .hdr__search{order:2;flex:1;max-width:620px}
+  .hdr__acts{margin-left:0}
+  .hdr.is-collapsed .hdr__loc{opacity:1;max-height:none;pointer-events:auto}
+  .hdr--sub .hdr__inner>div{gap:12px}
+  .hdr--sub .hdr__acts{margin-left:auto}
+
+  .wrap{max-width:1280px;margin:0 auto;padding:0 24px}
+  .pad{padding-left:24px;padding-right:24px}
+  .sec__head{padding:0 24px 10px}
+  .grid{grid-template-columns:repeat(5,1fr);gap:14px;padding:0 24px;max-width:1328px;margin:0 auto}
+  .cmp-w{display:inline}
+  .cats{padding:16px 24px 4px;gap:16px}
+  .cat,.cat__img{width:76px}
+  .cat__img{height:76px}
+  .promos{padding:16px 24px 0;gap:14px;max-width:1328px;margin:0 auto}
+  .promo{width:calc(50% - 7px);aspect-ratio:2.4/1}
+  .promo__txt h3{font-size:var(--fs-6)}
+  .frow,.srow{padding:0 24px;gap:14px;max-width:1328px;margin:0 auto}
+  .ftile{width:150px}
+  .scard{width:290px}
+  .radar{max-width:1280px;margin:20px auto 0;padding:0}
+  .flash__head,.flash__cd{padding-left:24px;padding-right:24px;max-width:1328px;margin:0 auto}
+  .filterbar{top:68px;padding:10px 24px}
+  .tabsrow{top:68px}
+  .resultline{padding:12px 24px 10px}
+
+  .pd__cols{display:grid;grid-template-columns:minmax(0,440px) minmax(0,1fr);gap:20px;align-items:start;max-width:1280px;margin:0 auto;padding:16px 24px}
+  .pd__cols .gallery{border-radius:var(--r);overflow:hidden;position:sticky;top:92px}
+  .pd__cols .pdblock,.pd__cols .cmpblock{border-radius:var(--r);margin-bottom:12px}
+  /* desktop: the buy bar becomes an in-column buy box, like a marketplace desktop page */
+  .pd{display:flex;flex-direction:column}
+  .pd>*{order:4}
+  .pd>.pdblock:nth-child(1){order:1}
+  .pd>.pdblock:nth-child(2){order:2}
+  .pd>.actionbar{order:3}
+  .actionbar{
+    position:static;border-radius:var(--r);border:1px solid var(--line);
+    box-shadow:none;margin-bottom:12px;padding:12px 14px;
+  }
+  #s-cart .actionbar{position:sticky;bottom:14px;box-shadow:0 6px 20px rgba(38,16,6,.16);max-width:820px;margin-left:24px}
+  .ocard,.savepanel{max-width:820px;margin-left:24px;margin-right:24px}
+  .cartgrp,.chatrow,.prof,.unlock{max-width:820px;margin-left:24px;margin-right:24px;border-radius:var(--r)}
+  .greet{padding:16px 24px 2px}
+
+  .sheet__p{
+    left:50%;right:auto;bottom:auto;top:50%;transform:translate(-50%,-46%);
+    width:min(620px,92vw);border-radius:12px;max-height:82vh;opacity:0;
+    transition:transform var(--t-std) var(--ease),opacity var(--t-std) var(--ease);
+  }
+  .sheet.is-open .sheet__p{transform:translate(-50%,-50%);opacity:1}
+  .sheet__grab{display:none}
+}
+
+/* =====================  REDUCED MOTION  ===================== */
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{
+    animation-duration:.01ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:.01ms !important;
+    scroll-behavior:auto !important;
+  }
+  .pcard:active,.ftile:active,.scard:active,.addbtn:active,.cta:active,.fav:active,.cat:active .cat__img,.iconbtn:active,.fchip:active{transform:none}
+  .promos,.cats,.frow,.srow,.gallery{scroll-snap-type:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ============ ICON SPRITE (one set, Lucide geometry, 24x24) ============ -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
+<symbol id="i-home" viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></symbol>
+<symbol id="i-cart" viewBox="0 0 24 24"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2 3h2.2l2.6 12.4a2 2 0 0 0 2 1.6h9.5a2 2 0 0 0 2-1.6L21.5 7H5.1"/></symbol>
+<symbol id="i-receipt" viewBox="0 0 24 24"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1V2l-2 1-2-1-2 1-2-1-2 1-2-1z"/><path d="M8 8h8"/><path d="M8 12h8"/><path d="M8 16h5"/></symbol>
+<symbol id="i-chat" viewBox="0 0 24 24"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22z"/></symbol>
+<symbol id="i-user" viewBox="0 0 24 24"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
+<symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></symbol>
+<symbol id="i-scan" viewBox="0 0 24 24"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><path d="M7 12h10"/></symbol>
+<symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"/></symbol>
+<symbol id="i-pin" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></symbol>
+<symbol id="i-right" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></symbol>
+<symbol id="i-left" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></symbol>
+<symbol id="i-down" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+<symbol id="i-star" viewBox="0 0 24 24"><path d="M11.5 3.2a.6.6 0 0 1 1 0l2.2 4.5 4.9.7a.6.6 0 0 1 .3 1l-3.5 3.5.8 4.9a.6.6 0 0 1-.8.6L12 16.1l-4.4 2.3a.6.6 0 0 1-.8-.6l.8-4.9-3.5-3.5a.6.6 0 0 1 .3-1l4.9-.7z"/></symbol>
+<symbol id="i-arrowdown" viewBox="0 0 24 24"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></symbol>
+<symbol id="i-arrowup" viewBox="0 0 24 24"><path d="M12 19V5"/><path d="m5 12 7-7 7 7"/></symbol>
+<symbol id="i-sliders" viewBox="0 0 24 24"><path d="M10 5H3"/><path d="M17 5h4"/><circle cx="13.5" cy="5" r="2.5"/><path d="M6 12H3"/><path d="M13 12h8"/><circle cx="9.5" cy="12" r="2.5"/><path d="M10 19H3"/><path d="M17 19h4"/><circle cx="13.5" cy="19" r="2.5"/></symbol>
+<symbol id="i-sort" viewBox="0 0 24 24"><path d="m3 16 4 4 4-4"/><path d="M7 20V4"/><path d="m21 8-4-4-4 4"/><path d="M17 4v16"/></symbol>
+<symbol id="i-heart" viewBox="0 0 24 24"><path d="M19.1 13.9c1.4-1.5 2.4-3.1 2.4-5A4.9 4.9 0 0 0 12 6.6 4.9 4.9 0 0 0 2.5 8.9c0 1.9 1 3.5 2.4 5l7.1 7z"/></symbol>
+<symbol id="i-plus" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="M12 5v14"/></symbol>
+<symbol id="i-minus" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol>
+<symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+<symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></symbol>
+<symbol id="i-store" viewBox="0 0 24 24"><path d="m3 8 1.6-4.4A1 1 0 0 1 5.5 3h13a1 1 0 0 1 .9.6L21 8"/><path d="M3 8h18v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M3 8a3 3 0 0 0 6 0 3 3 0 0 0 6 0 3 3 0 0 0 6 0"/></symbol>
+<symbol id="i-trenddown" viewBox="0 0 24 24"><path d="M22 17 13.5 8.5l-5 5L2 7"/><path d="M16 17h6v-6"/></symbol>
+<symbol id="i-scale" viewBox="0 0 24 24"><path d="M12 3v18"/><path d="M5 8h14"/><path d="m5 8-3 7h6z"/><path d="m19 8-3 7h6z"/></symbol>
+<symbol id="i-basket" viewBox="0 0 24 24"><path d="M5 10h14l-1.3 9.1a2 2 0 0 1-2 1.7H8.3a2 2 0 0 1-2-1.7z"/><path d="m8.5 10 3.5-6.5L15.5 10"/><path d="M9.5 14v3.5"/><path d="M14.5 14v3.5"/></symbol>
+<symbol id="i-flame" viewBox="0 0 24 24"><path d="M12 2c1.5 3.5 5 5 5 9a5 5 0 0 1-10 0c0-1.4.5-2.4 1.2-3.3.4 1.2 1.2 1.8 2 1.8C11.5 7.5 10.5 4.7 12 2z"/></symbol>
+<symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 2.5 4.5 5.5v6c0 4.7 3.2 8.3 7.5 9.9 4.3-1.6 7.5-5.2 7.5-9.9v-6z"/><path d="m9.2 12 2 2 3.6-3.7"/></symbol>
+<symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 8h.01"/></symbol>
+<symbol id="i-leaf" viewBox="0 0 24 24"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.5 19 2c1 2 2 4.2 2 8 0 5.5-4.8 10-10 10z"/><path d="M2 21c0-3 1.9-5.4 5.1-6 2.4-.5 4.9-2 5.9-3"/></symbol>
+<symbol id="i-meat" viewBox="0 0 24 24"><path d="M6 10a6 6 0 0 1 6-6h2a6 6 0 0 1 6 6v4a5 5 0 0 1-5 5h-4a5 5 0 0 1-5-5z"/><circle cx="10.5" cy="13.5" r="2.2"/><path d="M6 10 3 7"/></symbol>
+<symbol id="i-fish" viewBox="0 0 24 24"><path d="M6.5 12c1-3.5 5-6 8.5-6s6.1 2.5 7 6c-.9 3.5-3.5 6-7 6s-7.5-2.5-8.5-6z"/><path d="M6.5 12 2 8v8z"/><path d="M17.5 11h.01"/></symbol>
+<symbol id="i-apple" viewBox="0 0 24 24"><path d="M12 7c-1.5-2.5-4-3-5.5-2C4 6.4 3.5 9 4.4 12.4 5.3 15.8 7.3 20 10 20c1 0 1.5-.5 2-.5s1 .5 2 .5c2.7 0 4.7-4.2 5.6-7.6C20.5 9 20 6.4 17.5 5c-1.5-1-4-.5-5.5 2z"/><path d="M12 7V4"/><path d="M12 4c1.5 0 3-1 3-2"/></symbol>
+<symbol id="i-egg" viewBox="0 0 24 24"><path d="M12 22c-4 0-6.5-2.9-6.5-6.6C5.5 10.5 8.5 2 12 2s6.5 8.5 6.5 13.4C18.5 19.1 16 22 12 22z"/></symbol>
+<symbol id="i-grain" viewBox="0 0 24 24"><path d="M3.5 20.5c6-1 9.5-4.5 11-10.5"/><path d="M8 8.5c1.8-1.8 4.5-2 6-1.5.5 1.5.3 4.2-1.5 6-1.8 1.8-4.5 2-6 1.5-.5-1.5-.3-4.2 1.5-6z"/><path d="M14.5 4c1.5-1.5 3.6-1.7 4.8-1.3.4 1.2.2 3.3-1.3 4.8"/></symbol>
+<symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7.5" height="7.5" rx="1.5"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="1.5"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="1.5"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="1.5"/></symbol>
+</defs></svg>
+
+<div class="shell">
+
+  <!-- ============ DESKTOP RAIL ============ -->
+  <nav class="rail" aria-label="Main">
+    <div class="rail__brand">
+      <span class="mark" aria-hidden="true"><span>PH</span></span>
+      <span class="wordmark"><b>PalengkeHub</b><small>Lipa City Public Market</small></span>
+    </div>
+    <button class="tab is-on" data-go="home"><svg class="ic ic--lg"><use href="#i-home"/></svg><span>Home</span></button>
+    <button class="tab" data-go="cart"><svg class="ic ic--lg"><use href="#i-cart"/></svg><span>PalengKart</span><i class="dot" data-cartcount>3</i></button>
+    <button class="tab" data-go="orders"><svg class="ic ic--lg"><use href="#i-receipt"/></svg><span>Orders</span></button>
+    <button class="tab" data-go="chats"><svg class="ic ic--lg"><use href="#i-chat"/></svg><span>Chats</span><i class="dot">2</i></button>
+    <button class="tab" data-go="profile"><svg class="ic ic--lg"><use href="#i-user"/></svg><span>Profile</span></button>
+    <div class="rail__foot">
+      <h4>Bukas ang Palengke</h4>
+      <p>Monday to Sunday, 5:00 AM to 7:00 PM. Pickup lang, walang delivery fee.</p>
+    </div>
+  </nav>
+
+  <div class="main">
+
+    <!-- ============ HOME HEADER ============ -->
+    <header class="hdr" id="hdrHome">
+      <div class="hdr__inner">
+        <div style="flex:1;min-width:0">
+          <div class="hdr__brandrow">
+            <span class="mark" aria-hidden="true"><span>PH</span></span>
+            <span class="wordmark"><b>PalengkeHub</b><small>Lipa City Public Market</small></span>
+            <div class="hdr__acts">
+              <button class="iconbtn" aria-label="Notifications"><svg class="ic"><use href="#i-bell"/></svg><i class="dot">4</i></button>
+              <button class="iconbtn" data-go="cart" aria-label="PalengKart"><svg class="ic"><use href="#i-cart"/></svg><i class="dot" data-cartcount>3</i></button>
+            </div>
+          </div>
+          <button class="hdr__loc">
+            <svg class="ic"><use href="#i-pin"/></svg>
+            <span>Lipa City Public Market</span>
+            <svg class="ic chev"><use href="#i-down"/></svg>
+            <span class="openpill"><i></i>BUKAS &middot; 5AM to 7PM</span>
+          </button>
+          <div class="hdr__search">
+            <div class="searchbar">
+              <svg class="ic"><use href="#i-search"/></svg>
+              <input type="search" placeholder="Maghanap ng produkto, puwesto..." aria-label="Search products or stalls">
+              <span class="divider"></span>
+              <svg class="ic"><use href="#i-scan"/></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- ============ SUB HEADER ============ -->
+    <header class="hdr hdr--sub" id="hdrSub" hidden>
+      <div class="hdr__inner">
+        <div class="hdr__brandrow" style="margin-bottom:0;width:100%">
+          <button class="iconbtn" id="backBtn" aria-label="Back"><svg class="ic ic--lg"><use href="#i-left"/></svg></button>
+          <span class="title" id="subTitle">Gulay</span>
+          <div class="hdr__acts">
+            <button class="iconbtn" aria-label="Search"><svg class="ic"><use href="#i-search"/></svg></button>
+            <button class="iconbtn" data-go="cart" aria-label="PalengKart"><svg class="ic"><use href="#i-cart"/></svg><i class="dot" data-cartcount>3</i></button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main id="screens">
+
+      <!-- ==================== HOME ==================== -->
+      <section class="screen is-active" id="s-home">
+
+        <div class="greet">
+          <h1 id="greetLine">Magandang umaga</h1>
+          <p>Umorder na, i-pickup sa Pamilihang Bayan ng Lipa.</p>
+        </div>
+
+        <!-- category chips -->
+        <nav class="cats" id="cats" aria-label="Mamili ayon sa Kategorya"></nav>
+
+        <!-- promo carousel -->
+        <div class="promos" id="promos"></div>
+        <div class="dots" id="promoDots"><i class="on"></i><i></i></div>
+
+        <!-- flash sale strip -->
+        <section class="flash">
+          <div class="flash__head">
+            <svg class="ic ic--fill"><use href="#i-flame"/></svg>
+            <h2>Mga Deal Ngayong Araw</h2>
+            <button class="seeall" data-go="browse" data-cat="all">Tingnan Lahat<svg class="ic"><use href="#i-right"/></svg></button>
+          </div>
+          <div class="flash__cd">
+            <span class="countdown" aria-live="off">Matatapos sa <b id="cd-h">00</b>:<b id="cd-m">00</b>:<b id="cd-s">00</b></span>
+          </div>
+          <div class="frow" id="flashRow"></div>
+        </section>
+
+        <!-- price comparison, on the home screen -->
+        <section class="radar">
+          <div class="radar__h">
+            <svg class="ic ic--lg"><use href="#i-scale"/></svg>
+            <div>
+              <h2>Pinakamura Ngayon</h2>
+              <p>Presyo kada yunit, sinusuri sa lahat ng puwesto</p>
+            </div>
+          </div>
+          <div id="radarRows"></div>
+          <div class="radar__f">
+            <svg class="ic ic--sm"><use href="#i-info"/></svg>
+            <span id="radarAvg"></span>
+          </div>
+        </section>
+
+        <!-- top rated stalls -->
+        <section class="sec">
+          <div class="sec__head">
+            <div>
+              <h2>Mga Pinagkakatiwalaang Tindahan</h2>
+              <p>Trusted by our shoppers</p>
+            </div>
+            <button class="seeall" data-go="browse" data-cat="all">Tingnan Lahat<svg class="ic"><use href="#i-right"/></svg></button>
+          </div>
+          <div class="srow" id="stallRow"></div>
+        </section>
+
+        <!-- dense product feed -->
+        <section class="sec">
+          <div class="sec__head">
+            <div>
+              <h2>Presyo Ngayon sa Palengke</h2>
+              <p>Lahat ng presyo ay kada yunit, updated ngayong araw</p>
+            </div>
+          </div>
+          <div class="grid" id="homeGrid"></div>
+        </section>
+
+        <p style="padding:16px 12px 24px;font-size:var(--fs-1);color:var(--muted);line-height:1.5">
+          Pickup lang sa Lipa City Public Market. Walang delivery fee.<br>Bayad via GCash sa mismong puwesto ng vendor.
+        </p>
+      </section>
+
+      <!-- ==================== BROWSE / LISTING ==================== -->
+      <section class="screen" id="s-browse">
+        <div class="filterbar" id="filterbar">
+          <button class="fchip" id="filterBtn"><svg class="ic"><use href="#i-sliders"/></svg>Filters<span class="cnt" id="filterCount" hidden>0</span></button>
+          <button class="fchip" id="sortBtn"><svg class="ic"><use href="#i-sort"/></svg><span id="sortLabel">Pinakamura</span></button>
+          <button class="fchip" data-f="mura">Mura</button>
+          <button class="fchip is-on" data-f="open">Bukas ngayon</button>
+          <button class="fchip" data-f="near">Malapit</button>
+          <button class="fchip" data-f="rating">4.5+</button>
+          <button class="fchip" data-f="promo">May promo</button>
+        </div>
+        <div class="resultline" id="resultLine"></div>
+        <div class="grid" id="browseGrid" style="padding-bottom:20px"></div>
+        <p class="emptyline" id="browseEmpty" hidden>Walang produktong tumugma sa mga filter. Subukang alisin ang isa.</p>
+      </section>
+
+      <!-- ==================== PRODUCT DETAIL ==================== -->
+      <section class="screen" id="s-product">
+        <div class="pd__cols">
+          <div>
+            <div class="gallery" id="gallery"></div>
+          </div>
+          <div class="pd">
+
+            <div class="pdblock">
+              <div class="pd__price">
+                <span class="price-lg" id="pdPrice">&#8369;60</span>
+                <span class="unit" id="pdUnit">/ kg</span>
+              </div>
+              <div class="pd__anchor">
+                <s id="pdWas">&#8369;75</s>
+                <span class="off" id="pdOff">-20%</span>
+                <span id="pdVerdict"></span>
+                <span class="trendpill"><svg class="ic ic--sm"><use href="#i-trenddown"/></svg>Bumaba ang presyo &#8369;15</span>
+              </div>
+              <h1>Kamatis <em>Tomato</em></h1>
+              <div class="trustrow">
+                <span><svg class="ic ic--sm star"><use href="#i-star"/></svg> <b>4.8</b> (127 reviews)</span>
+                <span><b>340</b> benta</span>
+                <span><b>In Stock</b></span>
+              </div>
+              <div class="spread">
+                <svg class="ic"><use href="#i-scale"/></svg>
+                <span id="pdSpread"></span>
+              </div>
+            </div>
+
+            <div class="pdblock">
+              <h3 class="blocktitle">Select Unit</h3>
+              <div class="swatches" id="swatches"></div>
+              <div class="gcashrow"><i></i>GCash lang ang bayad &middot; sundo mo sa Vegetable Section &middot; #12</div>
+            </div>
+
+            <div class="pdblock">
+              <h3 class="blocktitle">Sold by</h3>
+              <div class="stallstrip">
+                <span class="thumb" style="border-radius:999px">
+                  <span class="ph"><svg class="ic"><use href="#i-store"/></svg></span>
+                </span>
+                <div style="min-width:0">
+                  <div class="stallname">Aling Nena Gulayan</div>
+                  <div class="meta meta--stall"><svg class="ic ic--sm star"><use href="#i-star"/></svg><span><b>4.8</b> (312) &middot; Vegetable Section &middot; #12</span></div>
+                </div>
+                <button class="ghostbtn">Bisitahin</button>
+              </div>
+            </div>
+
+            <!-- the signature block -->
+            <div class="cmpblock">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+                <svg class="ic" style="color:var(--brand-deep)"><use href="#i-scale"/></svg>
+                <div>
+                  <h3 class="blocktitle" style="margin:0">Ibang presyo sa ibang puwesto</h3>
+                  <p style="margin:1px 0 0;font-size:var(--fs-1);color:var(--muted)">Sinusukat kada kilo para patas ang paghahambing</p>
+                </div>
+              </div>
+              <div id="pdCompare"></div>
+              <div class="avgline" id="pdAvg"></div>
+              <button class="linkbtn" data-compare="kamatis" id="pdMore">Tingnan lahat ng puwesto<svg class="ic ic--sm"><use href="#i-right"/></svg></button>
+            </div>
+
+            <div class="pdblock">
+              <h3 class="blocktitle">Galaw ng presyo, 30 araw</h3>
+              <div class="spark">
+                <svg viewBox="0 0 240 44" preserveAspectRatio="none" aria-label="30 day price trend, down 12 percent">
+                  <polyline fill="none" stroke="#3B6E23" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    points="2,12 20,10 38,16 56,13 74,20 92,18 110,24 128,21 146,28 164,26 182,31 200,29 218,34 238,33"/>
+                  <circle cx="238" cy="33" r="3.5" fill="#3B6E23"/>
+                </svg>
+                <div style="flex:none;text-align:right">
+                  <div class="price-sm" style="color:var(--mura)">-12%</div>
+                  <div style="font-size:var(--fs-1);color:var(--muted)">ngayong linggo</div>
+                </div>
+              </div>
+              <p class="desc" style="margin:6px 0 0">Bumaba ang presyo ng kamatis ng 12% ngayong linggo. Panahon ng ani sa Batangas kaya marami ang stock.</p>
+            </div>
+
+            <div class="pdblock">
+              <h3 class="blocktitle">Product Details</h3>
+              <p class="desc">Sariwang kamatis mula sa taniman sa Lipa, pinipitas tuwing umaga. Mabigat, matigas at hindi masyadong hinog, bagay sa sinigang, ensalada at sarsa.</p>
+              <dl style="margin:10px 0 0">
+                <div class="kv"><dt>Kategorya</dt><dd>Vegetables &middot; Gulay</dd></div>
+                <div class="kv"><dt>Puwesto</dt><dd>Vegetable Section &middot; #12</dd></div>
+                <div class="kv"><dt>Pickup</dt><dd>Ready in 30 mins</dd></div>
+                <div class="kv"><dt>Bayad</dt><dd>GCash lang</dd></div>
+              </dl>
+            </div>
+
+            <div class="actionbar is-on" id="pdBar">
+              <div class="actionbar__p">
+                <span>Total, 1 kg</span>
+                <span class="price" id="pdTotal">&#8369;60</span>
+              </div>
+              <button class="cta"><svg class="ic ic--sm"><use href="#i-cart"/></svg>Idagdag sa Kart</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== PALENGKART ==================== -->
+      <section class="screen" id="s-cart">
+        <div class="savepanel">
+          <svg class="ic ic--lg"><use href="#i-trenddown"/></svg>
+          <div>
+            <b>Nakatipid ka ng &#8369;58</b>
+            <p>Kumpara sa average na presyo ng palengke para sa 6 na item.</p>
+          </div>
+        </div>
+
+        <div class="cartgrp">
+          <div class="cartgrp__h">
+            <span class="vend">PUWESTO 1 NG 2</span>
+            <div>
+              <h3>Aling Nena Gulayan</h3>
+              <p>Vegetable Section &middot; #12</p>
+            </div>
+          </div>
+          <div class="citem">
+            <span class="thumb"><span class="ph"><svg class="ic"><use href="#i-basket"/></svg></span><img src="../assets/generated/products/product-kamatis.png" alt="" onerror="this.remove()"></span>
+            <div style="flex:1;min-width:0;display:flex;flex-direction:column">
+              <div class="citem__n">Kamatis</div>
+              <div class="meta"><span class="price-sm">&#8369;60</span><span class="unit">/ kg</span><span data-verdict="kamatis"></span></div>
+              <div class="stepper"><button aria-label="Bawasan"><svg class="ic ic--sm"><use href="#i-minus"/></svg></button><span>2</span><button aria-label="Dagdagan"><svg class="ic ic--sm"><use href="#i-plus"/></svg></button></div>
+            </div>
+          </div>
+          <div class="citem">
+            <span class="thumb"><span class="ph"><svg class="ic"><use href="#i-basket"/></svg></span><img src="../assets/generated/products/product-sitaw.png" alt="" onerror="this.remove()"></span>
+            <div style="flex:1;min-width:0;display:flex;flex-direction:column">
+              <div class="citem__n">Sitaw</div>
+              <div class="meta"><span class="price-sm">&#8369;25</span><span class="unit">/ tali</span><span data-verdict="sitaw"></span></div>
+              <div class="stepper"><button aria-label="Bawasan"><svg class="ic ic--sm"><use href="#i-minus"/></svg></button><span>3</span><button aria-label="Dagdagan"><svg class="ic ic--sm"><use href="#i-plus"/></svg></button></div>
+            </div>
+          </div>
+          <div class="cartgrp__f">Stall Total<b>&#8369;195</b></div>
+        </div>
+
+        <div class="cartgrp">
+          <div class="cartgrp__h">
+            <span class="vend">PUWESTO 2 NG 2</span>
+            <div>
+              <h3>Mang Juan's Meat Shop</h3>
+              <p>Meat Section &middot; #07</p>
+            </div>
+          </div>
+          <div class="citem">
+            <span class="thumb"><span class="ph"><svg class="ic"><use href="#i-basket"/></svg></span><img src="../assets/generated/products/product-liempo.png" alt="" onerror="this.remove()"></span>
+            <div style="flex:1;min-width:0;display:flex;flex-direction:column">
+              <div class="citem__n">Liempo</div>
+              <div class="meta"><span class="price-sm">&#8369;165</span><span class="unit">/ 500g</span><span data-verdict="liempo"></span></div>
+              <div class="stepper"><button aria-label="Bawasan"><svg class="ic ic--sm"><use href="#i-minus"/></svg></button><span>1</span><button aria-label="Dagdagan"><svg class="ic ic--sm"><use href="#i-plus"/></svg></button></div>
+            </div>
+          </div>
+          <div class="cartgrp__f">Stall Total<b>&#8369;165</b></div>
+        </div>
+
+        <div style="padding:0 12px 20px;font-size:var(--fs-1);color:var(--muted);line-height:1.5">
+          You are ordering from 2 vendors. You will need to pay each vendor separately via GCash.
+        </div>
+
+        <div class="actionbar is-on">
+          <div class="actionbar__p">
+            <span>Total &middot; 6 items &middot; 2 stalls</span>
+            <span class="price">&#8369;360</span>
+          </div>
+          <button class="cta">Proceed to Checkout<svg class="ic ic--sm"><use href="#i-right"/></svg></button>
+        </div>
+      </section>
+
+      <!-- ==================== ORDERS ==================== -->
+      <section class="screen" id="s-orders">
+        <div class="tabsrow">
+          <button class="is-on">Active (2)</button>
+          <button>History (1)</button>
+        </div>
+        <div style="height:12px"></div>
+        <article class="ocard">
+          <div class="ocard__h">
+            <span class="num">Order #4B21F0A9</span>
+            <span class="status status--ready">READY</span>
+          </div>
+          <div class="ocard__b">
+            <div style="font-weight:600;color:var(--ink);margin-bottom:5px">Aling Nena Gulayan (#12) &middot; Vegetable Section</div>
+            <ul>
+              <li>2x Kamatis (kg)<b>&#8369;120</b></li>
+              <li>3x Sitaw (tali)<b>&#8369;75</b></li>
+            </ul>
+            <div style="margin-top:7px;display:flex;align-items:center;gap:5px;color:var(--mura);font-weight:600;font-size:var(--fs-2)">
+              <svg class="ic ic--sm"><use href="#i-check"/></svg>Ready for Pickup, come pick up your order
+            </div>
+          </div>
+          <div class="ocard__f"><svg class="ic ic--sm"><use href="#i-clock"/></svg>Pickup: Ngayon, 9:30 AM<span class="price-sm">&#8369;195</span></div>
+        </article>
+        <article class="ocard">
+          <div class="ocard__h">
+            <span class="num">Order #9C07E512</span>
+            <span class="status status--pending">PENDING</span>
+          </div>
+          <div class="ocard__b">
+            <div style="font-weight:600;color:var(--ink);margin-bottom:5px">Mang Juan's Meat Shop (#07) &middot; Meat Section</div>
+            <ul><li>1x Liempo (500g)<b>&#8369;165</b></li></ul>
+            <div style="margin-top:7px;font-size:var(--fs-2)">Pending, waiting for vendor confirmation.</div>
+          </div>
+          <div class="ocard__f"><svg class="ic ic--sm"><use href="#i-clock"/></svg>Pickup: Ngayon, 10:15 AM<span class="price-sm">&#8369;165</span></div>
+        </article>
+        <article class="ocard">
+          <div class="ocard__h">
+            <span class="num">Order #71AA30D4</span>
+            <span class="status status--done">COMPLETED</span>
+          </div>
+          <div class="ocard__b">
+            <div style="font-weight:600;color:var(--ink);margin-bottom:5px">Ate Vilma Isdaan (#42) &middot; Fish Section</div>
+            <ul><li>1x Bangus (kg)<b>&#8369;195</b></li></ul>
+          </div>
+          <div class="ocard__f"><svg class="ic ic--sm"><use href="#i-check"/></svg>Nakuha noong Aug 24<span class="price-sm">&#8369;195</span></div>
+        </article>
+        <div style="height:20px"></div>
+      </section>
+
+      <!-- ==================== CHATS ==================== -->
+      <section class="screen" id="s-chats">
+        <div style="height:8px"></div>
+        <button class="chatrow">
+          <span class="thumb"><span class="ph"><svg class="ic"><use href="#i-store"/></svg></span></span>
+          <div style="min-width:0">
+            <div class="chatrow__n">Aling Nena Gulayan</div>
+            <div class="chatrow__p">Handa na po ang kamatis, sundo na lang kayo.</div>
+          </div>
+          <div class="chatrow__t">9:12 AM<br><span class="dot2">2</span></div>
+        </button>
+        <button class="chatrow">
+          <span class="thumb"><span class="ph"><svg class="ic"><use href="#i-store"/></svg></span></span>
+          <div style="min-width:0">
+            <div class="chatrow__n">Mang Juan's Meat Shop</div>
+            <div class="chatrow__p">Sir, wala na pong kasim ngayon. Liempo na lang po?</div>
+          </div>
+          <div class="chatrow__t">8:40 AM</div>
+        </button>
+        <button class="chatrow">
+          <span class="thumb"><span class="ph"><svg class="ic"><use href="#i-store"/></svg></span></span>
+          <div style="min-width:0">
+            <div class="chatrow__n">Ate Vilma Isdaan</div>
+            <div class="chatrow__p">Salamat po sa order, sariwa ang bangus bukas.</div>
+          </div>
+          <div class="chatrow__t">Aug 24</div>
+        </button>
+        <div style="height:20px"></div>
+      </section>
+
+      <!-- ==================== PROFILE ==================== -->
+      <section class="screen" id="s-profile">
+        <div class="prof">
+          <span class="avatar"><svg class="ic ic--lg"><use href="#i-user"/></svg></span>
+          <div>
+            <h2>Guest User</h2>
+            <p>browsing without account</p>
+          </div>
+          <button class="ghostbtn">Sign in</button>
+        </div>
+        <div class="unlock">
+          <h3 class="blocktitle">Sign in to unlock</h3>
+          <ul>
+            <li><svg class="ic ic--sm"><use href="#i-check"/></svg>Save your cart items</li>
+            <li><svg class="ic ic--sm"><use href="#i-check"/></svg>Place orders</li>
+            <li><svg class="ic ic--sm"><use href="#i-check"/></svg>View order history</li>
+            <li><svg class="ic ic--sm"><use href="#i-check"/></svg>Rate stalls</li>
+            <li><svg class="ic ic--sm"><use href="#i-check"/></svg>Save favorite stalls</li>
+          </ul>
+        </div>
+        <div class="unlock">
+          <ul>
+            <li><svg class="ic ic--sm"><use href="#i-shield"/></svg>Privacy Policy</li>
+            <li><svg class="ic ic--sm"><use href="#i-info"/></svg>Help &amp; Support</li>
+            <li><svg class="ic ic--sm"><use href="#i-store"/></svg>Report an Issue</li>
+          </ul>
+        </div>
+        <div style="height:24px"></div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<button class="totop" id="toTop" aria-label="Balik sa itaas"><svg class="ic"><use href="#i-arrowup"/></svg></button>
+
+<!-- ============ BOTTOM TAB BAR ============ -->
+<nav class="tabbar" aria-label="Main">
+  <button class="tab is-on" data-go="home"><svg class="ic"><use href="#i-home"/></svg><span>Home</span></button>
+  <button class="tab" data-go="cart"><svg class="ic"><use href="#i-cart"/></svg><span>PalengKart</span><i class="dot" data-cartcount>3</i></button>
+  <button class="tab" data-go="orders"><svg class="ic"><use href="#i-receipt"/></svg><span>Orders</span></button>
+  <button class="tab" data-go="chats"><svg class="ic"><use href="#i-chat"/></svg><span>Chats</span><i class="dot">2</i></button>
+  <button class="tab" data-go="profile"><svg class="ic"><use href="#i-user"/></svg><span>Profile</span></button>
+</nav>
+
+<!-- ============ COMPARE SHEET ============ -->
+<div class="sheet" id="cmpSheet" role="dialog" aria-modal="true" aria-labelledby="cmpTitle">
+  <div class="sheet__bd" data-close></div>
+  <div class="sheet__p">
+    <div class="sheet__grab"></div>
+    <button class="sheet__x" data-close aria-label="Isara"><svg class="ic"><use href="#i-x"/></svg></button>
+    <div class="sheet__h">
+      <h2 id="cmpTitle">Kamatis</h2>
+      <p id="cmpSub">Presyo ngayon sa 6 na puwesto &middot; sinusukat kada kilo</p>
+      <p class="sheet__save" id="cmpSave"></p>
+    </div>
+    <div class="sheet__body">
+      <div class="cmpchips" id="cmpChips">
+        <button class="fchip is-on" data-cmpsort="price">Presyo kada yunit</button>
+        <button class="fchip" data-cmpsort="near">Pinakamalapit</button>
+        <button class="fchip" data-cmpsort="rating">Pinakamataas na rating</button>
+      </div>
+      <div class="sheetcard" id="cmpRows"></div>
+      <div class="avgline" id="cmpAvg"></div>
+      <p style="margin:12px 0 0;font-size:var(--fs-1);color:var(--muted);line-height:1.5">
+        Ang presyo ay ginawang katumbas kada yunit para patas ang paghahambing. Consider comparing quality before choosing the cheapest option.
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SORT SHEET ============ -->
+<div class="sheet" id="sortSheet" role="dialog" aria-modal="true" aria-labelledby="sortTitle">
+  <div class="sheet__bd" data-close></div>
+  <div class="sheet__p">
+    <div class="sheet__grab"></div>
+    <button class="sheet__x" data-close aria-label="Isara"><svg class="ic"><use href="#i-x"/></svg></button>
+    <div class="sheet__h"><h2 id="sortTitle">Sort By</h2><p>Pinipili ang pagkakasunod ng resulta</p></div>
+    <div class="sheet__body">
+      <div class="sortrow" id="sortRow">
+        <button class="is-on" data-sort="cheap">Pinakamura<svg class="ic ic--sm"><use href="#i-check"/></svg></button>
+        <button data-sort="verdict">Pinakamalaking tipid<svg class="ic ic--sm"><use href="#i-check"/></svg></button>
+        <button data-sort="near">Pinakamalapit<svg class="ic ic--sm"><use href="#i-check"/></svg></button>
+        <button data-sort="rating">Pinakamataas na rating<svg class="ic ic--sm"><use href="#i-check"/></svg></button>
+        <button data-sort="sold">Pinakabenta<svg class="ic ic--sm"><use href="#i-check"/></svg></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* =========================================================================
+   Data. Product names come from the app's Tagalog produce dictionary.
+   Prices, stalls, ratings and promo copy are plausible placeholders
+   (the repo ships no seed data), listed in the build report.
+   Every verdict chip and every PINAKAMURA ribbon on this page is COMPUTED
+   from the product's own compare roster. Nothing is authored by hand.
+   ========================================================================= */
+const PESO  = n => '₱' + Math.round(n).toLocaleString('en-PH');
+const PESO2 = n => '₱' + n.toLocaleString('en-PH',{minimumFractionDigits:2,maximumFractionDigits:2});
+
+/* CV-1: the shared 7-category set, same order in every variant. */
+const CATS = [
+  {key:'gulay', label:'Gulay',  en:'Vegetables', img:'kamatis',   icon:'i-leaf'},
+  {key:'karne', label:'Karne',  en:'Meat',       img:'liempo',    icon:'i-meat'},
+  {key:'isda',  label:'Isda',   en:'Fish',       img:'bangus',    icon:'i-fish'},
+  {key:'prutas',label:'Prutas', en:'Fruits',     img:'mangga',    icon:'i-apple'},
+  {key:'manok', label:'Manok',  en:'Poultry',    img:'manok',     icon:'i-egg'},
+  {key:'bigas', label:'Bigas',  en:'Rice',       img:'bigas',     icon:'i-grain'},
+  {key:'iba',   label:'Iba Pa', en:'Other',      img:'tokwa',     icon:'i-grid'}
+];
+
+/* pos = this stall's rank inside the product's own compare roster (0 = cheapest).
+   The verdict chip and the PINAKAMURA ribbon are both derived from it. */
+const PRODUCTS = [
+  {id:'kamatis',    n:'Kamatis',    en:'Tomato',        p:60,  was:75,  u:'kg',    cat:'gulay', pos:0, stall:'Aling Nena Gulayan',      no:12, sec:'Vegetable Section', r:4.8, sold:340},
+  {id:'talong',     n:'Talong',     en:'Eggplant',      p:75,  was:null,u:'kg',    cat:'gulay', pos:3, stall:'Kuya Boy Fresh Veg',      no:21, sec:'Vegetable Section', r:4.6, sold:212},
+  {id:'sitaw',      n:'Sitaw',      en:'String beans',  p:25,  was:32,  u:'tali',  cat:'gulay', pos:0, stall:'Tindahan ni Mareng Baby', no:33, sec:'Vegetable Section', r:4.9, sold:498},
+  {id:'repolyo',    n:'Repolyo',    en:'Cabbage',       p:90,  was:110, u:'kg',    cat:'gulay', pos:2, stall:'Aling Nena Gulayan',      no:12, sec:'Vegetable Section', r:4.8, sold:167},
+  {id:'kalabasa',   n:'Kalabasa',   en:'Squash',        p:45,  was:null,u:'kg',    cat:'gulay', pos:1, stall:'Mang Ising Gulayan',      no:44, sec:'Vegetable Section', r:4.4, sold:189},
+  {id:'sibuyas',    n:'Sibuyas',    en:'Red onion',     p:120, was:140, u:'kg',    cat:'gulay', pos:1, stall:'Aleng Puring Sari-Sari',  no:58, sec:'Dry Goods',         r:4.2, sold:356},
+  {id:'ampalaya',   n:'Ampalaya',   en:'Bitter gourd',  p:80,  was:null,u:'kg',    cat:'gulay', pos:4, stall:'Kuya Boy Fresh Veg',      no:21, sec:'Vegetable Section', r:4.6, sold:143},
+  {id:'calamansi',  n:'Kalamansi',  en:'Calamansi',     p:80,  was:95,  u:'kg',    cat:'gulay', pos:1, stall:'Kuya Boy Fresh Veg',      no:21, sec:'Vegetable Section', r:4.6, sold:433},
+
+  {id:'liempo',     n:'Liempo',     en:'Pork belly',    p:330, was:null,u:'kg',    cat:'karne', pos:2, stall:"Mang Juan's Meat Shop",   no:7,  sec:'Meat Section',      r:4.7, sold:822},
+  {id:'kasim',      n:'Kasim',      en:'Pork shoulder', p:290, was:null,u:'kg',    cat:'karne', pos:1, stall:'Kuya Dennis Karneria',    no:15, sec:'Meat Section',      r:4.5, sold:401},
+  {id:'giniling',   n:'Giniling',   en:'Ground pork',   p:265, was:290, u:'kg',    cat:'karne', pos:0, stall:'Aling Beth Baboy',        no:23, sec:'Meat Section',      r:4.3, sold:288},
+  {id:'longganisa', n:'Longganisa', en:'Pork sausage',  p:180, was:210, u:'pack',  cat:'karne', pos:3, stall:'Mang Rudy Meats',         no:31, sec:'Meat Section',      r:4.6, sold:512},
+
+  {id:'bangus',     n:'Bangus',     en:'Milkfish',      p:195, was:null,u:'kg',    cat:'isda',  pos:3, stall:'Ate Vilma Isdaan',        no:42, sec:'Fish Section',      r:4.6, sold:389},
+  {id:'tilapia',    n:'Tilapia',    en:'Tilapia',       p:140, was:160, u:'kg',    cat:'isda',  pos:1, stall:'Mang Tino Isdaan',        no:47, sec:'Fish Section',      r:4.5, sold:264},
+  {id:'galunggong', n:'Galunggong', en:'Round scad',    p:220, was:null,u:'kg',    cat:'isda',  pos:2, stall:'Aling Cora Seafood',      no:51, sec:'Fish Section',      r:4.4, sold:197},
+
+  {id:'saging',     n:'Saging',     en:'Latundan',      p:70,  was:85,  u:'kg',    cat:'prutas',pos:2, stall:'Nanay Linda Prutas',      no:5,  sec:'Fruit Section',     r:4.7, sold:274},
+  {id:'mangga',     n:'Mangga',     en:'Carabao mango', p:145, was:null,u:'kg',    cat:'prutas',pos:3, stall:'Nanay Linda Prutas',      no:5,  sec:'Fruit Section',     r:4.7, sold:158},
+  {id:'papaya',     n:'Papaya',     en:'Papaya',        p:55,  was:70,  u:'kg',    cat:'prutas',pos:0, stall:'Ate Baby Prutasan',       no:14, sec:'Fruit Section',     r:4.5, sold:132},
+  {id:'dalandan',   n:'Dalandan',   en:'Native orange', p:95,  was:null,u:'kg',    cat:'prutas',pos:3, stall:'Kuya Jun Fruit Stand',    no:26, sec:'Fruit Section',     r:4.3, sold:118},
+
+  {id:'manok',      n:'Manok',      en:'Chicken',       p:210, was:235, u:'kg',    cat:'manok', pos:1, stall:'Manang Rosa Manukan',     no:9,  sec:'Poultry Section',   r:4.5, sold:611},
+  {id:'itlog',      n:'Itlog',      en:'Egg',           p:10,  was:12,  u:'piraso',cat:'manok', pos:0, stall:'Manang Rosa Manukan',     no:9,  sec:'Poultry Section',   r:4.5, sold:1204},
+  {id:'pecho',      n:'Pecho',      en:'Chicken breast',p:245, was:null,u:'kg',    cat:'manok', pos:2, stall:'Kuya Ariel Manukan',      no:16, sec:'Poultry Section',   r:4.4, sold:233},
+
+  {id:'bigas',      n:'Bigas',      en:'Dinorado',      p:58,  was:null,u:'kg',    cat:'bigas', pos:2, stall:'Ka Tino Bigasan',         no:18, sec:'Rice Section',      r:4.4, sold:940},
+  {id:'sinandomeng',n:'Sinandomeng',en:'Rice',          p:52,  was:null,u:'kg',    cat:'bigas', pos:1, stall:'Aling Marites Bigasan',   no:22, sec:'Rice Section',      r:4.6, sold:727},
+
+  {id:'tokwa',      n:'Tokwa',      en:'Tofu',          p:20,  was:25,  u:'piraso',cat:'iba',   pos:1, stall:'Aleng Puring Sari-Sari',  no:58, sec:'Dry Goods',         r:4.2, sold:174},
+  {id:'bawang',     n:'Bawang',     en:'Garlic',        p:160, was:null,u:'kg',    cat:'iba',   pos:3, stall:'Mang Andoy Dry Goods',    no:61, sec:'Dry Goods',         r:4.3, sold:208}
+];
+
+const STALLS = [
+  {n:'Aling Nena Gulayan',      no:12, sec:'Vegetable Section', r:4.8, rev:312, lo:45,  hi:180, open:true,  img:'repolyo', tags:'Gulay, Prutas'},
+  {n:"Mang Juan's Meat Shop",   no:7,  sec:'Meat Section',      r:4.7, rev:208, lo:180, hi:420, open:true,  img:'liempo',  tags:'Karne, Baboy'},
+  {n:'Ate Vilma Isdaan',        no:42, sec:'Fish Section',      r:4.6, rev:177, lo:120, hi:390, open:true,  img:'bangus',  tags:'Isda, Hipon'},
+  {n:'Nanay Linda Prutas',      no:5,  sec:'Fruit Section',     r:4.7, rev:141, lo:55,  hi:220, open:false, img:'mangga',  tags:'Prutas'},
+  {n:'Ka Tino Bigasan',         no:18, sec:'Rice Section',      r:4.4, rev:96,  lo:52,  hi:78,  open:true,  img:'bigas',   tags:'Bigas, Butil'}
+];
+
+const PROMOS = [
+  {img:'banner-fresh-harvest',  big:'30%', bigSub:'OFF',     kick:'ANI NGAYONG UMAGA', h:'Sariwang ani, hanggang 30% off', p:'Gulay na pinitas kaninang 4 AM sa Lipa. Habang may stock.'},
+  {img:'banner-market-morning', big:'46',  bigSub:'PUWESTO', kick:'PRESYO WATCH',      h:'Ikumpara bago bumili',           p:'Presyo kada kilo mula sa 46 na puwesto, updated araw-araw.'}
+];
+
+/* One roster per category. A product's own stall is placed at its `pos`,
+   so the sheet, the card chip and the ribbon can never disagree. */
+const ROSTERS = {
+  gulay:[
+    {n:'Aling Nena Gulayan',      no:12, sec:'Vegetable Section', r:4.8, d:250, unit:'kg'},
+    {n:'Kuya Boy Fresh Veg',      no:21, sec:'Vegetable Section', r:4.6, d:180, unit:'500g'},
+    {n:'Tindahan ni Mareng Baby', no:33, sec:'Vegetable Section', r:4.9, d:400, unit:'kg'},
+    {n:'Mang Ising Gulayan',      no:44, sec:'Vegetable Section', r:4.4, d:320, unit:'250g'},
+    {n:'Aleng Puring Sari-Sari',  no:58, sec:'Dry Goods',         r:4.2, d:150, unit:'kg'},
+    {n:'Nanay Linda Prutas',      no:5,  sec:'Fruit Section',     r:4.7, d:510, unit:'kg'}
+  ],
+  karne:[
+    {n:"Mang Juan's Meat Shop",   no:7,  sec:'Meat Section', r:4.7, d:210, unit:'kg'},
+    {n:'Kuya Dennis Karneria',    no:15, sec:'Meat Section', r:4.5, d:260, unit:'500g'},
+    {n:'Aling Beth Baboy',        no:23, sec:'Meat Section', r:4.3, d:340, unit:'kg'},
+    {n:'Mang Rudy Meats',         no:31, sec:'Meat Section', r:4.6, d:180, unit:'kg'},
+    {n:'Aling Ising Karneria',    no:38, sec:'Meat Section', r:4.4, d:420, unit:'500g'}
+  ],
+  isda:[
+    {n:'Ate Vilma Isdaan',        no:42, sec:'Fish Section', r:4.6, d:290, unit:'kg'},
+    {n:'Mang Tino Isdaan',        no:47, sec:'Fish Section', r:4.5, d:330, unit:'kg'},
+    {n:'Aling Cora Seafood',      no:51, sec:'Fish Section', r:4.4, d:360, unit:'500g'},
+    {n:'Nanay Sela Isdaan',       no:55, sec:'Fish Section', r:4.2, d:410, unit:'kg'}
+  ],
+  prutas:[
+    {n:'Nanay Linda Prutas',      no:5,  sec:'Fruit Section', r:4.7, d:510, unit:'kg'},
+    {n:'Ate Baby Prutasan',       no:14, sec:'Fruit Section', r:4.5, d:470, unit:'kg'},
+    {n:'Kuya Jun Fruit Stand',    no:26, sec:'Fruit Section', r:4.3, d:530, unit:'500g'},
+    {n:'Aling Marissa Prutas',    no:34, sec:'Fruit Section', r:4.4, d:560, unit:'kg'}
+  ],
+  manok:[
+    {n:'Manang Rosa Manukan',     no:9,  sec:'Poultry Section', r:4.5, d:230, unit:'kg'},
+    {n:'Kuya Ariel Manukan',      no:16, sec:'Poultry Section', r:4.4, d:270, unit:'kg'},
+    {n:'Aling Fely Poultry',      no:28, sec:'Poultry Section', r:4.3, d:310, unit:'kg'},
+    {n:'Mang Tonio Manukan',      no:37, sec:'Poultry Section', r:4.5, d:390, unit:'kg'}
+  ],
+  bigas:[
+    {n:'Ka Tino Bigasan',         no:18, sec:'Rice Section', r:4.4, d:140, unit:'kg'},
+    {n:'Aling Marites Bigasan',   no:22, sec:'Rice Section', r:4.6, d:190, unit:'kg'},
+    {n:'Mang Ben Rice',           no:35, sec:'Rice Section', r:4.3, d:240, unit:'kg'},
+    {n:'Nanay Ester Bigasan',     no:39, sec:'Rice Section', r:4.5, d:300, unit:'kg'}
+  ],
+  iba:[
+    {n:'Aleng Puring Sari-Sari',  no:58, sec:'Dry Goods', r:4.2, d:150, unit:'kg'},
+    {n:'Mang Andoy Dry Goods',    no:61, sec:'Dry Goods', r:4.3, d:200, unit:'kg'},
+    {n:'Ate Susan Sari-Sari',     no:64, sec:'Dry Goods', r:4.1, d:260, unit:'kg'},
+    {n:'Kuya Rey Dry Goods',      no:70, sec:'Dry Goods', r:4.4, d:340, unit:'kg'}
+  ]
+};
+
+/* Price ladders, one per roster length. Deterministic, ascending. */
+const LADDER = {
+  4:[0.91,0.98,1.06,1.15],
+  5:[0.90,0.96,1.02,1.09,1.18],
+  6:[0.88,0.94,1.00,1.06,1.12,1.20]
+};
+const UNIT_DIV = {kg:1, '500g':2, '250g':4, tali:1, piraso:1, pack:1, dozen:1};
+
+/* CV-3: one verdict band for the whole file, plus or minus 5 percent. */
+const BAND = 0.05;
+const verdictOf = (price, avg) => price <= avg*(1-BAND) ? 'mura' : (price >= avg*(1+BAND) ? 'mahal' : 'avg');
+
+/* ------------------------- render helpers ------------------------- */
+const el = (h) => { const t=document.createElement('template'); t.innerHTML=h.trim(); return t.content.firstElementChild; };
+const productImg = (id, alt) =>
+  `<span class="ph"><svg class="ic"><use href="#i-basket"/></svg><b>${alt}</b></span>` +
+  `<img src="../assets/generated/products/product-${id}.png" alt="${alt}" loading="lazy" onerror="this.remove()">`;
+const stars = () => `<svg class="ic ic--sm star"><use href="#i-star"/></svg>`;
+const verdictChip = (v) => v==='mura' ? '<span class="verdict verdict--mura">MURA</span>'
+  : v==='mahal' ? '<span class="verdict verdict--mahal">MAHAL</span>'
+  : '<span class="verdict verdict--avg">KATAMTAMAN</span>';
+
+/* ------------------------- comparison engine ------------------------- */
+function compareRows(productId){
+  const p = PRODUCTS.find(x=>x.id===productId) || PRODUCTS[0];
+  const base = ROSTERS[p.cat] || ROSTERS.gulay;
+  const own  = base.find(s=>s.n===p.stall) || {n:p.stall,no:p.no,sec:p.sec,r:p.r,d:250,unit:'kg'};
+  const others = base.filter(s=>s.n!==own.n);
+  const list = others.slice();
+  list.splice(Math.min(p.pos, others.length), 0, own);
+  const mults = LADDER[list.length] || LADDER[4];
+  const pos   = Math.min(p.pos, mults.length-1);
+  const unitBase = p.p / mults[pos];               // implied market base price
+  const rows = list.map((s,i)=>{
+    const norm = unitBase * mults[i];              // price per the product's own unit
+    const unit = p.u === 'kg' ? s.unit : p.u;      // sub-units only make sense by weight
+    const div  = UNIT_DIV[unit] || 1;
+    return {...s, unit, norm, shown: norm/div, isOwn: s.n===own.n};
+  });
+  const avg = rows.reduce((t,r)=>t+r.norm,0)/rows.length;
+  return {p, rows, avg, ownIndex: rows.findIndex(r=>r.isOwn)};
+}
+/* the card chip: the same function, the same numbers, no authored constants */
+function productVerdict(p){ const {avg} = compareRows(p.id); return verdictOf(p.p, avg); }
+function isCheapest(p){ return p.pos === 0; }
+
+function cmpRowMarkup(r,i,avg,baseUnit){
+  const cheap = i===0;
+  const v = verdictOf(r.norm, avg);
+  const eq = r.unit !== baseUnit
+    ? `<span class="eq">= ${PESO2(r.norm)} / ${baseUnit} katumbas</span>` : '';
+  return `
+  <button class="cmprow ${cheap?'is-best':''}">
+    <span class="rank">${i+1}</span>
+    <span style="min-width:0">
+      <span class="cmprow__n">${r.n}</span>
+      <span class="cmprow__m">${stars()}${r.r} &middot; ${r.sec} &middot; #${r.no} &middot; ${r.d}m${cheap?'<span class="verdict verdict--mura">PINAKAMURA</span>':verdictChip(v)}</span>
+    </span>
+    <span class="cmprow__p">
+      <span class="price-sm">${PESO2(r.shown)}</span><span class="unit">/ ${r.unit}</span>${eq}
+    </span>
+  </button>`;
+}
+
+/* ------------------------- cards ------------------------- */
+function productCard(p, opts){
+  const off  = p.was ? Math.round((p.was-p.p)/p.was*100) : 0;
+  const v    = productVerdict(p);
+  const best = isCheapest(p);
+  const sold = opts && opts.sold;
+  return el(`
+  <article class="pcard" data-product="${p.id}">
+    <div class="thumb">
+      ${productImg(p.id,p.n)}
+      ${best ? '<span class="flag flag--best">PINAKAMURA</span>' : (off? `<span class="flag">-${off}%</span>`:'')}
+      <button class="fav" aria-label="I-save si ${p.n}"><svg class="ic"><use href="#i-heart"/></svg></button>
+    </div>
+    <div class="pcard__b">
+      <h3 class="pcard__t">${p.n} <em>${p.en}</em></h3>
+      <div class="priceline"><span class="price">${PESO(p.p)}</span><span class="unit">/ ${p.u}</span></div>
+      <div class="anchorline">${p.was?`<s>${PESO(p.was)}</s>`:''}${verdictChip(v)}</div>
+      <div class="meta">${stars()}<b>${p.r}</b> &middot; ${p.sold} benta</div>
+      <div class="meta meta--stall"><svg class="ic ic--sm"><use href="#i-store"/></svg><span>${p.stall} &middot; #${p.no}</span></div>
+      ${sold?`<div class="bar"><i style="width:${sold}%"></i></div><div class="pcard__sold">${sold>80?'Paubos na':'Nabenta na '+sold+'%'}</div>`:''}
+      <div class="pcard__foot">
+        <span class="cmpbtn" data-compare="${p.id}"><svg class="ic"><use href="#i-scale"/></svg>Ikumpara ${compareRows(p.id).rows.length}<span class="cmp-w">&nbsp;puwesto</span></span>
+        <button class="addbtn" aria-label="Idagdag sa PalengKart"><svg class="ic"><use href="#i-plus"/></svg></button>
+      </div>
+    </div>
+  </article>`);
+}
+
+function flashTile(p, sold){
+  const off = p.was ? Math.round((p.was-p.p)/p.was*100) : 15;
+  return el(`
+  <button class="ftile" data-product="${p.id}">
+    <div class="thumb">${productImg(p.id,p.n)}<span class="flag">-${off}%</span></div>
+    <div class="ftile__b">
+      <div class="ftile__n">${p.n}</div>
+      <div><span class="price-sm">${PESO(p.p)}</span>${p.was?`<s>${PESO(p.was)}</s>`:''}</div>
+      <div class="ftile__u">kada ${p.u}</div>
+      <div class="bar"><i style="width:${sold}%"></i></div>
+      <div class="ftile__left">${sold>80?'Paubos na':'Nabenta na '+sold+'%'}</div>
+    </div>
+  </button>`);
+}
+
+function stallCard(s){
+  return el(`
+  <button class="scard" data-go="browse" data-cat="all">
+    <div class="thumb">
+      ${productImg(s.img,s.n)}
+      <span class="badge-open ${s.open?'':'is-closed'}">${s.open?'BUKAS':'SARADO'}</span>
+    </div>
+    <div class="scard__b">
+      <div class="scard__n">${s.n}</div>
+      <div class="scard__r">${stars()}<b style="color:var(--ink-2)">${s.r}</b> (${s.rev}) &middot; ${s.sec} &middot; #${s.no}</div>
+      <div class="range"><span class="price-sm">${PESO(s.lo)}</span><small>hanggang</small><span class="price-sm">${PESO(s.hi)}</span><small>/ kg</small></div>
+    </div>
+  </button>`);
+}
+
+/* ------------------------- build the screens ------------------------- */
+const $ = (s,r=document) => r.querySelector(s);
+const $$ = (s,r=document) => [...r.querySelectorAll(s)];
+
+// categories: distinct glyph fallback per chip, so a chip row with zero photos still reads
+$('#cats').append(...CATS.map((c,i)=>el(`
+  <button class="cat ${i===0?'is-on':''}" data-go="browse" data-cat="${c.key}">
+    <span class="cat__img thumb">
+      <span class="ph"><svg class="ic"><use href="#${c.icon}"/></svg></span>
+      <img src="../assets/generated/products/product-${c.img}.png" alt="" loading="lazy" onerror="this.remove()">
+    </span>
+    <span>${c.label}</span>
+  </button>`)));
+
+// promos: the missing-banner state is a designed flat marketplace panel, not a void
+$('#promos').append(...PROMOS.map((b,i)=>el(`
+  <div class="promo thumb ${i?'promo--b':''}">
+    <span class="ph"><span class="ph__big">${b.big}<small>${b.bigSub}</small></span></span>
+    <img src="../assets/generated/banners/${b.img}.png" alt="" loading="lazy"
+         onerror="this.closest('.promo').classList.add('no-img');this.remove()">
+    <span class="promo__scrim"></span>
+    <div class="promo__txt">
+      <span class="promo__kick">${b.kick}</span>
+      <h3>${b.h}</h3>
+      <p>${b.p}</p>
+    </div>
+  </div>`)));
+
+// flash tiles
+const flashSet = ['kamatis','sitaw','manok','saging','calamansi','itlog','repolyo'];
+const soldPct  = [88,72,64,45,91,58,37];
+$('#flashRow').append(...flashSet.map((id,i)=>flashTile(PRODUCTS.find(p=>p.id===id), soldPct[i])));
+
+// price radar rows: only products that actually compute as mura
+const radarSet = ['kamatis','itlog','calamansi'];
+$('#radarRows').append(...radarSet.map(id=>{
+  const p = PRODUCTS.find(x=>x.id===id);
+  return el(`
+  <button class="rrow" data-compare="${p.id}">
+    <span class="thumb">${productImg(p.id,p.n)}</span>
+    <span style="min-width:0">
+      <span class="rrow__n">${p.n}</span>
+      <span class="rrow__m">Pinakamura sa ${p.stall} &middot; #${p.no}</span>
+    </span>
+    <span class="rrow__p">
+      <span class="price-sm">${PESO(p.p)}</span><span class="unit">/ ${p.u}</span>
+      <span style="display:block;margin-top:2px">${verdictChip(productVerdict(p))}</span>
+    </span>
+    <svg class="ic ic--sm" style="color:var(--muted)"><use href="#i-right"/></svg>
+  </button>`);
+}));
+(function(){
+  const {avg,p} = compareRows('kamatis');
+  $('#radarAvg').innerHTML = `Average sa palengke ngayon: <b>${PESO2(avg)} / ${p.u}</b> para sa kamatis`;
+})();
+
+// stalls + home feed (a curated slice, one row of each section of the market)
+$('#stallRow').append(...STALLS.map(stallCard));
+const HOME_FEED = ['kamatis','liempo','bangus','itlog','sitaw','manok','saging','bigas','sibuyas','tilapia','mangga','kasim'];
+const HOME_SOLD = {kamatis:88, sitaw:72, manok:64, saging:45, itlog:58, sibuyas:69};
+$('#homeGrid').append(...HOME_FEED.map(id=>{
+  const p = PRODUCTS.find(x=>x.id===id);
+  return productCard(p, {sold: HOME_SOLD[id]});
+}));
+
+/* ------------------------- browse: real filtering ------------------------- */
+const stallOpen = {}; STALLS.forEach(s=>stallOpen[s.n]=s.open);
+let browseCat = 'gulay';
+let sortMode  = 'cheap';
+const filters = {mura:false, open:true, near:false, rating:false, promo:false};
+
+function ownDistance(p){ const {rows,ownIndex} = compareRows(p.id); return rows[ownIndex] ? rows[ownIndex].d : 999; }
+
+function browseList(){
+  let list = PRODUCTS.filter(p=> browseCat==='all' || p.cat===browseCat);
+  if(filters.mura)   list = list.filter(p=>productVerdict(p)==='mura');
+  if(filters.open)   list = list.filter(p=>stallOpen[p.stall] !== false);
+  if(filters.near)   list = list.filter(p=>ownDistance(p) <= 300);
+  if(filters.rating) list = list.filter(p=>p.r >= 4.5);
+  if(filters.promo)  list = list.filter(p=>!!p.was);
+  const by = {
+    cheap:  (a,b)=>a.p-b.p,
+    verdict:(a,b)=>a.pos-b.pos || a.p-b.p,
+    near:   (a,b)=>ownDistance(a)-ownDistance(b),
+    rating: (a,b)=>b.r-a.r,
+    sold:   (a,b)=>b.sold-a.sold
+  };
+  return list.sort(by[sortMode] || by.cheap);
+}
+function renderBrowse(){
+  const list = browseList();
+  const cat  = CATS.find(c=>c.key===browseCat);
+  const label = browseCat==='all' ? 'lahat ng kategorya' : cat.label;
+  $('#browseGrid').innerHTML = '';
+  $('#browseGrid').append(...list.map(p=>productCard(p)));
+  $('#resultLine').innerHTML = `<b>${list.length}</b>&nbsp;na produkto sa ${label} &middot; presyo kada yunit`;
+  $('#browseEmpty').hidden = list.length > 0;
+  const on = Object.values(filters).filter(Boolean).length;
+  const cnt = $('#filterCount'); cnt.textContent = on; cnt.hidden = on === 0;
+  $('#subTitle').textContent = browseCat==='all' ? 'Lahat ng Produkto' : `${cat.label} (${cat.en})`;
+}
+$$('.filterbar [data-f]').forEach(c=>c.addEventListener('click',()=>{
+  const key = c.dataset.f;
+  filters[key] = !filters[key];
+  c.classList.toggle('is-on', filters[key]);
+  renderBrowse();
+}));
+
+// product detail gallery: product photo + the real market photograph
+$('#gallery').append(
+  el(`<div class="gslide thumb">${productImg('kamatis','Kamatis')}<span class="gcount">1 / 2</span></div>`),
+  el(`<div class="gslide thumb"><span class="ph"><svg class="ic"><use href="#i-store"/></svg><b>Lipa City Public Market</b></span><img src="../02-audit/logo/Lipapublicmarket.jpg" alt="Lipa City Public Market" loading="lazy" onerror="this.remove()"><span class="gcount">2 / 2</span></div>`)
+);
+
+// unit swatches (real unit_options / price_options model)
+const UNITS = [
+  {k:'250g', label:'Per 250g',  mult:0.25},
+  {k:'500g', label:'Per 500g',  mult:0.50},
+  {k:'kg',   label:'Per Kilo',  mult:1.00},
+  {k:'pack', label:'Per Pack',  mult:0.80}
+];
+const BASE = 60;
+function renderSwatches(active){
+  const box = $('#swatches'); box.innerHTML='';
+  UNITS.forEach(u=>{
+    const b = el(`<button class="sw ${u.k===active?'is-on':''}" data-unit="${u.k}">
+      <span>${u.label}</span><b>${PESO(BASE*u.mult)}</b></button>`);
+    b.addEventListener('click',()=>{
+      renderSwatches(u.k);
+      $('#pdPrice').textContent = PESO(BASE*u.mult);
+      $('#pdUnit').textContent  = '/ ' + u.k;
+      $('#pdWas').textContent   = PESO(75*u.mult);
+      $('#pdTotal').textContent = PESO(BASE*u.mult);
+      $('#pdBar').querySelector('span').textContent = 'Total, 1 ' + u.k;
+    });
+    box.append(b);
+  });
+}
+renderSwatches('kg');
+
+/* detail compare block, all figures computed from the kamatis roster */
+function renderDetailCompare(){
+  const {rows,avg,p} = compareRows('kamatis');
+  $('#pdCompare').innerHTML = rows.slice(0,3).map((r,i)=>cmpRowMarkup(r,i,avg,p.u)).join('');
+  const below = rows.filter(r=>verdictOf(r.norm, avg)==='mura').length;
+  $('#pdAvg').innerHTML = `<svg class="ic ic--sm"><use href="#i-info"/></svg>Average sa palengke: <b>${PESO2(avg)} / ${p.u}</b> &middot; ${below} puwesto ang mura kaysa average`;
+  $('#pdMore').innerHTML = `Tingnan lahat ng ${rows.length} na puwesto<svg class="ic ic--sm"><use href="#i-right"/></svg>`;
+  $('#pdSpread').innerHTML = `Presyo ngayon sa <b>${rows.length}</b> na puwesto: <b>${PESO2(rows[0].norm)}</b> hanggang <b>${PESO2(rows[rows.length-1].norm)}</b> kada ${p.u}. Ikaw ay tumitingin sa pinakamura.`;
+  $('#pdVerdict').innerHTML = verdictChip(verdictOf(p.p, avg));
+}
+renderDetailCompare();
+
+/* cart verdict chips use the same engine as the sheet */
+$$('[data-verdict]').forEach(slot=>{
+  const p = PRODUCTS.find(x=>x.id===slot.dataset.verdict);
+  if(p) slot.outerHTML = verdictChip(productVerdict(p));
+});
+
+/* ------------------------- compare sheet ------------------------- */
+let cmpState = {id:'kamatis', sort:'price'};
+function paintCompare(){
+  const {p,rows,avg} = compareRows(cmpState.id);
+  const view = rows.slice();
+  if(cmpState.sort==='near')   view.sort((a,b)=>a.d-b.d);
+  if(cmpState.sort==='rating') view.sort((a,b)=>b.r-a.r);
+  const cheapest = rows[0];
+  $('#cmpTitle').textContent = p.n;
+  $('#cmpSub').innerHTML = `Presyo ngayon sa ${rows.length} na puwesto &middot; sinusukat kada ${p.u}`;
+  $('#cmpSave').innerHTML = `<svg class="ic ic--sm"><use href="#i-trenddown"/></svg>Tipid ka ng <b>${PESO2(avg-cheapest.norm)} / ${p.u}</b> kay ${cheapest.n}`;
+  $('#cmpRows').innerHTML = view.map(r=>cmpRowMarkup(r, rows.indexOf(r), avg, p.u)).join('');
+  const below = rows.filter(r=>verdictOf(r.norm, avg)==='mura').length;
+  $('#cmpAvg').innerHTML = `<svg class="ic ic--sm"><use href="#i-info"/></svg>Average sa palengke: <b>${PESO2(avg)} / ${p.u}</b> &middot; ${below} puwesto ang mura kaysa average`;
+}
+function openCompare(productId){
+  cmpState = {id:productId, sort:'price'};
+  $$('#cmpChips .fchip').forEach(c=>c.classList.toggle('is-on', c.dataset.cmpsort==='price'));
+  paintCompare();
+  openSheet('cmpSheet');
+}
+$$('#cmpChips .fchip').forEach(c=>c.addEventListener('click',()=>{
+  $$('#cmpChips .fchip').forEach(x=>x.classList.remove('is-on'));
+  c.classList.add('is-on');
+  cmpState.sort = c.dataset.cmpsort;
+  paintCompare();
+}));
+
+/* ------------------------- sheets ------------------------- */
+function openSheet(id){ $('#'+id).classList.add('is-open'); document.body.style.overflow='hidden'; }
+function closeSheets(){ $$('.sheet').forEach(s=>s.classList.remove('is-open')); document.body.style.overflow=''; }
+$$('[data-close]').forEach(b=>b.addEventListener('click',closeSheets));
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeSheets(); });
+$('#sortBtn').addEventListener('click',()=>openSheet('sortSheet'));
+$('#filterBtn').addEventListener('click',()=>openSheet('sortSheet'));
+$$('#sortRow button').forEach(b=>b.addEventListener('click',()=>{
+  $$('#sortRow button').forEach(x=>x.classList.remove('is-on'));
+  b.classList.add('is-on');
+  sortMode = b.dataset.sort;
+  $('#sortLabel').textContent = b.textContent.trim();
+  renderBrowse();
+  closeSheets();
+}));
+
+/* ------------------------- router ------------------------- */
+const TABS = {home:'Home', cart:'My PalengKart', orders:'Orders', chats:'Chats', profile:'Profile'};
+let previous = 'home';
+
+function go(name){
+  const target = $('#s-'+name);
+  if(!target) return;
+  const current = $('.screen.is-active');
+  if(current === target) { window.scrollTo({top:0}); return; }
+  if(current) { previous = current.id.replace('s-',''); current.classList.remove('is-active'); }
+  target.classList.add('is-active');
+
+  const isHome = name === 'home';
+  $('#hdrHome').hidden = !isHome;
+  $('#hdrSub').hidden  = isHome;
+  if(!isHome && name !== 'browse'){
+    $('#subTitle').textContent = TABS[name] || (name==='product' ? 'Product Details' : name);
+  }
+  if(!isHome) $('#backBtn').style.display = TABS[name] ? 'none' : 'grid';
+  $$('.tab').forEach(t=>t.classList.toggle('is-on', t.dataset.go===name));
+  window.scrollTo({top:0});
+  $('#hdrHome').classList.remove('is-collapsed');
+}
+document.addEventListener('click',e=>{
+  const cmp = e.target.closest('[data-compare]');
+  if(cmp){ e.preventDefault(); e.stopPropagation(); openCompare(cmp.dataset.compare); return; }
+  const fav = e.target.closest('.fav');
+  if(fav){ e.preventDefault(); e.stopPropagation(); fav.classList.toggle('is-on'); return; }
+  const add = e.target.closest('.addbtn');
+  if(add){
+    e.preventDefault(); e.stopPropagation();
+    $$('[data-cartcount]').forEach(d=>{ const v=Math.min(9,(parseInt(d.textContent,10)||0)+1); d.textContent = v + (v>8?'+':''); });
+    return;
+  }
+  const prod = e.target.closest('[data-product]');
+  if(prod){ go('product'); return; }
+  const nav = e.target.closest('[data-go]');
+  if(nav && nav.dataset.go){
+    if(nav.dataset.cat){
+      browseCat = nav.dataset.cat;
+      if(nav.classList.contains('cat')){
+        $$('#cats .cat').forEach(x=>x.classList.remove('is-on'));
+        nav.classList.add('is-on');
+      }
+      renderBrowse();
+    }
+    go(nav.dataset.go);
+    return;
+  }
+});
+$('#backBtn').addEventListener('click',()=>go(previous==='product'?'browse':previous||'home'));
+
+renderBrowse();
+
+/* ------------------------- header collapse + scroll to top ------------------------- */
+window.addEventListener('scroll',()=>{
+  const y = window.scrollY;
+  $('#hdrHome').classList.toggle('is-collapsed', y > 56);
+  $('#toTop').classList.toggle('is-on', y > 700);
+},{passive:true});
+$('#toTop').addEventListener('click',()=>window.scrollTo({top:0,behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto':'smooth'}));
+
+/* ------------------------- promo dots ------------------------- */
+const promoTrack = $('#promos');
+promoTrack.addEventListener('scroll',()=>{
+  const i = Math.round(promoTrack.scrollLeft / (promoTrack.firstElementChild.offsetWidth + 8));
+  $$('#promoDots i').forEach((d,k)=>d.classList.toggle('on', k===Math.min(i,PROMOS.length-1)));
+},{passive:true});
+
+/* ------------------------- greeting + flash countdown ------------------------- */
+const hour = new Date().getHours();
+$('#greetLine').textContent = hour < 12 ? 'Magandang umaga' : hour < 18 ? 'Magandang hapon' : 'Magandang gabi';
+
+function tick(){
+  const now = new Date();
+  const end = new Date(now); end.setHours(19,0,0,0);        // market closes 7:00 PM
+  if(end <= now) end.setDate(end.getDate()+1);
+  let s = Math.floor((end-now)/1000);
+  $('#cd-h').textContent = String(Math.floor(s/3600)).padStart(2,'0');
+  $('#cd-m').textContent = String(Math.floor(s%3600/60)).padStart(2,'0');
+  $('#cd-s').textContent = String(s%60).padStart(2,'0');
+}
+tick(); setInterval(tick,1000);
+</script>
+</body>
+</html>

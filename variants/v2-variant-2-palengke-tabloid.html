@@ -1,0 +1,1830 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>PalengkeHub - Lipa City Public Market</title>
+<meta name="description" content="Bili online, sundo sa Lipa. Compare prices across stalls at the Lipa City Public Market, then pick up your order.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Barlow+Condensed:wght@600;700;800&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* =========================================================================
+   PalengkeHub - Variant 2 v2 "Palengke Tabloid"
+   Neo-brutalist market poster. Warm newsprint paper, 3px near-black rules,
+   hard offset shadows with zero blur, hand-slapped rotated price stickers,
+   tarpaulin red and yellow, orange as the single CTA.
+   The logo's thick outline is the whole system.
+   Single file. No build. Google Fonts only.
+   ========================================================================= */
+
+:root{
+  /* --- the one place the logo files are referenced --- */
+  --logo-mark:   url("../assets/generated/logo-final/mark.webp");
+  --logo-lockup: url("../assets/generated/logo-final/lockup.webp");
+
+  /* ink and paper */
+  --ink:     #1A1208;
+  --ink-2:   #4A3A28;
+  --muted:   #7A6A55;
+  --paper:   #FFF6EA;
+  --paper-2: #FFFDF7;
+  --rule:    #1A1208;
+
+  /* tarpaulin palette */
+  --red:      #E23D28;
+  --red-deep: #B62A18;
+  --yellow:   #FFC43D;
+  --orange:   #E8833A;   /* CTA ONLY. nothing else is orange. */
+
+  /* flat print fills, used only as poster tile / chip grounds */
+  --leaf: #8CA84B;
+  --sky:  #84BEE0;
+  --tan:  #E2BA87;
+  --tan2: #F0DCC0;
+
+  /* type */
+  --f-post: "Archivo Black","Barlow Condensed",system-ui,sans-serif;
+  --f-cond: "Barlow Condensed","Barlow",system-ui,sans-serif;
+  --f-ui:   "Barlow",system-ui,sans-serif;
+
+  --fs-hero: 38px;  /* poster headline */
+  --fs-d1:   26px;  /* section screamer */
+  --fs-d2:   19px;  /* block heading */
+  --fs-body: 15px;
+  --fs-meta: 12px;
+  --fs-mic:  11px;
+
+  /* shape: exactly two radii, 0 and round */
+  --r:      0px;
+  --r-pill: 999px;
+
+  /* the whole language: hard rules + hard shadows, zero blur */
+  --bd:  3px solid var(--ink);
+  --bd2: 2.5px solid var(--ink);
+  --bd1: 2px solid var(--ink);
+  --sh:  4px 4px 0 var(--ink);
+  --sh-sm: 3px 3px 0 var(--ink);
+
+  /* motion: instant or 100ms, linear. no softness. */
+  --t: 100ms linear;
+
+  --tap: 44px;
+  --hdr: 61px;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--f-ui);
+  font-size:var(--fs-body);
+  line-height:1.35;
+  -webkit-font-smoothing:antialiased;
+  padding-bottom:calc(66px + env(safe-area-inset-bottom));
+  /* faint newsprint tooth */
+  background-image:radial-gradient(rgba(26,18,8,.045) 1px, transparent 1.1px);
+  background-size:6px 6px;
+}
+img{display:block;max-width:100%}
+button{font:inherit;color:inherit;border:0;background:none;padding:0;cursor:pointer}
+a{color:inherit;text-decoration:none}
+h1,h2,h3,h4{margin:0;font-family:var(--f-post);font-weight:400;letter-spacing:-.01em;line-height:.95}
+ul{margin:0;padding:0;list-style:none}
+s{color:var(--muted)}
+:focus-visible{outline:3px solid var(--red);outline-offset:2px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+.num,.pz,.ptag b,.rank{font-family:var(--f-cond);font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1}
+
+/* press feedback: the whole system's one interaction. it drops onto the paper. */
+.pressable{transition:transform var(--t),box-shadow var(--t)}
+.pressable:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--ink)}
+
+/* ---------- icons ---------- */
+.ic{width:20px;height:20px;flex:none;stroke:currentColor;fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.ic--sm{width:14px;height:14px;stroke-width:2.6}
+.ic--lg{width:24px;height:24px}
+.ic--fill{fill:currentColor;stroke:none}
+
+/* =====================  SHELL  ===================== */
+.rail{display:none}
+.main{min-height:100vh}
+
+/* ---------- masthead ---------- */
+.hdr{position:sticky;top:0;z-index:40;background:var(--ink);color:var(--paper)}
+.hdr[hidden]{display:none}
+.plate{display:flex;align-items:center;gap:9px;padding:7px 14px 8px;overflow:hidden;transition:opacity var(--t),max-height var(--t),padding var(--t)}
+.mark{
+  width:36px;height:36px;flex:none;background:var(--paper) var(--logo-mark) center/104% no-repeat;
+  border:var(--bd2);border-color:var(--paper);
+}
+.nameplate{font-family:var(--f-post);font-size:20px;line-height:1;letter-spacing:-.025em;text-transform:uppercase}
+.edition{display:block;font-family:var(--f-cond);font-weight:700;font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--yellow);margin-top:3px}
+.hdr__acts{margin-left:auto;display:flex;gap:4px}
+.iconbtn{width:var(--tap);height:var(--tap);display:grid;place-items:center;position:relative;transition:background var(--t)}
+.iconbtn:active{background:rgba(255,246,234,.16)}
+.dot{
+  position:absolute;top:4px;right:1px;min-width:18px;height:18px;padding:0 4px;
+  background:var(--red);color:var(--paper);border:var(--bd1);border-color:var(--paper);
+  font-family:var(--f-cond);font-size:11px;font-weight:800;line-height:14px;text-align:center;
+}
+.hdr__srch{padding:0 14px 10px;transition:padding var(--t)}
+.srch{display:flex;align-items:stretch;background:var(--paper-2);border:var(--bd);height:48px}
+.srch__i{display:grid;place-items:center;width:40px;color:var(--ink);flex:none}
+.srch input{
+  border:0;outline:0;background:none;flex:1;min-width:0;
+  font:700 15px/1 var(--f-cond);letter-spacing:.05em;text-transform:uppercase;color:var(--ink);
+}
+.srch input::placeholder{color:var(--muted);opacity:1}
+.srch__b{width:48px;flex:none;background:var(--red);color:var(--paper);display:grid;place-items:center;border-left:var(--bd)}
+.hdr.is-collapsed .plate{max-height:0;opacity:0;padding-top:0;padding-bottom:0;pointer-events:none}
+.hdr.is-collapsed .hdr__srch{padding-top:6px;padding-bottom:6px}
+
+/* sub header */
+.hdr--sub .plate{max-height:none;opacity:1;padding-bottom:10px}
+.hdr--sub .title{font-family:var(--f-post);font-size:19px;text-transform:uppercase;letter-spacing:-.02em;line-height:1}
+.hdr--sub .title small{display:block;font-family:var(--f-cond);font-weight:700;font-size:10px;letter-spacing:.13em;color:var(--yellow);margin-top:3px}
+
+/* ---------- the one allowed marquee: the price ticker ---------- */
+.ticker{
+  background:var(--yellow);border-top:var(--bd);border-bottom:var(--bd);
+  overflow:hidden;position:relative;
+}
+.ticker__t{display:flex;width:max-content;animation:tick 42s linear infinite}
+.ticker__g{display:flex;align-items:center;flex:none}
+.ticker i{font-style:normal;display:inline-flex;align-items:center;gap:7px;padding:0 12px;height:34px;
+  font-family:var(--f-cond);font-weight:800;font-size:14px;letter-spacing:.03em;text-transform:uppercase;white-space:nowrap}
+.ticker i b{font-weight:800;font-size:17px}
+.ticker i::after{content:"";width:7px;height:7px;background:var(--ink);transform:rotate(45deg);margin-left:5px}
+@keyframes tick{to{transform:translateX(-50%)}}
+
+/* ---------- screens ---------- */
+.screen{display:none}
+.screen.is-active{display:block}
+.pad{padding:0 14px}
+
+/* ---------- section screamer ---------- */
+.sec{margin-top:22px}
+.sec__head{display:flex;align-items:flex-end;gap:10px;padding:0 14px 10px}
+.sec__head h2{font-size:var(--fs-d1);text-transform:uppercase;line-height:.9}
+.sec__head p{margin:4px 0 0;font-family:var(--f-cond);font-weight:700;font-size:var(--fs-mic);letter-spacing:.11em;text-transform:uppercase;color:var(--muted)}
+.seeall{
+  margin-left:auto;flex:none;display:inline-flex;align-items:center;gap:4px;height:32px;padding:0 9px;
+  border:var(--bd2);background:var(--paper-2);box-shadow:var(--sh-sm);
+  font-family:var(--f-cond);font-weight:800;font-size:12px;letter-spacing:.07em;text-transform:uppercase;
+}
+.rule{height:0;border-top:var(--bd);margin:0 14px}
+.rule--red{border-top-width:7px;border-top-color:var(--red);margin-top:3px}
+
+/* ---------- category tiles ---------- */
+.cats{display:flex;gap:10px;overflow-x:auto;padding:16px 14px 8px;scroll-snap-type:x proximity;scroll-padding-inline-start:14px}
+.cats::-webkit-scrollbar{display:none}
+.cat{flex:none;width:74px;text-align:left;scroll-snap-align:start}
+.cat__t{
+  width:74px;height:74px;border:var(--bd);box-shadow:var(--sh);display:grid;place-items:center;
+  position:relative;overflow:hidden;transition:transform var(--t),box-shadow var(--t);
+}
+.cat:active .cat__t{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--ink)}
+.cat__t .ic{width:34px;height:34px;stroke-width:2.2;position:relative}
+.cat span{display:block;margin-top:7px;font-family:var(--f-cond);font-weight:800;font-size:12px;letter-spacing:.06em;text-transform:uppercase}
+.cat.is-on .cat__t{box-shadow:4px 4px 0 var(--red)}
+.cat.is-on span{text-decoration:underline;text-decoration-thickness:2.5px;text-underline-offset:3px}
+.sk-leaf{background:var(--leaf)}
+.sk-red{background:var(--red);color:var(--paper)}
+.sk-sky{background:var(--sky)}
+.sk-yellow{background:var(--yellow)}
+.sk-tan{background:var(--tan)}
+.sk-tan2{background:var(--tan2)}
+.sk-paper{background:var(--paper-2)}
+
+/* printed pattern overlays for the flat fills */
+.pat::before{content:"";position:absolute;inset:0;pointer-events:none}
+.pat-stripe::before{background:repeating-linear-gradient(45deg,rgba(26,18,8,.11) 0 7px,transparent 7px 15px)}
+.pat-dot::before{background:radial-gradient(rgba(26,18,8,.18) 1.7px,transparent 1.8px);background-size:11px 11px}
+.pat-grid::before{background:
+  repeating-linear-gradient(0deg,rgba(26,18,8,.12) 0 2px,transparent 2px 14px),
+  repeating-linear-gradient(90deg,rgba(26,18,8,.12) 0 2px,transparent 2px 14px)}
+
+/* ---------- media: real photo, or a typographic poster tile ---------- */
+.media{position:relative;overflow:hidden;background:var(--tan2)}
+.shot{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:contrast(1.08) saturate(1.06)}
+.tile{
+  position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;
+  align-items:flex-start;padding:26px 9px 9px;overflow:hidden;color:var(--ink);
+}
+.tile b{
+  font-family:var(--f-post);font-size:var(--tile-fs,32px);line-height:.86;letter-spacing:-.035em;
+  text-transform:uppercase;position:relative;white-space:nowrap;
+}
+.tile i{
+  position:absolute;right:0;bottom:0;z-index:2;
+  font-style:normal;font-family:var(--f-cond);font-weight:800;font-size:10px;letter-spacing:.12em;
+  text-transform:uppercase;background:var(--ink);color:var(--paper);padding:3px 7px 4px;
+  border-left:var(--bd1);border-top:var(--bd1);
+}
+.tile--sm{padding:3px;justify-content:center;align-items:center}
+.tile--sm b{letter-spacing:-.02em}
+
+/* ---------- poster promo ---------- */
+.promos{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;padding:16px 14px 4px;scroll-padding-inline-start:14px}
+.promos::-webkit-scrollbar{display:none}
+.promo{
+  flex:none;width:calc(100% - 24px);scroll-snap-align:center;position:relative;overflow:hidden;
+  border:var(--bd);box-shadow:var(--sh);background:var(--red);color:var(--paper);min-height:250px;
+  padding:12px 13px 15px;
+}
+.promo--b{background:var(--ink)}
+.promo__kick{
+  display:inline-block;background:var(--yellow);color:var(--ink);border:var(--bd2);
+  font-family:var(--f-cond);font-weight:800;font-size:11px;letter-spacing:.13em;text-transform:uppercase;padding:2px 7px;
+  position:relative;z-index:3;
+}
+.promo h3{font-size:var(--fs-hero);text-transform:uppercase;margin-top:10px;max-width:9ch;position:relative;z-index:3;line-height:.88}
+.promo p{margin:9px 0 0;font-size:13px;font-weight:500;max-width:20ch;position:relative;z-index:3;line-height:1.3}
+.promo__cut{
+  position:absolute;right:-24px;bottom:-24px;width:172px;height:172px;border-radius:var(--r-pill);
+  border:var(--bd);overflow:hidden;background:var(--paper);z-index:1;
+}
+.promo__cut img{width:100%;height:100%;object-fit:cover}
+.promo--b .promo__cut{border-radius:0;right:0;bottom:0;width:150px;height:118px}
+.promo--b .promo__cut img{filter:grayscale(1) contrast(1.35) brightness(1.05)}
+.promo--b .promo__cut::after{content:"";position:absolute;inset:0;background:var(--red);mix-blend-mode:multiply;opacity:.72}
+.ptag--promo{position:absolute;right:96px;bottom:20px;z-index:4}
+.dots{display:flex;gap:6px;padding:10px 14px 0}
+.dots i{width:22px;height:7px;background:var(--paper-2);border:var(--bd1);display:block}
+.dots i.on{background:var(--ink)}
+
+/* ---------- the price sticker: hand slapped, always tilted ---------- */
+.ptag{
+  display:inline-flex;align-items:baseline;gap:4px;background:var(--yellow);color:var(--ink);
+  border:var(--bd2);box-shadow:var(--sh-sm);padding:3px 8px 4px;
+  transform:rotate(var(--tilt,-2deg));
+}
+.ptag b{font-weight:800;font-size:var(--tag-fs,27px);line-height:.9;letter-spacing:-.02em}
+.ptag i{font-style:normal;font-family:var(--f-cond);font-weight:800;font-size:12px;letter-spacing:.05em;text-transform:uppercase}
+.ptag--lg{--tag-fs:52px;padding:5px 12px 7px;box-shadow:5px 5px 0 var(--ink)}
+.ptag--sm{--tag-fs:20px;box-shadow:2px 2px 0 var(--ink);padding:2px 6px 3px}
+
+/* ---------- stamps ---------- */
+.stamp{
+  display:inline-block;font-family:var(--f-cond);font-weight:800;font-size:var(--fs-mic);
+  letter-spacing:.09em;text-transform:uppercase;border:var(--bd1);padding:2px 5px;line-height:1.15;
+}
+.stamp--mura{background:var(--yellow);color:var(--ink)}
+.stamp--mahal{background:var(--red-deep);color:var(--paper)}
+.stamp--avg{background:transparent;color:var(--ink-2)}
+.flag{
+  position:absolute;top:0;left:0;z-index:3;background:var(--red);color:var(--paper);
+  border-right:var(--bd2);border-bottom:var(--bd2);
+  font-family:var(--f-cond);font-weight:800;font-size:var(--fs-mic);letter-spacing:.09em;
+  padding:3px 7px 4px;
+}
+.flag--best{background:var(--ink);color:var(--yellow)}
+.fav{
+  position:absolute;top:0;right:0;z-index:3;width:38px;height:38px;display:grid;place-items:center;
+  background:var(--paper-2);border-left:var(--bd2);border-bottom:var(--bd2);color:var(--ink);
+}
+.fav .ic{width:17px;height:17px}
+.fav.is-on{background:var(--red);color:var(--paper)}
+.fav.is-on .ic{fill:currentColor}
+
+/* ---------- deals band ---------- */
+.deals{margin-top:22px;background:var(--red);color:var(--paper);border-top:var(--bd);border-bottom:var(--bd);padding:14px 0 18px}
+.deals__head{display:flex;align-items:center;gap:9px;padding:0 14px}
+.deals__head h2{font-size:var(--fs-d1);text-transform:uppercase}
+.deals .seeall{background:var(--paper-2);color:var(--ink)}
+.cd{display:flex;align-items:center;gap:6px;padding:9px 14px 12px;font-family:var(--f-cond);font-weight:700;font-size:12px;letter-spacing:.09em;text-transform:uppercase}
+.cd b{background:var(--ink);color:var(--yellow);border:var(--bd2);border-color:var(--paper);padding:2px 6px;font-size:16px;font-weight:800;min-width:30px;text-align:center}
+.frow{display:flex;gap:12px;overflow-x:auto;padding:0 14px 4px;scroll-snap-type:x proximity;scroll-padding-inline-start:14px}
+.frow::-webkit-scrollbar{display:none}
+.ftile{flex:none;width:132px;scroll-snap-align:start;background:var(--paper-2);color:var(--ink);border:var(--bd);box-shadow:var(--sh);text-align:left}
+.ftile .media{aspect-ratio:1/1;border-bottom:var(--bd)}
+.ftile__b{padding:8px}
+.ftile__n{font-family:var(--f-cond);font-weight:800;font-size:14px;letter-spacing:.04em;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ftile .pz{font-weight:800;font-size:23px;line-height:1}
+.ftile s{font-family:var(--f-cond);font-weight:700;font-size:12px;margin-left:4px}
+.bar{height:9px;border:var(--bd1);background:var(--paper);margin-top:7px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--red)}
+.ftile__left{font-family:var(--f-cond);font-weight:800;font-size:11px;letter-spacing:.07em;text-transform:uppercase;margin-top:4px}
+
+/* ---------- product card ---------- */
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 14px;padding:0 14px}
+.pcard{
+  background:var(--paper-2);border:var(--bd);box-shadow:var(--sh);text-align:left;
+  display:flex;flex-direction:column;position:relative;min-width:0;
+}
+.pcard:nth-child(2n){--tilt:2deg}
+.pcard .media{aspect-ratio:1/1;border-bottom:var(--bd)}
+.pcard__b{padding:0 8px 8px;display:flex;flex-direction:column;flex:1}
+.pcard .ptag{align-self:flex-start;margin:-17px 0 6px 4px;position:relative;z-index:3}
+.pcard__t{font-family:var(--f-cond);font-weight:800;font-size:16px;letter-spacing:.03em;text-transform:uppercase;line-height:1.05}
+.pcard__t em{display:block;font-style:normal;font-family:var(--f-ui);font-weight:500;font-size:11px;letter-spacing:0;text-transform:none;color:var(--muted);margin-top:1px}
+.pcard__row{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:6px;min-height:20px}
+.pcard__row s{font-family:var(--f-cond);font-weight:700;font-size:13px}
+.meta{display:flex;align-items:center;gap:5px;font-size:var(--fs-meta);color:var(--ink-2);font-weight:500;margin-top:5px;line-height:1.2}
+.meta .ic{width:13px;height:13px}
+.meta b{font-weight:700;color:var(--ink)}
+.meta--stall{white-space:nowrap;overflow:hidden}
+.meta--stall span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:var(--f-cond);font-weight:700;font-size:12px;letter-spacing:.04em;text-transform:uppercase}
+.pcard__sold{font-family:var(--f-cond);font-weight:800;font-size:11px;letter-spacing:.07em;text-transform:uppercase;margin-top:4px}
+.pcard__foot{display:flex;align-items:stretch;gap:8px;margin-top:auto;padding-top:9px}
+.cmpbtn{
+  flex:1;min-width:0;display:flex;align-items:center;gap:5px;height:40px;padding:0 7px;
+  border:var(--bd2);background:var(--paper);box-shadow:var(--sh-sm);
+  font-family:var(--f-cond);font-weight:800;font-size:12px;letter-spacing:.05em;text-transform:uppercase;
+  white-space:nowrap;overflow:hidden;
+}
+.cmpbtn .ic{width:15px;height:15px;flex:none}
+.cmp-w{display:none}
+.addbtn{
+  width:40px;height:40px;flex:none;background:var(--orange);color:var(--ink);
+  border:var(--bd2);box-shadow:var(--sh-sm);display:grid;place-items:center;
+}
+.addbtn .ic{width:20px;height:20px;stroke-width:3.2}
+
+/* ---------- price radar: the printed price list ---------- */
+.radar{margin:22px 14px 0;border:var(--bd);box-shadow:var(--sh);background:var(--paper-2)}
+.radar__h{background:var(--ink);color:var(--paper);padding:10px 12px;display:flex;align-items:center;gap:9px}
+.radar__h h2{font-size:var(--fs-d2);text-transform:uppercase}
+.radar__h p{margin:3px 0 0;font-family:var(--f-cond);font-weight:700;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--yellow)}
+.rrow{display:flex;align-items:center;gap:10px;padding:9px 12px;width:100%;min-height:60px;text-align:left;border-top:var(--bd1)}
+.rrow:first-child{border-top:0}
+.rrow .media{width:44px;height:44px;flex:none;border:var(--bd1)}
+.rrow__n{display:block;font-family:var(--f-cond);font-weight:800;font-size:17px;letter-spacing:.03em;text-transform:uppercase;line-height:1}
+.rrow__m{display:block;font-size:11px;color:var(--muted);margin-top:3px}
+.rrow__p{margin-left:auto;text-align:right;flex:none;white-space:nowrap;display:flex;align-items:center;gap:8px}
+.rrow .pz{font-weight:800;font-size:24px;line-height:1}
+.rrow .unit{font-family:var(--f-cond);font-weight:700;font-size:12px;text-transform:uppercase;color:var(--muted)}
+.radar__f{padding:9px 12px;border-top:var(--bd1);background:var(--yellow);display:flex;align-items:center;gap:7px;
+  font-family:var(--f-cond);font-weight:700;font-size:12px;letter-spacing:.05em;text-transform:uppercase}
+.radar__f b{font-weight:800}
+
+/* ---------- stall cards ---------- */
+.srow{display:flex;gap:14px;overflow-x:auto;padding:0 14px 4px;scroll-snap-type:x proximity;scroll-padding-inline-start:14px}
+.srow::-webkit-scrollbar{display:none}
+.scard{flex:none;width:250px;scroll-snap-align:start;background:var(--paper-2);border:var(--bd);box-shadow:var(--sh);text-align:left}
+.scard .media{aspect-ratio:16/9;border-bottom:var(--bd)}
+.scard__b{padding:9px 10px 11px}
+.scard__n{font-family:var(--f-post);font-size:19px;text-transform:uppercase;letter-spacing:-.02em;line-height:.95}
+.scard__r{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted);margin-top:5px}
+.range{margin-top:8px;display:flex;align-items:center;gap:6px;background:var(--ink);color:var(--paper);padding:5px 8px}
+.range .pz{font-weight:800;font-size:19px;line-height:1;color:var(--yellow)}
+.range small{font-family:var(--f-cond);font-weight:700;font-size:10px;letter-spacing:.1em;text-transform:uppercase}
+.badge-open{
+  position:absolute;top:0;right:0;z-index:3;background:var(--yellow);color:var(--ink);
+  border-left:var(--bd2);border-bottom:var(--bd2);
+  font-family:var(--f-cond);font-weight:800;font-size:11px;letter-spacing:.09em;padding:3px 7px 4px;
+}
+.badge-open.is-closed{background:var(--ink);color:var(--paper)}
+
+/* ---------- filter bar ---------- */
+.filterbar{
+  position:sticky;top:var(--hdr);z-index:30;background:var(--paper);
+  display:flex;gap:8px;overflow-x:auto;padding:11px 14px;border-bottom:var(--bd);
+}
+.filterbar::-webkit-scrollbar{display:none}
+.fchip{
+  flex:none;display:inline-flex;align-items:center;gap:5px;height:40px;padding:0 12px;
+  border:var(--bd2);background:var(--paper-2);box-shadow:var(--sh-sm);
+  font-family:var(--f-cond);font-weight:800;font-size:13px;letter-spacing:.05em;text-transform:uppercase;
+}
+.fchip .ic{width:15px;height:15px}
+.fchip.is-on{background:var(--ink);color:var(--paper)}
+.fchip .cnt{background:var(--yellow);color:var(--ink);border:var(--bd1);padding:0 5px;font-weight:800;font-size:11px}
+.fchip .cnt[hidden]{display:none}
+.resultline{padding:12px 14px 10px;font-family:var(--f-cond);font-weight:700;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2)}
+.resultline b{color:var(--ink);font-weight:800}
+.emptyline{padding:28px 14px;text-align:center;font-size:13px;color:var(--muted)}
+
+/* ---------- product detail ---------- */
+.gallery{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;background:var(--paper-2);border-bottom:var(--bd)}
+.gallery::-webkit-scrollbar{display:none}
+.gslide{flex:none;width:100%;aspect-ratio:1/1;scroll-snap-align:center;position:relative}
+.gcount{position:absolute;right:0;bottom:0;background:var(--ink);color:var(--paper);font-family:var(--f-cond);font-weight:800;font-size:11px;letter-spacing:.08em;padding:3px 8px 4px;z-index:3}
+.rubber{
+  position:absolute;left:12px;bottom:14px;z-index:3;transform:rotate(-11deg);
+  border:3px solid var(--red);color:var(--red);background:rgba(255,246,234,.86);
+  font-family:var(--f-post);font-size:17px;letter-spacing:.02em;text-transform:uppercase;padding:5px 10px 6px;
+}
+.pdblock{background:var(--paper-2);border-bottom:var(--bd);padding:14px}
+.pd__price{display:flex;align-items:flex-end;gap:10px;flex-wrap:wrap}
+.pd__anchor{display:flex;align-items:center;gap:8px;margin-top:12px;flex-wrap:wrap}
+.pd__anchor s{font-family:var(--f-cond);font-weight:700;font-size:16px}
+.trendpill{
+  display:inline-flex;align-items:center;gap:5px;background:var(--ink);color:var(--yellow);
+  border:var(--bd1);padding:3px 7px;font-family:var(--f-cond);font-weight:800;font-size:11px;letter-spacing:.06em;text-transform:uppercase;
+}
+.pd h1{font-size:34px;text-transform:uppercase;margin-top:12px;line-height:.9}
+.pd h1 em{display:block;font-style:normal;font-family:var(--f-ui);font-weight:500;font-size:14px;letter-spacing:0;text-transform:none;color:var(--muted);margin-top:5px}
+.trustrow{display:flex;align-items:center;gap:12px;margin-top:10px;font-size:12px;color:var(--muted);flex-wrap:wrap}
+.trustrow b{color:var(--ink);font-weight:700}
+.spread{
+  margin-top:12px;background:var(--yellow);border:var(--bd2);padding:9px 10px;
+  display:flex;align-items:center;gap:9px;font-size:12px;line-height:1.35;
+}
+.spread b{font-family:var(--f-cond);font-weight:800;font-size:15px}
+.blocktitle{font-size:var(--fs-d2);text-transform:uppercase;margin-bottom:10px}
+.swatches{display:flex;gap:9px;flex-wrap:wrap}
+.sw{border:var(--bd2);box-shadow:var(--sh-sm);background:var(--paper);text-align:left;padding:6px 10px 7px;min-width:88px}
+.sw span{display:block;font-family:var(--f-cond);font-weight:700;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.sw b{display:block;font-family:var(--f-cond);font-weight:800;font-size:22px;font-variant-numeric:tabular-nums;line-height:1.05}
+.sw.is-on{background:var(--ink);color:var(--paper)}
+.sw.is-on span{color:var(--yellow)}
+.stallstrip{display:flex;align-items:center;gap:11px}
+.stallstrip .media{width:52px;height:52px;flex:none;border:var(--bd2)}
+.stallname{font-family:var(--f-post);font-size:18px;text-transform:uppercase;letter-spacing:-.02em;line-height:1}
+.ghostbtn{
+  margin-left:auto;flex:none;border:var(--bd2);box-shadow:var(--sh-sm);background:var(--paper);
+  padding:0 13px;height:42px;display:inline-flex;align-items:center;
+  font-family:var(--f-cond);font-weight:800;font-size:13px;letter-spacing:.07em;text-transform:uppercase;
+}
+.spark{display:flex;align-items:center;gap:12px;margin-top:6px;border:var(--bd2);padding:8px 10px;background:var(--paper)}
+.spark svg{flex:1;height:48px}
+.desc{font-size:13px;color:var(--ink-2);line-height:1.55}
+.kv{display:flex;gap:10px;font-size:12px;padding:7px 0;border-bottom:var(--bd1);border-bottom-color:rgba(26,18,8,.18)}
+.kv:last-child{border:0}
+.kv dt{color:var(--muted);width:104px;flex:none;font-family:var(--f-cond);font-weight:700;letter-spacing:.07em;text-transform:uppercase}
+.kv dd{margin:0;font-weight:600}
+.gcashrow{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--ink-2);margin-top:11px}
+.gcashrow i{width:10px;height:10px;background:var(--ink);display:block;flex:none}
+
+/* compare list */
+.cmpblock{background:var(--paper-2);border-bottom:var(--bd);padding:14px}
+.cmprow{display:flex;align-items:center;gap:10px;padding:9px 0;min-height:56px;border-top:var(--bd1);border-top-color:rgba(26,18,8,.2);width:100%;text-align:left}
+.cmprow:first-of-type{border-top:0}
+.rank{
+  width:28px;height:28px;background:var(--ink);color:var(--paper);
+  font-weight:800;font-size:15px;display:grid;place-items:center;flex:none;
+}
+.cmprow.is-best{background:var(--yellow);margin:0 -14px;padding:10px 14px;border:0;box-shadow:inset 0 3px 0 var(--ink),inset 0 -3px 0 var(--ink)}
+.cmprow.is-best .rank{background:var(--red);color:var(--paper)}
+.cmprow__n{display:block;font-family:var(--f-cond);font-weight:800;font-size:16px;letter-spacing:.03em;text-transform:uppercase;line-height:1.05}
+.cmprow__m{display:block;font-size:11px;color:var(--muted);margin-top:4px;line-height:1.6}
+.cmprow.is-best .cmprow__m{color:var(--ink-2)}
+.cmprow__m .stamp{margin-left:5px}
+.cmprow__p{margin-left:auto;text-align:right;flex:none}
+.cmprow__p .pz{display:block;font-weight:800;font-size:22px;line-height:1}
+.cmprow__p .unit{font-family:var(--f-cond);font-weight:700;font-size:11px;text-transform:uppercase;color:var(--muted)}
+.eq{font-size:10px;color:var(--muted);display:block;font-weight:600;margin-top:2px}
+.avgline{
+  display:block;margin-top:12px;padding:9px 10px;background:var(--ink);color:var(--paper);
+  font-size:12px;line-height:1.5;
+}
+.avgline .ic{vertical-align:-3px;margin-right:6px;color:var(--yellow)}
+.avgline b{font-family:var(--f-cond);font-weight:800;color:var(--yellow);white-space:nowrap;font-size:14px}
+.linkbtn{
+  display:flex;align-items:center;justify-content:center;gap:6px;width:100%;margin-top:12px;
+  height:46px;border:var(--bd2);box-shadow:var(--sh-sm);background:var(--paper);
+  font-family:var(--f-cond);font-weight:800;font-size:13px;letter-spacing:.07em;text-transform:uppercase;
+}
+
+/* ---------- sticky action bar ---------- */
+.actionbar{
+  position:fixed;left:0;right:0;bottom:calc(66px + env(safe-area-inset-bottom));z-index:35;
+  background:var(--paper-2);border-top:var(--bd);
+  display:none;align-items:center;gap:12px;padding:9px 14px;
+}
+.actionbar.is-on{display:flex}
+.actionbar__p span{display:block;font-family:var(--f-cond);font-weight:700;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.actionbar__p span.pz{font-weight:800;font-size:28px;color:var(--ink);letter-spacing:-.01em;line-height:1;margin-top:2px}
+.cta{
+  margin-left:auto;background:var(--orange);color:var(--ink);border:var(--bd);box-shadow:var(--sh-sm);
+  height:48px;padding:0 16px;display:inline-flex;align-items:center;gap:8px;white-space:nowrap;
+  font-family:var(--f-cond);font-weight:800;font-size:15px;letter-spacing:.06em;text-transform:uppercase;
+}
+
+/* ---------- cart ---------- */
+.cartgrp{background:var(--paper-2);border-bottom:var(--bd);margin-bottom:0}
+.cartgrp__h{display:flex;align-items:center;gap:10px;padding:11px 14px;background:var(--ink);color:var(--paper)}
+.cartgrp__h .vend{font-family:var(--f-cond);font-weight:800;font-size:10px;letter-spacing:.11em;background:var(--yellow);color:var(--ink);padding:3px 6px;flex:none}
+.cartgrp__h h3{font-size:17px;text-transform:uppercase}
+.cartgrp__h p{margin:3px 0 0;font-size:11px;color:var(--tan)}
+.citem{display:flex;gap:11px;padding:11px 14px;border-bottom:var(--bd1);border-bottom-color:rgba(26,18,8,.2)}
+.citem .media{width:62px;height:62px;flex:none;border:var(--bd2)}
+.citem__b{flex:1;min-width:0;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:7px 10px}
+.citem__n{grid-column:1/-1;font-family:var(--f-cond);font-weight:800;font-size:16px;letter-spacing:.04em;text-transform:uppercase}
+.citem .meta{margin-top:0;flex-wrap:wrap}
+.citem .pz{font-weight:800;font-size:20px}
+.citem .unit{font-family:var(--f-cond);font-weight:700;font-size:11px;text-transform:uppercase;color:var(--muted)}
+.stepper{display:flex;align-items:center;border:var(--bd2);background:var(--paper)}
+.stepper button{width:38px;height:36px;display:grid;place-items:center}
+.stepper button:active{background:var(--yellow)}
+.stepper span{width:34px;text-align:center;font-family:var(--f-cond);font-weight:800;font-size:15px;border-left:var(--bd2);border-right:var(--bd2)}
+.cartgrp__f{display:flex;align-items:center;padding:10px 14px;font-family:var(--f-cond);font-weight:700;font-size:13px;letter-spacing:.08em;text-transform:uppercase}
+.cartgrp__f b{margin-left:auto;font-weight:800;font-size:22px;font-variant-numeric:tabular-nums}
+.savepanel{
+  margin:0;background:var(--yellow);border-bottom:var(--bd);padding:13px 14px;
+  display:flex;align-items:center;gap:11px;
+}
+.savepanel b{font-family:var(--f-post);font-size:22px;text-transform:uppercase;line-height:1}
+.savepanel p{margin:5px 0 0;font-size:12px;color:var(--ink-2)}
+
+/* ---------- orders / chats / profile ---------- */
+.ocard{background:var(--paper-2);border:var(--bd);box-shadow:var(--sh);margin:0 14px 16px}
+.ocard__h{display:flex;align-items:center;gap:9px;padding:10px 12px;border-bottom:var(--bd)}
+.ocard__h .num{font-family:var(--f-cond);font-weight:800;font-size:13px;letter-spacing:.06em}
+.status{margin-left:auto;font-family:var(--f-cond);font-weight:800;font-size:11px;letter-spacing:.1em;padding:3px 7px 4px;border:var(--bd1)}
+.status--ready{background:var(--yellow);color:var(--ink)}
+.status--pending{background:var(--paper);color:var(--ink-2)}
+.status--done{background:var(--ink);color:var(--paper)}
+.ocard__b{padding:11px 12px;font-size:12px;color:var(--ink-2)}
+.ocard__b li{display:flex;gap:8px;padding:3px 0}
+.ocard__b li b{margin-left:auto;font-family:var(--f-cond);font-weight:800;font-size:15px;font-variant-numeric:tabular-nums;color:var(--ink)}
+.ocard__f{display:flex;align-items:center;gap:8px;padding:10px 12px;border-top:var(--bd1);border-top-color:rgba(26,18,8,.2);font-family:var(--f-cond);font-weight:700;font-size:12px;letter-spacing:.06em;text-transform:uppercase}
+.ocard__f .pz{margin-left:auto;font-weight:800;font-size:22px;letter-spacing:0}
+.tabsrow{display:flex;background:var(--paper-2);border-bottom:var(--bd);position:sticky;top:var(--hdr);z-index:30}
+.tabsrow button{flex:1;min-height:48px;font-family:var(--f-cond);font-weight:800;font-size:14px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.tabsrow button.is-on{background:var(--ink);color:var(--paper)}
+.chatrow{display:flex;gap:11px;align-items:center;padding:12px 14px;background:var(--paper-2);border-bottom:var(--bd1);border-bottom-color:rgba(26,18,8,.2);width:100%;text-align:left}
+.chatrow .media{width:48px;height:48px;flex:none;border:var(--bd2)}
+.chatrow__n{font-family:var(--f-cond);font-weight:800;font-size:16px;letter-spacing:.04em;text-transform:uppercase}
+.chatrow__p{font-size:12px;color:var(--muted);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:56vw}
+.chatrow__t{margin-left:auto;text-align:right;flex:none;font-family:var(--f-cond);font-weight:700;font-size:11px;letter-spacing:.05em;color:var(--muted)}
+.chatrow__t .dot2{display:inline-grid;place-items:center;min-width:20px;height:20px;background:var(--red);color:var(--paper);font-weight:800;font-size:11px;margin-top:5px;border:var(--bd1)}
+.prof{background:var(--ink);color:var(--paper);padding:16px 14px;display:flex;align-items:center;gap:13px;border-bottom:var(--bd)}
+.prof .avatar{width:56px;height:56px;background:var(--yellow);border:var(--bd2);border-color:var(--paper);display:grid;place-items:center;color:var(--ink);flex:none}
+.prof h2{font-size:24px;text-transform:uppercase}
+.prof p{margin:4px 0 0;font-family:var(--f-cond);font-weight:700;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--tan)}
+.prof .ghostbtn{background:var(--paper);box-shadow:3px 3px 0 var(--red)}
+.unlock{background:var(--paper-2);border-bottom:var(--bd);padding:14px}
+.unlock li{display:flex;align-items:center;gap:9px;min-height:42px;font-size:14px;color:var(--ink-2);border-bottom:var(--bd1);border-bottom-color:rgba(26,18,8,.18)}
+.unlock li:last-child{border:0}
+.footnote{padding:18px 14px 26px;font-family:var(--f-cond);font-weight:700;font-size:12px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);line-height:1.7}
+
+/* ---------- bottom sheet ---------- */
+.sheet{position:fixed;inset:0;z-index:60;display:none}
+.sheet.is-open{display:block}
+.sheet__bd{position:absolute;inset:0;background:rgba(26,18,8,.62)}
+.sheet__p{
+  position:absolute;left:0;right:0;bottom:0;background:var(--paper);border-top:var(--bd);
+  max-height:88vh;display:flex;flex-direction:column;
+  transform:translateY(100%);transition:transform var(--t);
+}
+.sheet.is-open .sheet__p{transform:none}
+.sheet__h{padding:14px;background:var(--ink);color:var(--paper);position:relative}
+.sheet__h h2{font-size:26px;text-transform:uppercase;padding-right:48px}
+.sheet__h p{margin:6px 0 0;font-family:var(--f-cond);font-weight:700;font-size:11px;letter-spacing:.11em;text-transform:uppercase;color:var(--tan)}
+.sheet__h p.sheet__save{
+  margin:10px 0 0;display:flex;align-items:center;gap:8px;background:var(--yellow);color:var(--ink);
+  border:var(--bd2);border-color:var(--paper);padding:7px 9px;font-family:var(--f-ui);
+  font-size:12px;font-weight:600;letter-spacing:0;text-transform:none;
+}
+.sheet__save b{font-family:var(--f-cond);font-weight:800;font-size:15px}
+.sheet__x{position:absolute;top:10px;right:10px;width:40px;height:40px;display:grid;place-items:center;border:var(--bd2);border-color:var(--paper)}
+.sheet__body{overflow-y:auto;padding:12px 14px 20px}
+.sortrow{display:flex;flex-direction:column}
+.sortrow button{display:flex;align-items:center;gap:9px;min-height:52px;padding:0 12px;background:var(--paper-2);border:var(--bd2);margin-bottom:9px;
+  font-family:var(--f-cond);font-weight:800;font-size:15px;letter-spacing:.05em;text-transform:uppercase;text-align:left}
+.sortrow button .ic{margin-left:auto;opacity:0}
+.sortrow button.is-on{background:var(--ink);color:var(--paper)}
+.sortrow button.is-on .ic{opacity:1;color:var(--yellow)}
+.cmpchips{display:flex;gap:8px;overflow-x:auto;padding-bottom:12px}
+.cmpchips::-webkit-scrollbar{display:none}
+.sheetcard{background:var(--paper-2);border:var(--bd);box-shadow:var(--sh);padding:4px 14px 14px}
+
+/* ---------- scroll to top ---------- */
+.totop{
+  position:fixed;right:14px;bottom:calc(80px + env(safe-area-inset-bottom));z-index:34;
+  width:46px;height:46px;background:var(--yellow);color:var(--ink);border:var(--bd);box-shadow:var(--sh);
+  display:none;place-items:center;
+}
+.totop.is-on{display:grid}
+
+/* ---------- bottom tab bar ---------- */
+.tabbar{
+  position:fixed;left:0;right:0;bottom:0;z-index:50;
+  background:var(--paper-2);border-top:var(--bd);
+  display:grid;grid-template-columns:repeat(5,1fr);
+  padding-bottom:env(safe-area-inset-bottom);
+}
+.tab{
+  height:66px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
+  color:var(--ink-2);position:relative;transition:background var(--t),color var(--t);
+}
+.tab+.tab{border-left:var(--bd1);border-left-color:rgba(26,18,8,.22)}
+.tab span{font-family:var(--f-cond);font-weight:800;font-size:10px;letter-spacing:.07em;text-transform:uppercase}
+.tab .ic{width:23px;height:23px}
+.tab.is-on{background:var(--ink);color:var(--yellow)}
+.tab .dot{top:9px;right:calc(50% - 24px)}
+
+/* =====================  DESKTOP: the broadsheet edition  ===================== */
+@media (min-width:1024px){
+  body{padding-bottom:0}
+  .shell{display:grid;grid-template-columns:250px minmax(0,1fr);max-width:1560px;margin:0 auto;
+    border-left:var(--bd);border-right:var(--bd);background:var(--paper);min-height:100vh}
+  .rail{
+    display:flex;flex-direction:column;gap:9px;position:sticky;top:0;align-self:start;
+    height:100vh;background:var(--paper);border-right:var(--bd);padding:16px 14px;
+  }
+  .rail__brand{padding:0 0 14px;border-bottom:7px solid var(--red)}
+  .rail__lockup{display:block;width:100%;height:52px;background:var(--logo-lockup) left center/contain no-repeat}
+  .rail__brand p{margin:9px 0 0;font-family:var(--f-cond);font-weight:800;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+  .rail .tab{
+    flex-direction:row;justify-content:flex-start;gap:11px;height:48px;padding:0 11px;
+    border:var(--bd2);background:var(--paper-2);box-shadow:var(--sh-sm);
+  }
+  .rail .tab+.tab{border-left:var(--bd2)}
+  .rail .tab span{font-size:14px}
+  .rail .tab .dot{position:static;margin-left:auto;border-color:var(--ink)}
+  .rail .tab.is-on{background:var(--ink);color:var(--yellow);box-shadow:3px 3px 0 var(--red)}
+  .rail__foot{margin-top:auto;background:var(--yellow);border:var(--bd);padding:12px}
+  .rail__foot h4{font-size:17px;text-transform:uppercase}
+  .rail__foot p{margin:6px 0 0;font-size:12px;line-height:1.45}
+  .tabbar{display:none}
+  .totop{bottom:22px;right:22px}
+
+  .hdr{border-bottom:var(--bd)}
+  .hdr__inner{display:flex;align-items:center;gap:22px;padding:11px 26px}
+  /* the rail carries the brand on desktop, so the plate dissolves into the bar */
+  .plate{display:contents}
+  .plate .mark,.plate .nameplate{display:none}
+  .edition{margin-top:0;font-size:11px;white-space:nowrap}
+  .hdr__srch{order:2;flex:1;max-width:640px;padding:0;margin:0 auto}
+  .hdr__acts{order:3;margin-left:auto;flex:none}
+  .hdr--sub .title{flex:none}
+
+  .pad{padding:0 26px}
+  .sec__head{padding:0 26px 12px}
+  .rule{margin:0 26px}
+  .grid{grid-template-columns:repeat(5,minmax(0,1fr));gap:22px 20px;padding:0 26px}
+  /* the poster tiles scale with the wider desktop card */
+  .pcard .tile b{font-size:calc(var(--tile-fs) * 1.34)}
+  .scard .tile b{font-size:calc(var(--tile-fs) * 1.24)}
+  .ftile .tile b{font-size:calc(var(--tile-fs) * 1.28)}
+  .cats{padding:20px 26px 10px;gap:14px}
+  .promos{padding:20px 26px 4px;gap:20px}
+  .promo{width:calc(50% - 10px);min-height:280px;padding:18px 20px 22px;display:flex;flex-direction:column;justify-content:flex-start}
+  .promo h3{font-size:46px;max-width:11ch}
+  .promo__cut{width:210px;height:210px;right:-30px;bottom:-30px}
+  .promo--b .promo__cut{width:230px;height:170px}
+  .ptag--promo{right:130px;bottom:26px}
+  .dots{padding:12px 26px 0}
+  .deals__head,.cd{padding-left:26px;padding-right:26px}
+  .frow,.srow{padding-left:26px;padding-right:26px;gap:20px}
+  .ftile{width:170px}
+  .scard{width:310px}
+  .radar{margin:26px}
+  .filterbar{top:69px;padding:12px 26px}
+  .tabsrow{top:69px}
+  .resultline{padding:14px 26px 12px}
+  .ocard{margin:0 26px 20px;max-width:860px}
+  .cartgrp,.chatrow,.unlock,.savepanel,.prof{max-width:100%}
+  .footnote{padding:22px 26px 30px}
+
+  .pd__cols{display:grid;grid-template-columns:minmax(0,470px) minmax(0,1fr);gap:0;align-items:start}
+  .pd__cols>div:first-child{position:sticky;top:88px;border-right:var(--bd)}
+  .gallery{border-bottom:var(--bd)}
+  .pd{display:flex;flex-direction:column}
+  .pd>*{order:4}
+  .pd>.pdblock:nth-child(1){order:1}
+  .pd>.pdblock:nth-child(2){order:2}
+  .pd>.actionbar{order:3}
+  .actionbar{position:static;border:0;border-bottom:var(--bd);padding:14px}
+  #s-cart .actionbar{position:sticky;bottom:0;border-top:var(--bd)}
+  .pd h1{font-size:44px}
+
+  .sheet__p{
+    left:50%;right:auto;bottom:auto;top:50%;transform:translate(-50%,-50%) scale(.98);
+    width:min(660px,92vw);max-height:84vh;border:var(--bd);box-shadow:10px 10px 0 var(--ink);opacity:0;
+    transition:transform var(--t),opacity var(--t);
+  }
+  .sheet.is-open .sheet__p{transform:translate(-50%,-50%) scale(1);opacity:1}
+}
+
+/* =====================  REDUCED MOTION  ===================== */
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{
+    animation-duration:.01ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:.01ms !important;
+    scroll-behavior:auto !important;
+  }
+  /* the marquee stops and becomes a plain scrollable strip */
+  .ticker__t{animation:none;transform:none}
+  .ticker{overflow-x:auto}
+  .pressable:active,.cat:active .cat__t,.stepper button:active{transform:none}
+  .promos,.cats,.frow,.srow,.gallery{scroll-snap-type:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ============ ICON SPRITE (one set, 24x24) ============ -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
+<symbol id="i-home" viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></symbol>
+<symbol id="i-cart" viewBox="0 0 24 24"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2 3h2.2l2.6 12.4a2 2 0 0 0 2 1.6h9.5a2 2 0 0 0 2-1.6L21.5 7H5.1"/></symbol>
+<symbol id="i-receipt" viewBox="0 0 24 24"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1V2l-2 1-2-1-2 1-2-1-2 1-2-1z"/><path d="M8 8h8"/><path d="M8 12h8"/><path d="M8 16h5"/></symbol>
+<symbol id="i-chat" viewBox="0 0 24 24"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22z"/></symbol>
+<symbol id="i-user" viewBox="0 0 24 24"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
+<symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></symbol>
+<symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"/></symbol>
+<symbol id="i-pin" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></symbol>
+<symbol id="i-right" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></symbol>
+<symbol id="i-left" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></symbol>
+<symbol id="i-star" viewBox="0 0 24 24"><path d="M11.5 3.2a.6.6 0 0 1 1 0l2.2 4.5 4.9.7a.6.6 0 0 1 .3 1l-3.5 3.5.8 4.9a.6.6 0 0 1-.8.6L12 16.1l-4.4 2.3a.6.6 0 0 1-.8-.6l.8-4.9-3.5-3.5a.6.6 0 0 1 .3-1l4.9-.7z"/></symbol>
+<symbol id="i-arrowup" viewBox="0 0 24 24"><path d="M12 19V5"/><path d="m5 12 7-7 7 7"/></symbol>
+<symbol id="i-sliders" viewBox="0 0 24 24"><path d="M10 5H3"/><path d="M17 5h4"/><circle cx="13.5" cy="5" r="2.5"/><path d="M6 12H3"/><path d="M13 12h8"/><circle cx="9.5" cy="12" r="2.5"/><path d="M10 19H3"/><path d="M17 19h4"/><circle cx="13.5" cy="19" r="2.5"/></symbol>
+<symbol id="i-sort" viewBox="0 0 24 24"><path d="m3 16 4 4 4-4"/><path d="M7 20V4"/><path d="m21 8-4-4-4 4"/><path d="M17 4v16"/></symbol>
+<symbol id="i-heart" viewBox="0 0 24 24"><path d="M19.1 13.9c1.4-1.5 2.4-3.1 2.4-5A4.9 4.9 0 0 0 12 6.6 4.9 4.9 0 0 0 2.5 8.9c0 1.9 1 3.5 2.4 5l7.1 7z"/></symbol>
+<symbol id="i-plus" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="M12 5v14"/></symbol>
+<symbol id="i-minus" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol>
+<symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+<symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></symbol>
+<symbol id="i-store" viewBox="0 0 24 24"><path d="m3 8 1.6-4.4A1 1 0 0 1 5.5 3h13a1 1 0 0 1 .9.6L21 8"/><path d="M3 8h18v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M3 8a3 3 0 0 0 6 0 3 3 0 0 0 6 0 3 3 0 0 0 6 0"/></symbol>
+<symbol id="i-trenddown" viewBox="0 0 24 24"><path d="M22 17 13.5 8.5l-5 5L2 7"/><path d="M16 17h6v-6"/></symbol>
+<symbol id="i-scale" viewBox="0 0 24 24"><path d="M12 3v18"/><path d="M5 8h14"/><path d="m5 8-3 7h6z"/><path d="m19 8-3 7h6z"/></symbol>
+<symbol id="i-flame" viewBox="0 0 24 24"><path d="M12 2c1.5 3.5 5 5 5 9a5 5 0 0 1-10 0c0-1.4.5-2.4 1.2-3.3.4 1.2 1.2 1.8 2 1.8C11.5 7.5 10.5 4.7 12 2z"/></symbol>
+<symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 2.5 4.5 5.5v6c0 4.7 3.2 8.3 7.5 9.9 4.3-1.6 7.5-5.2 7.5-9.9v-6z"/><path d="m9.2 12 2 2 3.6-3.7"/></symbol>
+<symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 8h.01"/></symbol>
+<symbol id="i-leaf" viewBox="0 0 24 24"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.5 19 2c1 2 2 4.2 2 8 0 5.5-4.8 10-10 10z"/><path d="M2 21c0-3 1.9-5.4 5.1-6 2.4-.5 4.9-2 5.9-3"/></symbol>
+<symbol id="i-meat" viewBox="0 0 24 24"><path d="M6 10a6 6 0 0 1 6-6h2a6 6 0 0 1 6 6v4a5 5 0 0 1-5 5h-4a5 5 0 0 1-5-5z"/><circle cx="10.5" cy="13.5" r="2.2"/><path d="M6 10 3 7"/></symbol>
+<symbol id="i-fish" viewBox="0 0 24 24"><path d="M6.5 12c1-3.5 5-6 8.5-6s6.1 2.5 7 6c-.9 3.5-3.5 6-7 6s-7.5-2.5-8.5-6z"/><path d="M6.5 12 2 8v8z"/><path d="M17.5 11h.01"/></symbol>
+<symbol id="i-apple" viewBox="0 0 24 24"><path d="M12 7c-1.5-2.5-4-3-5.5-2C4 6.4 3.5 9 4.4 12.4 5.3 15.8 7.3 20 10 20c1 0 1.5-.5 2-.5s1 .5 2 .5c2.7 0 4.7-4.2 5.6-7.6C20.5 9 20 6.4 17.5 5c-1.5-1-4-.5-5.5 2z"/><path d="M12 7V4"/><path d="M12 4c1.5 0 3-1 3-2"/></symbol>
+<symbol id="i-egg" viewBox="0 0 24 24"><path d="M12 22c-4 0-6.5-2.9-6.5-6.6C5.5 10.5 8.5 2 12 2s6.5 8.5 6.5 13.4C18.5 19.1 16 22 12 22z"/></symbol>
+<symbol id="i-grain" viewBox="0 0 24 24"><path d="M3.5 20.5c6-1 9.5-4.5 11-10.5"/><path d="M8 8.5c1.8-1.8 4.5-2 6-1.5.5 1.5.3 4.2-1.5 6-1.8 1.8-4.5 2-6 1.5-.5-1.5-.3-4.2 1.5-6z"/><path d="M14.5 4c1.5-1.5 3.6-1.7 4.8-1.3.4 1.2.2 3.3-1.3 4.8"/></symbol>
+<symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7.5" height="7.5"/><rect x="13.5" y="3" width="7.5" height="7.5"/><rect x="3" y="13.5" width="7.5" height="7.5"/><rect x="13.5" y="13.5" width="7.5" height="7.5"/></symbol>
+</defs></svg>
+
+<div class="shell">
+
+  <!-- ============ DESKTOP RAIL ============ -->
+  <nav class="rail" aria-label="Main">
+    <div class="rail__brand">
+      <span class="rail__lockup" role="img" aria-label="PalengkeHub"></span>
+      <p>Lipa City Public Market</p>
+    </div>
+    <button class="tab is-on" data-go="home"><svg class="ic ic--lg"><use href="#i-home"/></svg><span>Home</span></button>
+    <button class="tab" data-go="cart"><svg class="ic ic--lg"><use href="#i-cart"/></svg><span>PalengKart</span><i class="dot" data-cartcount>3</i></button>
+    <button class="tab" data-go="orders"><svg class="ic ic--lg"><use href="#i-receipt"/></svg><span>Orders</span></button>
+    <button class="tab" data-go="chats"><svg class="ic ic--lg"><use href="#i-chat"/></svg><span>Chats</span><i class="dot">2</i></button>
+    <button class="tab" data-go="profile"><svg class="ic ic--lg"><use href="#i-user"/></svg><span>Profile</span></button>
+    <div class="rail__foot">
+      <h4>Bukas ang Palengke</h4>
+      <p>Lunes hanggang Linggo, 5:00 AM to 7:00 PM. Pickup lang, walang delivery fee.</p>
+    </div>
+  </nav>
+
+  <div class="main">
+
+    <!-- ============ MASTHEAD ============ -->
+    <header class="hdr" id="hdrHome">
+      <div class="hdr__inner">
+        <div class="plate">
+          <span class="mark" aria-hidden="true"></span>
+          <span>
+            <span class="nameplate">PalengkeHub</span>
+            <span class="edition" id="editionLine">Lipa City &middot; Bukas 5AM to 7PM</span>
+          </span>
+          <div class="hdr__acts">
+            <button class="iconbtn" aria-label="Notifications"><svg class="ic"><use href="#i-bell"/></svg><i class="dot">4</i></button>
+            <button class="iconbtn" data-go="cart" aria-label="PalengKart"><svg class="ic"><use href="#i-cart"/></svg><i class="dot" data-cartcount>3</i></button>
+          </div>
+        </div>
+        <div class="hdr__srch">
+          <div class="srch">
+            <span class="srch__i"><svg class="ic"><use href="#i-search"/></svg></span>
+            <input type="search" placeholder="Maghanap ng produkto o puwesto" aria-label="Search products or stalls">
+            <span class="srch__b" aria-hidden="true"><svg class="ic"><use href="#i-right"/></svg></span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- ============ SUB HEADER ============ -->
+    <header class="hdr hdr--sub" id="hdrSub" hidden>
+      <div class="hdr__inner">
+        <div class="plate">
+          <button class="iconbtn" id="backBtn" aria-label="Back"><svg class="ic ic--lg"><use href="#i-left"/></svg></button>
+          <span class="title" id="subTitle">Gulay<small>Presyo kada yunit</small></span>
+          <div class="hdr__acts">
+            <button class="iconbtn" aria-label="Search"><svg class="ic"><use href="#i-search"/></svg></button>
+            <button class="iconbtn" data-go="cart" aria-label="PalengKart"><svg class="ic"><use href="#i-cart"/></svg><i class="dot" data-cartcount>3</i></button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- ============ PRICE TICKER (the one marquee) ============ -->
+    <div class="ticker" aria-label="Presyo ngayong araw">
+      <div class="ticker__t" id="ticker"></div>
+    </div>
+
+    <main id="screens">
+
+      <!-- ==================== HOME ==================== -->
+      <section class="screen is-active" id="s-home">
+
+        <!-- category tiles -->
+        <nav class="cats" id="cats" aria-label="Mamili ayon sa kategorya"></nav>
+
+        <!-- poster promos -->
+        <div class="promos" id="promos"></div>
+        <div class="dots" id="promoDots"><i class="on"></i><i></i></div>
+
+        <!-- deals band -->
+        <section class="deals">
+          <div class="deals__head">
+            <svg class="ic ic--lg ic--fill"><use href="#i-flame"/></svg>
+            <h2>Paubos Ngayon</h2>
+            <button class="seeall pressable" data-go="browse" data-cat="all">Lahat<svg class="ic ic--sm"><use href="#i-right"/></svg></button>
+          </div>
+          <div class="cd">Sarado sa <b id="cd-h">00</b>:<b id="cd-m">00</b>:<b id="cd-s">00</b></div>
+          <div class="frow" id="flashRow"></div>
+        </section>
+
+        <!-- price comparison on the home screen -->
+        <section class="radar">
+          <div class="radar__h">
+            <svg class="ic ic--lg"><use href="#i-scale"/></svg>
+            <div>
+              <h2>Pinakamura Ngayon</h2>
+              <p>Presyo kada yunit &middot; 46 puwesto</p>
+            </div>
+          </div>
+          <div id="radarRows"></div>
+          <div class="radar__f">
+            <svg class="ic ic--sm"><use href="#i-info"/></svg>
+            <span id="radarAvg"></span>
+          </div>
+        </section>
+
+        <!-- stalls -->
+        <section class="sec">
+          <div class="sec__head">
+            <div>
+              <h2>Mga Puwesto</h2>
+              <p>Pinagkakatiwalaan ng mga suki</p>
+            </div>
+            <button class="seeall pressable" data-go="browse" data-cat="all">Lahat<svg class="ic ic--sm"><use href="#i-right"/></svg></button>
+          </div>
+          <div class="srow" id="stallRow"></div>
+        </section>
+
+        <!-- dense product feed -->
+        <section class="sec">
+          <div class="sec__head">
+            <div>
+              <h2>Presyo Ngayon</h2>
+              <p>Lahat kada yunit &middot; updated ngayong araw</p>
+            </div>
+          </div>
+          <div class="rule"></div><div class="rule rule--red"></div>
+          <div style="height:14px"></div>
+          <div class="grid" id="homeGrid"></div>
+        </section>
+
+        <p class="footnote">
+          Pickup lang sa Lipa City Public Market. Walang delivery fee.<br>
+          Bayad via GCash sa mismong puwesto ng vendor.
+        </p>
+      </section>
+
+      <!-- ==================== BROWSE / LISTING ==================== -->
+      <section class="screen" id="s-browse">
+        <div class="filterbar" id="filterbar">
+          <button class="fchip pressable" id="filterBtn"><svg class="ic"><use href="#i-sliders"/></svg>Filters<span class="cnt" id="filterCount" hidden>0</span></button>
+          <button class="fchip pressable" id="sortBtn"><svg class="ic"><use href="#i-sort"/></svg><span id="sortLabel">Pinakamura</span></button>
+          <button class="fchip pressable" data-f="mura">Mura</button>
+          <button class="fchip pressable is-on" data-f="open">Bukas ngayon</button>
+          <button class="fchip pressable" data-f="near">Malapit</button>
+          <button class="fchip pressable" data-f="rating">4.5+</button>
+          <button class="fchip pressable" data-f="promo">May promo</button>
+        </div>
+        <div class="resultline" id="resultLine"></div>
+        <div class="grid" id="browseGrid" style="padding-bottom:24px"></div>
+        <p class="emptyline" id="browseEmpty" hidden>Walang produktong tumugma sa mga filter. Subukang alisin ang isa.</p>
+      </section>
+
+      <!-- ==================== PRODUCT DETAIL ==================== -->
+      <section class="screen" id="s-product">
+        <div class="pd__cols">
+          <div>
+            <div class="gallery" id="gallery"></div>
+          </div>
+          <div class="pd">
+
+            <div class="pdblock">
+              <div class="pd__price">
+                <span class="ptag ptag--lg" style="--tilt:-2.5deg"><b class="pz" id="pdPrice">&#8369;60</b><i id="pdUnit">/ kg</i></span>
+                <span class="stamp" id="pdVerdict"></span>
+              </div>
+              <div class="pd__anchor">
+                <s id="pdWas">&#8369;75</s>
+                <span class="stamp stamp--mahal" id="pdOff">-20%</span>
+                <span class="trendpill"><svg class="ic ic--sm"><use href="#i-trenddown"/></svg>Bumaba &#8369;15</span>
+              </div>
+              <h1>Kamatis<em>Tomato &middot; Solanum lycopersicum</em></h1>
+              <div class="trustrow">
+                <span><svg class="ic ic--sm"><use href="#i-star"/></svg> <b>4.8</b> (127 reviews)</span>
+                <span><b>340</b> benta</span>
+                <span><b>In Stock</b></span>
+              </div>
+              <div class="spread">
+                <svg class="ic"><use href="#i-scale"/></svg>
+                <span id="pdSpread"></span>
+              </div>
+            </div>
+
+            <div class="pdblock">
+              <h3 class="blocktitle">Pumili ng Timbang</h3>
+              <div class="swatches" id="swatches"></div>
+              <div class="gcashrow"><i></i>GCash lang ang bayad &middot; sundo mo sa Vegetable Section &middot; #12</div>
+            </div>
+
+            <div class="pdblock">
+              <h3 class="blocktitle">Puwesto</h3>
+              <div class="stallstrip">
+                <span class="media" id="pdStallMedia"></span>
+                <div style="min-width:0">
+                  <div class="stallname">Aling Nena Gulayan</div>
+                  <div class="meta meta--stall"><svg class="ic ic--sm"><use href="#i-star"/></svg><span>4.8 (312) &middot; Vegetable &middot; #12</span></div>
+                </div>
+                <button class="ghostbtn pressable">Bisitahin</button>
+              </div>
+            </div>
+
+            <!-- the signature block -->
+            <div class="cmpblock">
+              <div style="display:flex;align-items:center;gap:9px;margin-bottom:10px">
+                <svg class="ic ic--lg"><use href="#i-scale"/></svg>
+                <div>
+                  <h3 class="blocktitle" style="margin:0">Ibang Puwesto</h3>
+                  <p style="margin:4px 0 0;font-family:var(--f-cond);font-weight:700;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)">Sinusukat kada kilo para patas</p>
+                </div>
+              </div>
+              <div id="pdCompare"></div>
+              <div class="avgline" id="pdAvg"></div>
+              <button class="linkbtn pressable" data-compare="kamatis" id="pdMore">Tingnan lahat<svg class="ic ic--sm"><use href="#i-right"/></svg></button>
+            </div>
+
+            <div class="pdblock">
+              <h3 class="blocktitle">Galaw ng Presyo, 30 Araw</h3>
+              <div class="spark">
+                <svg viewBox="0 0 240 48" preserveAspectRatio="none" aria-label="30 day price trend, down 12 percent">
+                  <polyline fill="none" stroke="#1A1208" stroke-width="3" stroke-linecap="square" stroke-linejoin="miter"
+                    points="2,12 20,10 38,17 56,14 74,22 92,19 110,26 128,23 146,31 164,28 182,34 200,32 218,37 238,36"/>
+                  <rect x="233" y="31" width="10" height="10" fill="#E23D28" stroke="#1A1208" stroke-width="3"/>
+                </svg>
+                <div style="flex:none;text-align:right">
+                  <div class="pz" style="font-weight:800;font-size:26px;line-height:1">-12%</div>
+                  <div style="font-family:var(--f-cond);font-weight:700;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)">Ngayong linggo</div>
+                </div>
+              </div>
+              <p class="desc" style="margin:10px 0 0">Bumaba ang presyo ng kamatis ng 12% ngayong linggo. Panahon ng ani sa Batangas kaya marami ang stock.</p>
+            </div>
+
+            <div class="pdblock" style="border-bottom:0">
+              <h3 class="blocktitle">Detalye</h3>
+              <p class="desc">Sariwang kamatis mula sa taniman sa Lipa, pinipitas tuwing umaga. Mabigat, matigas at hindi masyadong hinog, bagay sa sinigang, ensalada at sarsa.</p>
+              <dl style="margin:12px 0 0">
+                <div class="kv"><dt>Kategorya</dt><dd>Gulay &middot; Vegetables</dd></div>
+                <div class="kv"><dt>Puwesto</dt><dd>Vegetable Section &middot; #12</dd></div>
+                <div class="kv"><dt>Pickup</dt><dd>Handa sa loob ng 30 minuto</dd></div>
+                <div class="kv"><dt>Bayad</dt><dd>GCash lang</dd></div>
+              </dl>
+            </div>
+
+            <div class="actionbar is-on" id="pdBar">
+              <div class="actionbar__p">
+                <span>Total, 1 kg</span>
+                <span class="pz" id="pdTotal">&#8369;60</span>
+              </div>
+              <button class="cta pressable"><svg class="ic ic--sm"><use href="#i-cart"/></svg>Idagdag sa Kart</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== PALENGKART ==================== -->
+      <section class="screen" id="s-cart">
+        <div class="savepanel">
+          <svg class="ic ic--lg"><use href="#i-trenddown"/></svg>
+          <div>
+            <b>Nakatipid ka ng &#8369;58</b>
+            <p>Kumpara sa average na presyo ng palengke para sa 6 na item.</p>
+          </div>
+        </div>
+
+        <div class="cartgrp">
+          <div class="cartgrp__h">
+            <span class="vend">1 NG 2</span>
+            <div>
+              <h3>Aling Nena Gulayan</h3>
+              <p>Vegetable Section &middot; #12</p>
+            </div>
+          </div>
+          <div class="citem">
+            <span class="media" data-media="kamatis" data-mode="sm" data-w="62"></span>
+            <div class="citem__b">
+              <div class="citem__n">Kamatis</div>
+              <div class="meta"><span class="pz">&#8369;60</span><span class="unit">/ kg</span><span data-verdict="kamatis"></span></div>
+              <div class="stepper"><button aria-label="Bawasan"><svg class="ic ic--sm"><use href="#i-minus"/></svg></button><span>2</span><button aria-label="Dagdagan"><svg class="ic ic--sm"><use href="#i-plus"/></svg></button></div>
+            </div>
+          </div>
+          <div class="citem">
+            <span class="media" data-media="sitaw" data-mode="sm" data-w="62"></span>
+            <div class="citem__b">
+              <div class="citem__n">Sitaw</div>
+              <div class="meta"><span class="pz">&#8369;25</span><span class="unit">/ tali</span><span data-verdict="sitaw"></span></div>
+              <div class="stepper"><button aria-label="Bawasan"><svg class="ic ic--sm"><use href="#i-minus"/></svg></button><span>3</span><button aria-label="Dagdagan"><svg class="ic ic--sm"><use href="#i-plus"/></svg></button></div>
+            </div>
+          </div>
+          <div class="cartgrp__f">Stall Total<b>&#8369;195</b></div>
+        </div>
+
+        <div class="cartgrp">
+          <div class="cartgrp__h">
+            <span class="vend">2 NG 2</span>
+            <div>
+              <h3>Mang Juan's Meat Shop</h3>
+              <p>Meat Section &middot; #07</p>
+            </div>
+          </div>
+          <div class="citem">
+            <span class="media" data-media="liempo" data-mode="sm" data-w="62"></span>
+            <div class="citem__b">
+              <div class="citem__n">Liempo</div>
+              <div class="meta"><span class="pz">&#8369;165</span><span class="unit">/ 500g</span><span data-verdict="liempo"></span></div>
+              <div class="stepper"><button aria-label="Bawasan"><svg class="ic ic--sm"><use href="#i-minus"/></svg></button><span>1</span><button aria-label="Dagdagan"><svg class="ic ic--sm"><use href="#i-plus"/></svg></button></div>
+            </div>
+          </div>
+          <div class="cartgrp__f">Stall Total<b>&#8369;165</b></div>
+        </div>
+
+        <p class="footnote">Dalawang vendor ang order mo. Hiwalay ang bayad sa bawat puwesto via GCash.</p>
+
+        <div class="actionbar is-on">
+          <div class="actionbar__p">
+            <span>6 item &middot; 2 puwesto</span>
+            <span class="pz">&#8369;360</span>
+          </div>
+          <button class="cta pressable">Checkout<svg class="ic ic--sm"><use href="#i-right"/></svg></button>
+        </div>
+      </section>
+
+      <!-- ==================== ORDERS ==================== -->
+      <section class="screen" id="s-orders">
+        <div class="tabsrow">
+          <button class="is-on">Active (2)</button>
+          <button>History (1)</button>
+        </div>
+        <div style="height:16px"></div>
+        <article class="ocard">
+          <div class="ocard__h">
+            <span class="num">Order #4B21F0A9</span>
+            <span class="status status--ready">Handa na</span>
+          </div>
+          <div class="ocard__b">
+            <div style="font-family:var(--f-cond);font-weight:800;font-size:15px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink);margin-bottom:7px">Aling Nena Gulayan &middot; #12</div>
+            <ul>
+              <li>2x Kamatis (kg)<b>&#8369;120</b></li>
+              <li>3x Sitaw (tali)<b>&#8369;75</b></li>
+            </ul>
+            <div style="margin-top:9px;display:flex;align-items:center;gap:6px;font-family:var(--f-cond);font-weight:800;font-size:12px;letter-spacing:.06em;text-transform:uppercase">
+              <svg class="ic ic--sm"><use href="#i-check"/></svg>Sunduin na sa puwesto
+            </div>
+          </div>
+          <div class="ocard__f"><svg class="ic ic--sm"><use href="#i-clock"/></svg>Ngayon, 9:30 AM<span class="pz">&#8369;195</span></div>
+        </article>
+        <article class="ocard">
+          <div class="ocard__h">
+            <span class="num">Order #9C07E512</span>
+            <span class="status status--pending">Pending</span>
+          </div>
+          <div class="ocard__b">
+            <div style="font-family:var(--f-cond);font-weight:800;font-size:15px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink);margin-bottom:7px">Mang Juan's Meat Shop &middot; #07</div>
+            <ul><li>1x Liempo (500g)<b>&#8369;165</b></li></ul>
+            <div style="margin-top:9px;font-size:12px">Hinihintay ang kumpirmasyon ng vendor.</div>
+          </div>
+          <div class="ocard__f"><svg class="ic ic--sm"><use href="#i-clock"/></svg>Ngayon, 10:15 AM<span class="pz">&#8369;165</span></div>
+        </article>
+        <article class="ocard">
+          <div class="ocard__h">
+            <span class="num">Order #71AA30D4</span>
+            <span class="status status--done">Tapos</span>
+          </div>
+          <div class="ocard__b">
+            <div style="font-family:var(--f-cond);font-weight:800;font-size:15px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink);margin-bottom:7px">Ate Vilma Isdaan &middot; #42</div>
+            <ul><li>1x Bangus (kg)<b>&#8369;195</b></li></ul>
+          </div>
+          <div class="ocard__f"><svg class="ic ic--sm"><use href="#i-check"/></svg>Nakuha noong Aug 24<span class="pz">&#8369;195</span></div>
+        </article>
+        <div style="height:22px"></div>
+      </section>
+
+      <!-- ==================== CHATS ==================== -->
+      <section class="screen" id="s-chats">
+        <button class="chatrow">
+          <span class="media" data-media="repolyo" data-mode="sm" data-w="48" data-label="Nena"></span>
+          <div style="min-width:0">
+            <div class="chatrow__n">Aling Nena Gulayan</div>
+            <div class="chatrow__p">Handa na po ang kamatis, sundo na lang kayo.</div>
+          </div>
+          <div class="chatrow__t">9:12 AM<br><span class="dot2">2</span></div>
+        </button>
+        <button class="chatrow">
+          <span class="media" data-media="liempo" data-mode="sm" data-w="62" data-label="Juan"></span>
+          <div style="min-width:0">
+            <div class="chatrow__n">Mang Juan's Meat Shop</div>
+            <div class="chatrow__p">Sir, wala na pong kasim ngayon. Liempo na lang po?</div>
+          </div>
+          <div class="chatrow__t">8:40 AM</div>
+        </button>
+        <button class="chatrow">
+          <span class="media" data-media="bangus" data-mode="sm" data-w="48" data-label="Vilma"></span>
+          <div style="min-width:0">
+            <div class="chatrow__n">Ate Vilma Isdaan</div>
+            <div class="chatrow__p">Salamat po sa order, sariwa ang bangus bukas.</div>
+          </div>
+          <div class="chatrow__t">Aug 24</div>
+        </button>
+        <div style="height:22px"></div>
+      </section>
+
+      <!-- ==================== PROFILE ==================== -->
+      <section class="screen" id="s-profile">
+        <div class="prof">
+          <span class="avatar"><svg class="ic ic--lg"><use href="#i-user"/></svg></span>
+          <div>
+            <h2>Guest User</h2>
+            <p>Naka-browse nang walang account</p>
+          </div>
+          <button class="ghostbtn pressable">Sign in</button>
+        </div>
+        <div class="unlock">
+          <h3 class="blocktitle">I-sign in para ma-unlock</h3>
+          <ul>
+            <li><svg class="ic ic--sm"><use href="#i-check"/></svg>I-save ang laman ng kart</li>
+            <li><svg class="ic ic--sm"><use href="#i-check"/></svg>Mag-order sa mga puwesto</li>
+            <li><svg class="ic ic--sm"><use href="#i-check"/></svg>Tingnan ang order history</li>
+            <li><svg class="ic ic--sm"><use href="#i-check"/></svg>I-rate ang mga tindahan</li>
+            <li><svg class="ic ic--sm"><use href="#i-check"/></svg>I-save ang paboritong puwesto</li>
+          </ul>
+        </div>
+        <div class="unlock">
+          <ul>
+            <li><svg class="ic ic--sm"><use href="#i-shield"/></svg>Privacy Policy</li>
+            <li><svg class="ic ic--sm"><use href="#i-info"/></svg>Help and Support</li>
+            <li><svg class="ic ic--sm"><use href="#i-store"/></svg>Report an Issue</li>
+          </ul>
+        </div>
+        <div style="height:26px"></div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<button class="totop pressable" id="toTop" aria-label="Balik sa itaas"><svg class="ic"><use href="#i-arrowup"/></svg></button>
+
+<!-- ============ BOTTOM TAB BAR ============ -->
+<nav class="tabbar" aria-label="Main">
+  <button class="tab is-on" data-go="home"><svg class="ic"><use href="#i-home"/></svg><span>Home</span></button>
+  <button class="tab" data-go="cart"><svg class="ic"><use href="#i-cart"/></svg><span>PalengKart</span><i class="dot" data-cartcount>3</i></button>
+  <button class="tab" data-go="orders"><svg class="ic"><use href="#i-receipt"/></svg><span>Orders</span></button>
+  <button class="tab" data-go="chats"><svg class="ic"><use href="#i-chat"/></svg><span>Chats</span><i class="dot">2</i></button>
+  <button class="tab" data-go="profile"><svg class="ic"><use href="#i-user"/></svg><span>Profile</span></button>
+</nav>
+
+<!-- ============ COMPARE SHEET ============ -->
+<div class="sheet" id="cmpSheet" role="dialog" aria-modal="true" aria-labelledby="cmpTitle">
+  <div class="sheet__bd" data-close></div>
+  <div class="sheet__p">
+    <div class="sheet__h">
+      <button class="sheet__x" data-close aria-label="Isara"><svg class="ic"><use href="#i-x"/></svg></button>
+      <h2 id="cmpTitle">Kamatis</h2>
+      <p id="cmpSub">Presyo ngayon sa 6 na puwesto</p>
+      <p class="sheet__save" id="cmpSave"></p>
+    </div>
+    <div class="sheet__body">
+      <div class="cmpchips" id="cmpChips">
+        <button class="fchip pressable is-on" data-cmpsort="price">Kada yunit</button>
+        <button class="fchip pressable" data-cmpsort="near">Pinakamalapit</button>
+        <button class="fchip pressable" data-cmpsort="rating">Rating</button>
+      </div>
+      <div class="sheetcard" id="cmpRows"></div>
+      <div class="avgline" id="cmpAvg"></div>
+      <p style="margin:14px 0 0;font-size:12px;color:var(--muted);line-height:1.55">
+        Ang presyo ay ginawang katumbas kada yunit para patas ang paghahambing. Tingnan din ang kalidad bago piliin ang pinakamura.
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SORT SHEET ============ -->
+<div class="sheet" id="sortSheet" role="dialog" aria-modal="true" aria-labelledby="sortTitle">
+  <div class="sheet__bd" data-close></div>
+  <div class="sheet__p">
+    <div class="sheet__h">
+      <button class="sheet__x" data-close aria-label="Isara"><svg class="ic"><use href="#i-x"/></svg></button>
+      <h2 id="sortTitle">Ayusin</h2>
+      <p>Pinipili ang pagkakasunod ng resulta</p>
+    </div>
+    <div class="sheet__body">
+      <div class="sortrow" id="sortRow">
+        <button class="is-on" data-sort="cheap">Pinakamura<svg class="ic ic--sm"><use href="#i-check"/></svg></button>
+        <button data-sort="verdict">Pinakamalaking tipid<svg class="ic ic--sm"><use href="#i-check"/></svg></button>
+        <button data-sort="near">Pinakamalapit<svg class="ic ic--sm"><use href="#i-check"/></svg></button>
+        <button data-sort="rating">Pinakamataas na rating<svg class="ic ic--sm"><use href="#i-check"/></svg></button>
+        <button data-sort="sold">Pinakabenta<svg class="ic ic--sm"><use href="#i-check"/></svg></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* =========================================================================
+   Data. Unchanged from round 1: product names come from the app's Tagalog
+   produce dictionary; prices, stalls, ratings and promo copy are plausible
+   placeholders (the repo ships no seed data), listed in the build report.
+   Every verdict stamp and every PINAKAMURA flag is COMPUTED from the
+   product's own compare roster. Nothing is authored by hand.
+   ========================================================================= */
+const PESO  = n => '₱' + Math.round(n).toLocaleString('en-PH');
+const PESO2 = n => '₱' + n.toLocaleString('en-PH',{minimumFractionDigits:2,maximumFractionDigits:2});
+
+/* CV-1: the shared 7-category set, same order in every variant. */
+const CATS = [
+  {key:'gulay', label:'Gulay',  en:'Vegetables', img:'kamatis',   icon:'i-leaf',  skin:'leaf',  pat:'pat-stripe'},
+  {key:'karne', label:'Karne',  en:'Meat',       img:'liempo',    icon:'i-meat',  skin:'red',   pat:'pat-dot'},
+  {key:'isda',  label:'Isda',   en:'Fish',       img:'bangus',    icon:'i-fish',  skin:'sky',   pat:'pat-stripe'},
+  {key:'prutas',label:'Prutas', en:'Fruits',     img:'mangga',    icon:'i-apple', skin:'yellow',pat:'pat-dot'},
+  {key:'manok', label:'Manok',  en:'Poultry',    img:'manok',     icon:'i-egg',   skin:'tan',   pat:'pat-grid'},
+  {key:'bigas', label:'Bigas',  en:'Rice',       img:'bigas',     icon:'i-grain', skin:'tan2',  pat:'pat-stripe'},
+  {key:'iba',   label:'Iba Pa', en:'Other',      img:'tokwa',     icon:'i-grid',  skin:'paper', pat:'pat-grid'}
+];
+
+/* pos = this stall's rank inside the product's own compare roster (0 = cheapest). */
+const PRODUCTS = [
+  {id:'kamatis',    n:'Kamatis',    en:'Tomato',        p:60,  was:75,  u:'kg',    cat:'gulay', pos:0, stall:'Aling Nena Gulayan',      no:12, sec:'Vegetable Section', r:4.8, sold:340},
+  {id:'talong',     n:'Talong',     en:'Eggplant',      p:75,  was:null,u:'kg',    cat:'gulay', pos:3, stall:'Kuya Boy Fresh Veg',      no:21, sec:'Vegetable Section', r:4.6, sold:212},
+  {id:'sitaw',      n:'Sitaw',      en:'String beans',  p:25,  was:32,  u:'tali',  cat:'gulay', pos:0, stall:'Tindahan ni Mareng Baby', no:33, sec:'Vegetable Section', r:4.9, sold:498},
+  {id:'repolyo',    n:'Repolyo',    en:'Cabbage',       p:90,  was:110, u:'kg',    cat:'gulay', pos:2, stall:'Aling Nena Gulayan',      no:12, sec:'Vegetable Section', r:4.8, sold:167},
+  {id:'kalabasa',   n:'Kalabasa',   en:'Squash',        p:45,  was:null,u:'kg',    cat:'gulay', pos:1, stall:'Mang Ising Gulayan',      no:44, sec:'Vegetable Section', r:4.4, sold:189},
+  {id:'sibuyas',    n:'Sibuyas',    en:'Red onion',     p:120, was:140, u:'kg',    cat:'gulay', pos:1, stall:'Aleng Puring Sari-Sari',  no:58, sec:'Dry Goods',         r:4.2, sold:356},
+  {id:'ampalaya',   n:'Ampalaya',   en:'Bitter gourd',  p:80,  was:null,u:'kg',    cat:'gulay', pos:4, stall:'Kuya Boy Fresh Veg',      no:21, sec:'Vegetable Section', r:4.6, sold:143},
+  {id:'calamansi',  n:'Kalamansi',  en:'Calamansi',     p:80,  was:95,  u:'kg',    cat:'gulay', pos:1, stall:'Kuya Boy Fresh Veg',      no:21, sec:'Vegetable Section', r:4.6, sold:433},
+
+  {id:'liempo',     n:'Liempo',     en:'Pork belly',    p:330, was:null,u:'kg',    cat:'karne', pos:2, stall:"Mang Juan's Meat Shop",   no:7,  sec:'Meat Section',      r:4.7, sold:822},
+  {id:'kasim',      n:'Kasim',      en:'Pork shoulder', p:290, was:null,u:'kg',    cat:'karne', pos:1, stall:'Kuya Dennis Karneria',    no:15, sec:'Meat Section',      r:4.5, sold:401},
+  {id:'giniling',   n:'Giniling',   en:'Ground pork',   p:265, was:290, u:'kg',    cat:'karne', pos:0, stall:'Aling Beth Baboy',        no:23, sec:'Meat Section',      r:4.3, sold:288},
+  {id:'longganisa', n:'Longganisa', en:'Pork sausage',  p:180, was:210, u:'pack',  cat:'karne', pos:3, stall:'Mang Rudy Meats',         no:31, sec:'Meat Section',      r:4.6, sold:512},
+
+  {id:'bangus',     n:'Bangus',     en:'Milkfish',      p:195, was:null,u:'kg',    cat:'isda',  pos:3, stall:'Ate Vilma Isdaan',        no:42, sec:'Fish Section',      r:4.6, sold:389},
+  {id:'tilapia',    n:'Tilapia',    en:'Tilapia',       p:140, was:160, u:'kg',    cat:'isda',  pos:1, stall:'Mang Tino Isdaan',        no:47, sec:'Fish Section',      r:4.5, sold:264},
+  {id:'galunggong', n:'Galunggong', en:'Round scad',    p:220, was:null,u:'kg',    cat:'isda',  pos:2, stall:'Aling Cora Seafood',      no:51, sec:'Fish Section',      r:4.4, sold:197},
+
+  {id:'saging',     n:'Saging',     en:'Latundan',      p:70,  was:85,  u:'kg',    cat:'prutas',pos:2, stall:'Nanay Linda Prutas',      no:5,  sec:'Fruit Section',     r:4.7, sold:274},
+  {id:'mangga',     n:'Mangga',     en:'Carabao mango', p:145, was:null,u:'kg',    cat:'prutas',pos:3, stall:'Nanay Linda Prutas',      no:5,  sec:'Fruit Section',     r:4.7, sold:158},
+  {id:'papaya',     n:'Papaya',     en:'Papaya',        p:55,  was:70,  u:'kg',    cat:'prutas',pos:0, stall:'Ate Baby Prutasan',       no:14, sec:'Fruit Section',     r:4.5, sold:132},
+  {id:'dalandan',   n:'Dalandan',   en:'Native orange', p:95,  was:null,u:'kg',    cat:'prutas',pos:3, stall:'Kuya Jun Fruit Stand',    no:26, sec:'Fruit Section',     r:4.3, sold:118},
+
+  {id:'manok',      n:'Manok',      en:'Chicken',       p:210, was:235, u:'kg',    cat:'manok', pos:1, stall:'Manang Rosa Manukan',     no:9,  sec:'Poultry Section',   r:4.5, sold:611},
+  {id:'itlog',      n:'Itlog',      en:'Egg',           p:10,  was:12,  u:'piraso',cat:'manok', pos:0, stall:'Manang Rosa Manukan',     no:9,  sec:'Poultry Section',   r:4.5, sold:1204},
+  {id:'pecho',      n:'Pecho',      en:'Chicken breast',p:245, was:null,u:'kg',    cat:'manok', pos:2, stall:'Kuya Ariel Manukan',      no:16, sec:'Poultry Section',   r:4.4, sold:233},
+
+  {id:'bigas',      n:'Bigas',      en:'Dinorado',      p:58,  was:null,u:'kg',    cat:'bigas', pos:2, stall:'Ka Tino Bigasan',         no:18, sec:'Rice Section',      r:4.4, sold:940},
+  {id:'sinandomeng',n:'Sinandomeng',en:'Rice',          p:52,  was:null,u:'kg',    cat:'bigas', pos:1, stall:'Aling Marites Bigasan',   no:22, sec:'Rice Section',      r:4.6, sold:727},
+
+  {id:'tokwa',      n:'Tokwa',      en:'Tofu',          p:20,  was:25,  u:'piraso',cat:'iba',   pos:1, stall:'Aleng Puring Sari-Sari',  no:58, sec:'Dry Goods',         r:4.2, sold:174},
+  {id:'bawang',     n:'Bawang',     en:'Garlic',        p:160, was:null,u:'kg',    cat:'iba',   pos:3, stall:'Mang Andoy Dry Goods',    no:61, sec:'Dry Goods',         r:4.3, sold:208}
+];
+
+const STALLS = [
+  {n:'Aling Nena Gulayan',      no:12, sec:'Vegetable Section', r:4.8, rev:312, lo:45,  hi:180, open:true,  img:'repolyo', cat:'gulay',  tags:'Gulay, Prutas'},
+  {n:"Mang Juan's Meat Shop",   no:7,  sec:'Meat Section',      r:4.7, rev:208, lo:180, hi:420, open:true,  img:'liempo',  cat:'karne',  tags:'Karne, Baboy'},
+  {n:'Ate Vilma Isdaan',        no:42, sec:'Fish Section',      r:4.6, rev:177, lo:120, hi:390, open:true,  img:'bangus',  cat:'isda',   tags:'Isda, Hipon'},
+  {n:'Nanay Linda Prutas',      no:5,  sec:'Fruit Section',     r:4.7, rev:141, lo:55,  hi:220, open:false, img:'mangga',  cat:'prutas', tags:'Prutas'},
+  {n:'Ka Tino Bigasan',         no:18, sec:'Rice Section',      r:4.4, rev:96,  lo:52,  hi:78,  open:true,  img:'bigas',   cat:'bigas',  tags:'Bigas, Butil'}
+];
+
+const PROMOS = [
+  {kick:'ANI NGAYONG UMAGA', h:'Sariwang ani, 30% off', p:'Gulay na pinitas kaninang 4 AM sa Lipa. Habang may stock.', photo:'kamatis', tagBig:'-30%', tagSm:'off'},
+  {kick:'PRESYO WATCH',      h:'Ikumpara bago bumili',  p:'Presyo kada kilo mula sa 46 na puwesto, updated araw-araw.', market:true, tagBig:'46', tagSm:'puwesto'}
+];
+
+/* One roster per category. */
+const ROSTERS = {
+  gulay:[
+    {n:'Aling Nena Gulayan',      no:12, sec:'Vegetable Section', r:4.8, d:250, unit:'kg'},
+    {n:'Kuya Boy Fresh Veg',      no:21, sec:'Vegetable Section', r:4.6, d:180, unit:'500g'},
+    {n:'Tindahan ni Mareng Baby', no:33, sec:'Vegetable Section', r:4.9, d:400, unit:'kg'},
+    {n:'Mang Ising Gulayan',      no:44, sec:'Vegetable Section', r:4.4, d:320, unit:'250g'},
+    {n:'Aleng Puring Sari-Sari',  no:58, sec:'Dry Goods',         r:4.2, d:150, unit:'kg'},
+    {n:'Nanay Linda Prutas',      no:5,  sec:'Fruit Section',     r:4.7, d:510, unit:'kg'}
+  ],
+  karne:[
+    {n:"Mang Juan's Meat Shop",   no:7,  sec:'Meat Section', r:4.7, d:210, unit:'kg'},
+    {n:'Kuya Dennis Karneria',    no:15, sec:'Meat Section', r:4.5, d:260, unit:'500g'},
+    {n:'Aling Beth Baboy',        no:23, sec:'Meat Section', r:4.3, d:340, unit:'kg'},
+    {n:'Mang Rudy Meats',         no:31, sec:'Meat Section', r:4.6, d:180, unit:'kg'},
+    {n:'Aling Ising Karneria',    no:38, sec:'Meat Section', r:4.4, d:420, unit:'500g'}
+  ],
+  isda:[
+    {n:'Ate Vilma Isdaan',        no:42, sec:'Fish Section', r:4.6, d:290, unit:'kg'},
+    {n:'Mang Tino Isdaan',        no:47, sec:'Fish Section', r:4.5, d:330, unit:'kg'},
+    {n:'Aling Cora Seafood',      no:51, sec:'Fish Section', r:4.4, d:360, unit:'500g'},
+    {n:'Nanay Sela Isdaan',       no:55, sec:'Fish Section', r:4.2, d:410, unit:'kg'}
+  ],
+  prutas:[
+    {n:'Nanay Linda Prutas',      no:5,  sec:'Fruit Section', r:4.7, d:510, unit:'kg'},
+    {n:'Ate Baby Prutasan',       no:14, sec:'Fruit Section', r:4.5, d:470, unit:'kg'},
+    {n:'Kuya Jun Fruit Stand',    no:26, sec:'Fruit Section', r:4.3, d:530, unit:'500g'},
+    {n:'Aling Marissa Prutas',    no:34, sec:'Fruit Section', r:4.4, d:560, unit:'kg'}
+  ],
+  manok:[
+    {n:'Manang Rosa Manukan',     no:9,  sec:'Poultry Section', r:4.5, d:230, unit:'kg'},
+    {n:'Kuya Ariel Manukan',      no:16, sec:'Poultry Section', r:4.4, d:270, unit:'kg'},
+    {n:'Aling Fely Poultry',      no:28, sec:'Poultry Section', r:4.3, d:310, unit:'kg'},
+    {n:'Mang Tonio Manukan',      no:37, sec:'Poultry Section', r:4.5, d:390, unit:'kg'}
+  ],
+  bigas:[
+    {n:'Ka Tino Bigasan',         no:18, sec:'Rice Section', r:4.4, d:140, unit:'kg'},
+    {n:'Aling Marites Bigasan',   no:22, sec:'Rice Section', r:4.6, d:190, unit:'kg'},
+    {n:'Mang Ben Rice',           no:35, sec:'Rice Section', r:4.3, d:240, unit:'kg'},
+    {n:'Nanay Ester Bigasan',     no:39, sec:'Rice Section', r:4.5, d:300, unit:'kg'}
+  ],
+  iba:[
+    {n:'Aleng Puring Sari-Sari',  no:58, sec:'Dry Goods', r:4.2, d:150, unit:'kg'},
+    {n:'Mang Andoy Dry Goods',    no:61, sec:'Dry Goods', r:4.3, d:200, unit:'kg'},
+    {n:'Ate Susan Sari-Sari',     no:64, sec:'Dry Goods', r:4.1, d:260, unit:'kg'},
+    {n:'Kuya Rey Dry Goods',      no:70, sec:'Dry Goods', r:4.4, d:340, unit:'kg'}
+  ]
+};
+
+const LADDER = {
+  4:[0.91,0.98,1.06,1.15],
+  5:[0.90,0.96,1.02,1.09,1.18],
+  6:[0.88,0.94,1.00,1.06,1.12,1.20]
+};
+const UNIT_DIV = {kg:1, '500g':2, '250g':4, tali:1, piraso:1, pack:1, dozen:1};
+
+/* CV-3: one verdict band for the whole file, plus or minus 5 percent. */
+const BAND = 0.05;
+const verdictOf = (price, avg) => price <= avg*(1-BAND) ? 'mura' : (price >= avg*(1+BAND) ? 'mahal' : 'avg');
+
+/* ------------------------- media: photo, or poster tile ------------------------- */
+/* Only these seven products have a real photograph. Everything else gets a
+   deliberate typographic poster tile in the tabloid language: flat print
+   colour, printed pattern, the Tagalog name at poster scale. Never a
+   placeholder glyph, never a "missing image" state. */
+const PHOTOS = new Set(['kamatis','talong','repolyo','sitaw','saging','mangga','calamansi']);
+const SKIN = {gulay:['leaf','pat-stripe'], karne:['red','pat-dot'], isda:['sky','pat-stripe'],
+              prutas:['yellow','pat-dot'], manok:['tan','pat-grid'], bigas:['tan2','pat-stripe'],
+              iba:['paper','pat-grid']};
+const catOf = id => (PRODUCTS.find(p=>p.id===id)||{}).cat || 'iba';
+
+/* The poster tile sets the product name at the largest size that still fits
+   the tile, so the type is always deliberately scaled and never clipped.
+   Archivo Black caps average about 0.78em of advance per character. */
+const fitType = (chars, boxW, pad, max) =>
+  Math.max(13, Math.min(max, Math.floor((boxW - pad) / (chars * 0.78))));
+
+/* mode: 'lg' | 'mid' poster tile | 'sm' stencil. boxW = tile width in px. */
+function mediaInner(id, mode, labelOverride, boxW){
+  const p = PRODUCTS.find(x=>x.id===id);
+  const name = labelOverride || (p ? p.n : id);
+  if(PHOTOS.has(id)){
+    return `<img class="shot" src="../assets/generated/products/product-${id}.png" alt="${name}" loading="lazy">`;
+  }
+  const [skin,pat] = SKIN[catOf(id)] || SKIN.iba;
+  if(mode === 'sm'){
+    /* a printed crate stencil: one initial, filling the square */
+    const w = boxW || 48;
+    return `<span class="tile tile--sm sk-${skin} pat ${pat}" style="--tile-fs:${Math.round(w*0.62)}px"><b>${name.slice(0,1).toUpperCase()}</b></span>`;
+  }
+  const w  = boxW || 150;
+  const fs = fitType(name.length, w, 20, mode==='lg' ? 96 : 46);
+  return `<span class="tile sk-${skin} pat ${pat}" style="--tile-fs:${fs}px"><b>${name}</b></span>`;
+}
+
+/* ------------------------- render helpers ------------------------- */
+const el = (h) => { const t=document.createElement('template'); t.innerHTML=h.trim(); return t.content.firstElementChild; };
+const stars = () => `<svg class="ic ic--sm"><use href="#i-star"/></svg>`;
+const stampOf = (v) => v==='mura' ? '<span class="stamp stamp--mura">MURA</span>'
+  : v==='mahal' ? '<span class="stamp stamp--mahal">MAHAL</span>'
+  : '<span class="stamp stamp--avg">KATAMTAMAN</span>';
+
+/* ------------------------- comparison engine (unchanged) ------------------------- */
+function compareRows(productId){
+  const p = PRODUCTS.find(x=>x.id===productId) || PRODUCTS[0];
+  const base = ROSTERS[p.cat] || ROSTERS.gulay;
+  const own  = base.find(s=>s.n===p.stall) || {n:p.stall,no:p.no,sec:p.sec,r:p.r,d:250,unit:'kg'};
+  const others = base.filter(s=>s.n!==own.n);
+  const list = others.slice();
+  list.splice(Math.min(p.pos, others.length), 0, own);
+  const mults = LADDER[list.length] || LADDER[4];
+  const pos   = Math.min(p.pos, mults.length-1);
+  const unitBase = p.p / mults[pos];
+  const rows = list.map((s,i)=>{
+    const norm = unitBase * mults[i];
+    const unit = p.u === 'kg' ? s.unit : p.u;
+    const div  = UNIT_DIV[unit] || 1;
+    return {...s, unit, norm, shown: norm/div, isOwn: s.n===own.n};
+  });
+  const avg = rows.reduce((t,r)=>t+r.norm,0)/rows.length;
+  return {p, rows, avg, ownIndex: rows.findIndex(r=>r.isOwn)};
+}
+function productVerdict(p){ const {avg} = compareRows(p.id); return verdictOf(p.p, avg); }
+function isCheapest(p){ return p.pos === 0; }
+
+function cmpRowMarkup(r,i,avg,baseUnit){
+  const cheap = i===0;
+  const v = verdictOf(r.norm, avg);
+  const eq = r.unit !== baseUnit
+    ? `<span class="eq">= ${PESO2(r.norm)} / ${baseUnit} katumbas</span>` : '';
+  return `
+  <button class="cmprow ${cheap?'is-best':''}">
+    <span class="rank">${i+1}</span>
+    <span style="min-width:0">
+      <span class="cmprow__n">${r.n}</span>
+      <span class="cmprow__m">${stars()} ${r.r} &middot; #${r.no} &middot; ${r.d}m ${cheap?'<span class="stamp stamp--mura">PINAKAMURA</span>':stampOf(v)}</span>
+    </span>
+    <span class="cmprow__p">
+      <span class="pz">${PESO2(r.shown)}</span><span class="unit">/ ${r.unit}</span>${eq}
+    </span>
+  </button>`;
+}
+
+/* ------------------------- cards ------------------------- */
+function productCard(p, opts){
+  const off  = p.was ? Math.round((p.was-p.p)/p.was*100) : 0;
+  const v    = productVerdict(p);
+  const best = isCheapest(p);
+  const sold = opts && opts.sold;
+  return el(`
+  <article class="pcard" data-product="${p.id}">
+    <div class="media">
+      ${mediaInner(p.id,'mid',null,150)}
+      ${best ? '<span class="flag flag--best">PINAKAMURA</span>' : (off? `<span class="flag">-${off}%</span>`:'')}
+      <button class="fav" aria-label="I-save si ${p.n}"><svg class="ic"><use href="#i-heart"/></svg></button>
+    </div>
+    <div class="pcard__b">
+      <span class="ptag"><b class="pz">${PESO(p.p)}</b><i>/${p.u}</i></span>
+      <h3 class="pcard__t">${p.n}<em>${p.en}</em></h3>
+      <div class="pcard__row">${p.was?`<s>${PESO(p.was)}</s>`:''}${stampOf(v)}</div>
+      <div class="meta">${stars()}<b>${p.r}</b> &middot; ${p.sold} benta</div>
+      <div class="meta meta--stall"><svg class="ic ic--sm"><use href="#i-store"/></svg><span>${p.stall}</span></div>
+      ${sold?`<div class="bar"><i style="width:${sold}%"></i></div><div class="pcard__sold">${sold>80?'Paubos na':'Nabenta na '+sold+'%'}</div>`:''}
+      <div class="pcard__foot">
+        <span class="cmpbtn pressable" data-compare="${p.id}"><svg class="ic"><use href="#i-scale"/></svg>Ikumpara ${compareRows(p.id).rows.length}<span class="cmp-w">&nbsp;puwesto</span></span>
+        <button class="addbtn pressable" aria-label="Idagdag sa PalengKart"><svg class="ic"><use href="#i-plus"/></svg></button>
+      </div>
+    </div>
+  </article>`);
+}
+
+function flashTile(p, sold){
+  const off = p.was ? Math.round((p.was-p.p)/p.was*100) : 15;
+  return el(`
+  <button class="ftile pressable" data-product="${p.id}">
+    <div class="media">${mediaInner(p.id,'mid',null,126)}<span class="flag">-${off}%</span></div>
+    <div class="ftile__b">
+      <div class="ftile__n">${p.n}</div>
+      <div><span class="pz">${PESO(p.p)}</span>${p.was?`<s>${PESO(p.was)}</s>`:''}</div>
+      <div class="bar"><i style="width:${sold}%"></i></div>
+      <div class="ftile__left">${sold>80?'Paubos na':'Nabenta '+sold+'%'}</div>
+    </div>
+  </button>`);
+}
+
+function stallCard(s){
+  const inner = PHOTOS.has(s.img)
+    ? `<img class="shot" src="../assets/generated/products/product-${s.img}.png" alt="${s.n}" loading="lazy">`
+    : (function(){
+        const [skin,pat] = SKIN[s.cat] || SKIN.iba;
+        const word = s.tags.split(',')[0];
+        return `<span class="tile sk-${skin} pat ${pat}" style="--tile-fs:${fitType(word.length,244,20,52)}px"><b>${word}</b><i>${s.sec}</i></span>`;
+      })();
+  return el(`
+  <button class="scard pressable" data-go="browse" data-cat="all">
+    <div class="media">
+      ${inner}
+      <span class="badge-open ${s.open?'':'is-closed'}">${s.open?'BUKAS':'SARADO'}</span>
+    </div>
+    <div class="scard__b">
+      <div class="scard__n">${s.n}</div>
+      <div class="scard__r">${stars()}<b>${s.r}</b> (${s.rev}) &middot; ${s.sec} &middot; #${s.no}</div>
+      <div class="range"><span class="pz">${PESO(s.lo)}</span><small>hanggang</small><span class="pz">${PESO(s.hi)}</span><small>/ kg</small></div>
+    </div>
+  </button>`);
+}
+
+/* ------------------------- build the screens ------------------------- */
+const $ = (s,r=document) => r.querySelector(s);
+const $$ = (s,r=document) => [...r.querySelectorAll(s)];
+
+/* ticker: the one marquee. today's headline prices, duplicated for the loop. */
+(function(){
+  const set = ['kamatis','itlog','sitaw','liempo','bangus','manok','bigas','calamansi','sibuyas','tilapia'];
+  const items = set.map(id=>{
+    const p = PRODUCTS.find(x=>x.id===id);
+    return `<i>${p.n} <b>${PESO(p.p)}</b>/${p.u}</i>`;
+  }).join('');
+  const group = `<span class="ticker__g">${items}</span>`;
+  $('#ticker').innerHTML = group + group;
+})();
+
+/* category tiles */
+$('#cats').append(...CATS.map((c,i)=>el(`
+  <button class="cat ${i===0?'is-on':''}" data-go="browse" data-cat="${c.key}">
+    <span class="cat__t sk-${c.skin} pat ${c.pat}">
+      <svg class="ic"><use href="#${c.icon}"/></svg>
+    </span>
+    <span>${c.label}</span>
+  </button>`)));
+
+/* poster promos */
+$('#promos').append(...PROMOS.map((b,i)=>el(`
+  <div class="promo ${i?'promo--b':''}">
+    <span class="promo__kick">${b.kick}</span>
+    <h3>${b.h}</h3>
+    <p>${b.p}</p>
+    <span class="promo__cut">
+      ${b.market
+        ? `<img src="../02-audit/logo/Lipapublicmarket.jpg" alt="Lipa City Public Market" loading="lazy">`
+        : `<img src="../assets/generated/products/product-${b.photo}.png" alt="" loading="lazy">`}
+    </span>
+    <span class="ptag ptag--promo" style="--tilt:${i?3:-4}deg"><b class="pz">${b.tagBig}</b><i>${b.tagSm}</i></span>
+  </div>`)));
+
+/* flash tiles */
+const flashSet = ['kamatis','sitaw','manok','saging','calamansi','itlog','repolyo'];
+const soldPct  = [88,72,64,45,91,58,37];
+$('#flashRow').append(...flashSet.map((id,i)=>flashTile(PRODUCTS.find(p=>p.id===id), soldPct[i])));
+
+/* price radar rows */
+const radarSet = ['kamatis','itlog','calamansi'];
+$('#radarRows').append(...radarSet.map(id=>{
+  const p = PRODUCTS.find(x=>x.id===id);
+  return el(`
+  <button class="rrow" data-compare="${p.id}">
+    <span class="media">${mediaInner(p.id,'sm',null,44)}</span>
+    <span style="min-width:0">
+      <span class="rrow__n">${p.n}</span>
+      <span class="rrow__m">Pinakamura sa ${p.stall} &middot; #${p.no}</span>
+    </span>
+    <span class="rrow__p">
+      <span><span class="pz">${PESO(p.p)}</span><span class="unit">/${p.u}</span></span>
+      ${stampOf(productVerdict(p))}
+    </span>
+  </button>`);
+}));
+(function(){
+  const {avg,p} = compareRows('kamatis');
+  $('#radarAvg').innerHTML = `Average sa palengke: <b>${PESO2(avg)} / ${p.u}</b> para sa kamatis`;
+})();
+
+/* stalls + home feed. The feed alternates photo and poster tile on purpose,
+   so the grid reads as a designed checkerboard, not as missing images. */
+$('#stallRow').append(...STALLS.map(stallCard));
+const HOME_FEED = ['kamatis','liempo','sitaw','bangus','saging','itlog','mangga','manok','talong','bigas','calamansi','kasim'];
+const HOME_SOLD = {kamatis:88, sitaw:72, manok:64, saging:45, itlog:58, sibuyas:69};
+$('#homeGrid').append(...HOME_FEED.map(id=>{
+  const p = PRODUCTS.find(x=>x.id===id);
+  return productCard(p, {sold: HOME_SOLD[id]});
+}));
+
+/* inline media slots in static markup (cart, chats, detail) */
+$$('[data-media]').forEach(slot=>{
+  slot.innerHTML = mediaInner(slot.dataset.media, slot.dataset.mode || 'sm', slot.dataset.label,
+                              parseInt(slot.dataset.w,10) || 48);
+});
+$('#pdStallMedia').innerHTML = mediaInner('repolyo','sm','Nena',52);
+
+/* ------------------------- browse: real filtering ------------------------- */
+const stallOpen = {}; STALLS.forEach(s=>stallOpen[s.n]=s.open);
+let browseCat = 'gulay';
+let sortMode  = 'cheap';
+const filters = {mura:false, open:true, near:false, rating:false, promo:false};
+
+function ownDistance(p){ const {rows,ownIndex} = compareRows(p.id); return rows[ownIndex] ? rows[ownIndex].d : 999; }
+
+function browseList(){
+  let list = PRODUCTS.filter(p=> browseCat==='all' || p.cat===browseCat);
+  if(filters.mura)   list = list.filter(p=>productVerdict(p)==='mura');
+  if(filters.open)   list = list.filter(p=>stallOpen[p.stall] !== false);
+  if(filters.near)   list = list.filter(p=>ownDistance(p) <= 300);
+  if(filters.rating) list = list.filter(p=>p.r >= 4.5);
+  if(filters.promo)  list = list.filter(p=>!!p.was);
+  const by = {
+    cheap:  (a,b)=>a.p-b.p,
+    verdict:(a,b)=>a.pos-b.pos || a.p-b.p,
+    near:   (a,b)=>ownDistance(a)-ownDistance(b),
+    rating: (a,b)=>b.r-a.r,
+    sold:   (a,b)=>b.sold-a.sold
+  };
+  return list.sort(by[sortMode] || by.cheap);
+}
+function renderBrowse(){
+  const list = browseList();
+  const cat  = CATS.find(c=>c.key===browseCat);
+  const label = browseCat==='all' ? 'lahat ng kategorya' : cat.label;
+  $('#browseGrid').innerHTML = '';
+  $('#browseGrid').append(...list.map(p=>productCard(p)));
+  $('#resultLine').innerHTML = `<b>${list.length}</b> na produkto sa ${label} &middot; presyo kada yunit`;
+  $('#browseEmpty').hidden = list.length > 0;
+  const on = Object.values(filters).filter(Boolean).length;
+  const cnt = $('#filterCount'); cnt.textContent = on; cnt.hidden = on === 0;
+  $('#subTitle').innerHTML = (browseCat==='all' ? 'Lahat' : cat.label) + `<small>${list.length} produkto &middot; presyo kada yunit</small>`;
+}
+$$('.filterbar [data-f]').forEach(c=>c.addEventListener('click',()=>{
+  const key = c.dataset.f;
+  filters[key] = !filters[key];
+  c.classList.toggle('is-on', filters[key]);
+  renderBrowse();
+}));
+
+/* product detail gallery */
+$('#gallery').append(
+  el(`<div class="gslide media">${mediaInner('kamatis','lg',null,375)}<span class="rubber">Sariwa ngayon</span><span class="gcount">1 / 2</span></div>`),
+  el(`<div class="gslide media"><img class="shot" src="../02-audit/logo/Lipapublicmarket.jpg" alt="Lipa City Public Market" loading="lazy"><span class="gcount">2 / 2</span></div>`)
+);
+
+/* unit swatches */
+const UNITS = [
+  {k:'250g', label:'250g',  mult:0.25},
+  {k:'500g', label:'500g',  mult:0.50},
+  {k:'kg',   label:'1 kilo',mult:1.00},
+  {k:'pack', label:'Pack',  mult:0.80}
+];
+const BASE = 60;
+function renderSwatches(active){
+  const box = $('#swatches'); box.innerHTML='';
+  UNITS.forEach(u=>{
+    const b = el(`<button class="sw pressable ${u.k===active?'is-on':''}" data-unit="${u.k}">
+      <span>${u.label}</span><b>${PESO(BASE*u.mult)}</b></button>`);
+    b.addEventListener('click',()=>{
+      renderSwatches(u.k);
+      $('#pdPrice').textContent = PESO(BASE*u.mult);
+      $('#pdUnit').textContent  = '/ ' + u.k;
+      $('#pdWas').textContent   = PESO(75*u.mult);
+      $('#pdTotal').textContent = PESO(BASE*u.mult);
+      $('#pdBar').querySelector('span').textContent = 'Total, 1 ' + u.k;
+    });
+    box.append(b);
+  });
+}
+renderSwatches('kg');
+
+/* detail compare block */
+function renderDetailCompare(){
+  const {rows,avg,p} = compareRows('kamatis');
+  $('#pdCompare').innerHTML = rows.slice(0,3).map((r,i)=>cmpRowMarkup(r,i,avg,p.u)).join('');
+  const below = rows.filter(r=>verdictOf(r.norm, avg)==='mura').length;
+  $('#pdAvg').innerHTML = `<svg class="ic ic--sm"><use href="#i-info"/></svg>Average sa palengke: <b>${PESO2(avg)} / ${p.u}</b> &middot; ${below} puwesto ang mura kaysa average`;
+  $('#pdMore').innerHTML = `Tingnan lahat ng ${rows.length} puwesto<svg class="ic ic--sm"><use href="#i-right"/></svg>`;
+  $('#pdSpread').innerHTML = `Presyo sa <b>${rows.length}</b> puwesto: <b>${PESO2(rows[0].norm)}</b> hanggang <b>${PESO2(rows[rows.length-1].norm)}</b> kada ${p.u}. Ito ang pinakamura.`;
+  const vd = verdictOf(p.p, avg);
+  const slot = $('#pdVerdict');
+  slot.className = 'stamp stamp--' + vd;
+  slot.textContent = vd==='mura' ? 'MURA' : vd==='mahal' ? 'MAHAL' : 'KATAMTAMAN';
+}
+renderDetailCompare();
+
+/* cart verdict stamps use the same engine as the sheet */
+$$('[data-verdict]').forEach(slot=>{
+  const p = PRODUCTS.find(x=>x.id===slot.dataset.verdict);
+  if(p) slot.outerHTML = stampOf(productVerdict(p));
+});
+
+/* ------------------------- compare sheet ------------------------- */
+let cmpState = {id:'kamatis', sort:'price'};
+function paintCompare(){
+  const {p,rows,avg} = compareRows(cmpState.id);
+  const view = rows.slice();
+  if(cmpState.sort==='near')   view.sort((a,b)=>a.d-b.d);
+  if(cmpState.sort==='rating') view.sort((a,b)=>b.r-a.r);
+  const cheapest = rows[0];
+  $('#cmpTitle').textContent = p.n;
+  $('#cmpSub').innerHTML = `Presyo ngayon sa ${rows.length} na puwesto &middot; kada ${p.u}`;
+  $('#cmpSave').innerHTML = `<svg class="ic ic--sm"><use href="#i-trenddown"/></svg>Tipid ka ng <b>${PESO2(avg-cheapest.norm)} / ${p.u}</b> kay ${cheapest.n}`;
+  $('#cmpRows').innerHTML = view.map(r=>cmpRowMarkup(r, rows.indexOf(r), avg, p.u)).join('');
+  const below = rows.filter(r=>verdictOf(r.norm, avg)==='mura').length;
+  $('#cmpAvg').innerHTML = `<svg class="ic ic--sm"><use href="#i-info"/></svg>Average sa palengke: <b>${PESO2(avg)} / ${p.u}</b> &middot; ${below} puwesto ang mura kaysa average`;
+}
+function openCompare(productId){
+  cmpState = {id:productId, sort:'price'};
+  $$('#cmpChips .fchip').forEach(c=>c.classList.toggle('is-on', c.dataset.cmpsort==='price'));
+  paintCompare();
+  openSheet('cmpSheet');
+}
+$$('#cmpChips .fchip').forEach(c=>c.addEventListener('click',()=>{
+  $$('#cmpChips .fchip').forEach(x=>x.classList.remove('is-on'));
+  c.classList.add('is-on');
+  cmpState.sort = c.dataset.cmpsort;
+  paintCompare();
+}));
+
+/* ------------------------- sheets ------------------------- */
+function openSheet(id){ $('#'+id).classList.add('is-open'); document.body.style.overflow='hidden'; }
+function closeSheets(){ $$('.sheet').forEach(s=>s.classList.remove('is-open')); document.body.style.overflow=''; }
+$$('[data-close]').forEach(b=>b.addEventListener('click',closeSheets));
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeSheets(); });
+$('#sortBtn').addEventListener('click',()=>openSheet('sortSheet'));
+$('#filterBtn').addEventListener('click',()=>openSheet('sortSheet'));
+$$('#sortRow button').forEach(b=>b.addEventListener('click',()=>{
+  $$('#sortRow button').forEach(x=>x.classList.remove('is-on'));
+  b.classList.add('is-on');
+  sortMode = b.dataset.sort;
+  $('#sortLabel').textContent = b.textContent.trim();
+  renderBrowse();
+  closeSheets();
+}));
+
+/* ------------------------- router ------------------------- */
+const TABS = {home:'Home', cart:'PalengKart', orders:'Orders', chats:'Chats', profile:'Profile'};
+const SUBS = {cart:'6 item &middot; 2 puwesto', orders:'3 order', chats:'3 usapan', profile:'Guest', product:'Vegetable Section &middot; #12'};
+let previous = 'home';
+
+function go(name){
+  const target = $('#s-'+name);
+  if(!target) return;
+  const current = $('.screen.is-active');
+  if(current === target) { window.scrollTo({top:0}); return; }
+  if(current) { previous = current.id.replace('s-',''); current.classList.remove('is-active'); }
+  target.classList.add('is-active');
+
+  const isHome = name === 'home';
+  $('#hdrHome').hidden = !isHome;
+  $('#hdrSub').hidden  = isHome;
+  if(!isHome && name !== 'browse'){
+    const t = TABS[name] || (name==='product' ? 'Kamatis' : name);
+    $('#subTitle').innerHTML = t + `<small>${SUBS[name]||''}</small>`;
+  }
+  if(!isHome) $('#backBtn').style.display = TABS[name] ? 'none' : 'grid';
+  $$('.tab').forEach(t=>t.classList.toggle('is-on', t.dataset.go===name));
+  window.scrollTo({top:0});
+  $('#hdrHome').classList.remove('is-collapsed');
+}
+document.addEventListener('click',e=>{
+  const cmp = e.target.closest('[data-compare]');
+  if(cmp){ e.preventDefault(); e.stopPropagation(); openCompare(cmp.dataset.compare); return; }
+  const fav = e.target.closest('.fav');
+  if(fav){ e.preventDefault(); e.stopPropagation(); fav.classList.toggle('is-on'); return; }
+  const add = e.target.closest('.addbtn');
+  if(add){
+    e.preventDefault(); e.stopPropagation();
+    $$('[data-cartcount]').forEach(d=>{ const v=Math.min(9,(parseInt(d.textContent,10)||0)+1); d.textContent = v + (v>8?'+':''); });
+    return;
+  }
+  const prod = e.target.closest('[data-product]');
+  if(prod){ go('product'); return; }
+  const nav = e.target.closest('[data-go]');
+  if(nav && nav.dataset.go){
+    if(nav.dataset.cat){
+      browseCat = nav.dataset.cat;
+      if(nav.classList.contains('cat')){
+        $$('#cats .cat').forEach(x=>x.classList.remove('is-on'));
+        nav.classList.add('is-on');
+      }
+      renderBrowse();
+    }
+    go(nav.dataset.go);
+    return;
+  }
+});
+$('#backBtn').addEventListener('click',()=>go(previous==='product'?'browse':previous||'home'));
+
+renderBrowse();
+
+/* ------------------------- header collapse + scroll to top ------------------------- */
+window.addEventListener('scroll',()=>{
+  const y = window.scrollY;
+  $('#hdrHome').classList.toggle('is-collapsed', y > 60);
+  $('#toTop').classList.toggle('is-on', y > 800);
+},{passive:true});
+$('#toTop').addEventListener('click',()=>window.scrollTo({top:0,behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto':'smooth'}));
+
+/* ------------------------- promo dots ------------------------- */
+const promoTrack = $('#promos');
+promoTrack.addEventListener('scroll',()=>{
+  const i = Math.round(promoTrack.scrollLeft / (promoTrack.firstElementChild.offsetWidth + 14));
+  $$('#promoDots i').forEach((d,k)=>d.classList.toggle('on', k===Math.min(i,PROMOS.length-1)));
+},{passive:true});
+
+/* ------------------------- edition line + countdown ------------------------- */
+(function(){
+  const DAYS  = ['Linggo','Lunes','Martes','Miyerkules','Huwebes','Biyernes','Sabado'];
+  const MONTH = ['Enero','Pebrero','Marso','Abril','Mayo','Hunyo','Hulyo','Agosto','Setyembre','Oktubre','Nobyembre','Disyembre'];
+  const d = new Date();
+  $('#editionLine').textContent = `Lipa City · ${DAYS[d.getDay()]}, ${d.getDate()} ${MONTH[d.getMonth()]}`;
+})();
+
+function tick(){
+  const now = new Date();
+  const end = new Date(now); end.setHours(19,0,0,0);        // market closes 7:00 PM
+  if(end <= now) end.setDate(end.getDate()+1);
+  let s = Math.floor((end-now)/1000);
+  $('#cd-h').textContent = String(Math.floor(s/3600)).padStart(2,'0');
+  $('#cd-m').textContent = String(Math.floor(s%3600/60)).padStart(2,'0');
+  $('#cd-s').textContent = String(s%60).padStart(2,'0');
+}
+tick(); setInterval(tick,1000);
+</script>
+</body>
+</html>
