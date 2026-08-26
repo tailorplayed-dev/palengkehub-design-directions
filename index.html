@@ -181,6 +181,31 @@
     .dir--wide .dir__opts{ grid-column:2; grid-row:1 / span 2; margin-top:0; }
   }
 
+  /* ════ YOUR PICK, TAKEN FURTHER (two adoption pages) ════
+     same hard-ink card as .dir, two up, colored rail + icon tile, reusing .opt__btn */
+  .picks{ display:grid; grid-template-columns:repeat(auto-fit, minmax(370px,1fr)); gap:22px; margin-top:52px; }
+  .pick{ position:relative; overflow:hidden; background:var(--paper); border:3px solid var(--ink); border-radius:20px;
+    padding:24px 24px 22px 28px; box-shadow:6px 6px 0 0 var(--ink); display:flex; flex-direction:column;
+    transition:transform .16s, box-shadow .16s; }
+  .pick:hover{ transform:translate(-3px,-3px); box-shadow:9px 9px 0 0 var(--ink); }
+  .pick::before{ content:""; position:absolute; top:0; left:0; width:7px; height:100%; }
+  .pick--ds::before{ background:var(--lavender); }
+  .pick--land::before{ background:var(--ui-green); }
+  .pick__head{ display:flex; align-items:center; gap:13px; margin-bottom:12px; }
+  .pick__ic{ flex:none; width:48px; height:48px; border-radius:14px; border:3px solid var(--ink); display:grid; place-items:center;
+    font-size:25px; color:#fff; box-shadow:3px 3px 0 0 var(--ink); }
+  .pick--ds .pick__ic{ background:var(--lavender); }
+  .pick--land .pick__ic{ background:var(--ui-green); }
+  .pick__title{ font-family:'Rubik'; font-weight:900; font-size:23px; color:var(--ink); margin:0; line-height:1.14; }
+  .pick__sub{ font-family:'Rubik'; font-weight:700; font-size:13px; color:var(--anchor); margin:3px 0 0; letter-spacing:.2px; }
+  .pick__desc{ font-size:18px; color:var(--gray-600); margin:0 0 16px; line-height:1.5; }
+  .pick__how{ display:flex; align-items:flex-start; gap:11px; background:var(--canvas); border:2.5px solid var(--ink);
+    border-radius:14px; padding:13px 15px; margin:0 0 18px; }
+  .pick__how i{ font-size:21px; color:var(--anchor); flex:none; margin-top:2px; }
+  .pick__how p{ font-size:16.5px; line-height:1.45; color:var(--gray-700); margin:0; }
+  .pick__how b{ font-family:'Rubik'; font-weight:800; color:var(--ink); }
+  .pick .opt__btn{ margin-top:auto; align-self:flex-start; padding:13px 26px; font-size:16px; }
+
   /* ════ cell grid (what is inside) ════ */
   .show-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:20px; margin-top:52px; }
   .cell{ position:relative; background:var(--canvas); border:3px solid var(--ink); border-radius:20px; padding:24px 22px;
@@ -264,6 +289,9 @@
     .cell p{ font-size:16px; }
     .units{ grid-template-columns:1fr; gap:18px; margin-top:38px; }
     .dir__desc{ font-size:17px; }
+    .picks{ grid-template-columns:1fr; gap:18px; margin-top:38px; }
+    .pick__desc{ font-size:17px; }
+    .pick__how p{ font-size:16px; }
   }
   @media (max-width:560px){
     .hero__deco{ display:none; }
@@ -515,6 +543,53 @@
             <a class="opt__btn" href="variants/v2-variant-5-presyo-exchange.html" aria-label="Open Presyo Exchange, the bold version of Motion and Price Drama"><i class="ti ti-external-link" aria-hidden="true"></i> Open Bold</a>
           </div>
         </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ════ YOUR PICK, TAKEN FURTHER ════ -->
+<section class="sec build" id="package">
+  <div class="wrap">
+    <div class="reveal">
+      <span class="sec__kick"><i class="ti ti-star" aria-hidden="true"></i> You picked 04</span>
+      <h2 class="sec__title">Your pick, <span class="u">taken further</span></h2>
+      <p class="sec__lead">Your team chose direction 04, PalengkeHub's Own Identity. So I built the full package around it: the parts that make the look, and a new landing page wearing it.</p>
+    </div>
+
+    <div class="picks stagger">
+
+      <article class="pick pick--ds">
+        <div class="pick__head">
+          <span class="pick__ic"><i class="ti ti-color-swatch" aria-hidden="true"></i></span>
+          <div>
+            <h3 class="pick__title">Design System</h3>
+            <p class="pick__sub">Direction 04 · every part of the look</p>
+          </div>
+        </div>
+        <p class="pick__desc">All the colors, buttons, cards, chips and screen pieces of your chosen direction, in one page you can read and copy from.</p>
+        <div class="pick__how">
+          <i class="ti ti-device-desktop" aria-hidden="true"></i>
+          <p><b>Open this one on a computer.</b> It is the full living component library behind your app's new look.</p>
+        </div>
+        <a class="opt__btn" href="ds/design-system.html" aria-label="Open the PalengkeHub design system"><i class="ti ti-external-link" aria-hidden="true"></i> Open Design System</a>
+      </article>
+
+      <article class="pick pick--land">
+        <div class="pick__head">
+          <span class="pick__ic"><i class="ti ti-world" aria-hidden="true"></i></span>
+          <div>
+            <h3 class="pick__title">New Landing Page</h3>
+            <p class="pick__sub">Direction 04 · palengkehub.site</p>
+          </div>
+        </div>
+        <p class="pick__desc">The website that greets people and sends them to the app, rebuilt from the same direction so the site and the app finally match.</p>
+        <div class="pick__how">
+          <i class="ti ti-device-mobile" aria-hidden="true"></i>
+          <p><b>Open this one on your phone AND on a computer.</b> It is the new palengkehub.site, built in your chosen style.</p>
+        </div>
+        <a class="opt__btn" href="landing/index.html" aria-label="Open the new PalengkeHub landing page"><i class="ti ti-external-link" aria-hidden="true"></i> Open Landing Page</a>
       </article>
 
     </div>
