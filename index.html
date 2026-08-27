@@ -205,6 +205,13 @@
   .pick__how p{ font-size:16.5px; line-height:1.45; color:var(--gray-700); margin:0; }
   .pick__how b{ font-family:'Rubik'; font-weight:800; color:var(--ink); }
   .pick .opt__btn{ margin-top:auto; align-self:flex-start; padding:13px 26px; font-size:16px; }
+  .oldsite{ display:flex; align-items:center; gap:14px; background:var(--paper); border:2.5px dashed var(--ink);
+    border-radius:16px; padding:16px 20px; margin-top:26px; }
+  .oldsite > i{ font-size:24px; color:var(--anchor); flex:none; }
+  .oldsite p{ font-size:16.5px; line-height:1.45; color:var(--gray-700); margin:0; flex:1; }
+  .oldsite b{ font-family:'Rubik'; font-weight:800; color:var(--ink); }
+  .oldsite .opt__btn{ flex:none; padding:11px 20px; font-size:15px; }
+  @media (max-width:640px){ .oldsite{ flex-direction:column; align-items:flex-start; } }
 
   /* ════ cell grid (what is inside) ════ */
   .show-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:20px; margin-top:52px; }
@@ -592,6 +599,12 @@
         <a class="opt__btn" href="landing/index.html" aria-label="Open the new PalengkeHub landing page"><i class="ti ti-external-link" aria-hidden="true"></i> Open Landing Page</a>
       </article>
 
+    </div>
+
+    <div class="oldsite reveal">
+      <i class="ti ti-history" aria-hidden="true"></i>
+      <p><b>Remember where it started?</b> The old palengkehub.site is saved here exactly as it was, so you can look back at it any time.</p>
+      <a class="opt__btn" href="before/index.html" aria-label="Open the old PalengkeHub site, kept as a snapshot"><i class="ti ti-external-link" aria-hidden="true"></i> Open the Old Site</a>
     </div>
   </div>
 </section>
